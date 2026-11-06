@@ -50,15 +50,15 @@ const TTHCM_KNOWLEDGE = {
             coreIdea: "Ý chí độc lập, tự chủ trong việc lựa chọn con đường cứu nước. Không rập khuôn theo các bậc tiền bối mà trực tiếp đến 'sào huyệt' của chủ nghĩa thực dân để nghiên cứu, tìm cách giúp đồng bào thoát ách nô lệ.",
             famousQuote: "Tôi muốn đi ra nước ngoài, xem nước Pháp và các nước khác. Sau khi xem xét họ làm như thế nào, tôi sẽ trở về giúp đồng bào chúng ta.",
             quiz: {
-                question: "Vì sao người thanh niên Nguyễn Tất Thành không đi sang Nhật Bản như phong trào Đông Du mà lại quyết định sang phương Tây năm 1911?",
+                question: "Ngày 5/6/1911 ghi dấu mốc sự kiện lịch sử quan trọng nào trong cuộc đời hoạt động cách mạng của Nguyễn Tất Thành?",
                 options: [
-                    "Vì muốn tìm hiểu bản chất của khẩu hiệu 'Tự do - Bình đẳng - Bác ái' tại chính mẫu quốc rồi trở về giúp đồng bào",
-                    "Vì được sự tài trợ chi phí học tập của chính quyền thực dân Pháp",
-                    "Vì Nhật Bản lúc bấy giờ từ chối nhận du học sinh người Việt Nam",
-                    "Vì muốn tìm một công việc ổn định để định cư lâu dài ở châu Âu"
+                    "Người tham gia sáng lập Đảng Xã hội Pháp tại Paris",
+                    "Người rời bến cảng Nhà Rồng trên tàu Amiral Latouche-Tréville ra đi tìm đường cứu nước",
+                    "Người gửi bản Yêu sách của nhân dân An Nam tới Hội nghị Versailles",
+                    "Người đọc bản Sơ thảo Luận cương về vấn đề dân tộc và thuộc địa của Lênin"
                 ],
-                correctIndex: 0,
-                explanation: "Nguyễn Tất Thành khâm phục các bậc tiền bối nhưng không hoàn toàn tán thành đường lối của họ. Người muốn tận mắt thấy điều gì ẩn giấu sau những từ 'Tự do - Bình đẳng - Bác ái' của Pháp để tìm ra con đường cứu nước đúng đắn."
+                correctIndex: 1,
+                explanation: "Ngày 5/6/1911, từ bến cảng Nhà Rồng (Sài Gòn), người thanh niên yêu nước Nguyễn Tất Thành lấy tên Văn Ba, lên tàu buôn Pháp Amiral Latouche-Tréville rời Tổ quốc, mở đầu hành trình 30 năm bôn ba tìm con đường cứu nước, cứu dân."
             }
         },
         "hoi_yeu_nuoc": {
@@ -72,15 +72,15 @@ const TTHCM_KNOWLEDGE = {
             coreIdea: "Tư tưởng Hồ Chí Minh về tập hợp lực lượng, gắn kết đồng bào yêu nước ở hải ngoại, sử dụng quyền tự do báo chí, ngôn luận để đấu tranh đòi quyền lợi chính đáng cho dân tộc.",
             famousQuote: "Dù ở nơi đâu, hễ là người Việt Nam mang dòng máu Lạc Hồng thì đều phải đồng tâm hiệp lực vì nền độc lập của Tổ quốc.",
             quiz: {
-                question: "Hoạt động của Nguyễn Ái Quốc trong tổ chức người Việt yêu nước tại Pháp thể hiện tư tưởng nào sau đây?",
+                question: "Trong tiến trình hình thành và phát triển tư tưởng Hồ Chí Minh, giai đoạn 'Tìm tòi con đường cứu nước, giải phóng dân tộc' được xác định trong thời gian nào?",
                 options: [
-                    "Tư tưởng ỷ lại vào sự can thiệp của các cường quốc phương Tây",
-                    "Tư tưởng đại đoàn kết kiều bào và ý thức tổ chức lực lượng cách mạng",
-                    "Tư tưởng cải lương, thỏa hiệp với chính sách khai thác thuộc địa",
-                    "Tư tưởng phát triển thương mại đơn thuần cho người Việt ở nước ngoài"
+                    "Trước năm 1911",
+                    "Thời kỳ 1911 - 1920",
+                    "Thời kỳ 1921 - 1930",
+                    "Thời kỳ 1930 - 1945"
                 ],
                 correctIndex: 1,
-                explanation: "Đây là tiền đề quan trọng hình thành tư tưởng Đại đoàn kết toàn dân tộc của Hồ Chí Minh: tập hợp mọi lực lượng yêu nước, đoàn kết trong và ngoài nước thành một khối thống nhất."
+                explanation: "Giai đoạn 1911 - 1920 là thời kỳ Nguyễn Ái Quốc bôn ba qua nhiều nước tư bản và thuộc địa, tham gia các tổ chức yêu nước tiến bộ, tìm thấy con đường cứu nước đúng đắn qua Luận cương Lênin."
             }
         },
         "yeu_sach_1919": {
@@ -94,15 +94,15 @@ const TTHCM_KNOWLEDGE = {
             coreIdea: "Đánh dấu lần đầu tiên tiếng nói chính nghĩa của dân tộc Việt Nam vang dội trên trường quốc tế. Qua việc bản Yêu sách bị các cường quốc phớt lờ, Người rút ra bài học cốt lõi: 'Muốn được giải phóng, các dân tộc chỉ có thể trông cậy vào lực lượng của bản thân mình'.",
             famousQuote: "Chủ nghĩa Uyn-xơn chỉ là một trò bịp bợm lớn... Muốn giải phóng, chỉ có thể dựa vào chính sức mình!",
             quiz: {
-                question: "Bài học lịch sử sâu sắc nhất Nguyễn Ái Quốc rút ra sau khi Bản Yêu sách 8 điểm bị bác bỏ tại Versailles là gì?",
+                question: "Bản 'Yêu sách của nhân dân An Nam' do Nguyễn Ái Quốc thay mặt Hội những người Việt Nam yêu nước gửi tới Hội nghị Versailles (18/6/1919) gồm bao nhiêu điểm?",
                 options: [
-                    "Cần tiếp tục chờ đợi sự khoan hồng và ban ơn từ các nước đế quốc thắng trận",
-                    "Muốn được giải phóng, dân tộc bị áp bức chỉ có thể dựa vào chính lực lượng của bản thân mình",
-                    "Từ bỏ con đường đấu tranh chính trị để chuyển hoàn toàn sang kinh tế",
-                    "Hợp tác toàn diện với chính quyền thực dân để xin cải cách từng bước"
+                    "6 điểm",
+                    "10 điểm",
+                    "8 điểm",
+                    "12 điểm"
                 ],
-                correctIndex: 1,
-                explanation: "Hội nghị Versailles dạy cho Nguyễn Ái Quốc bài học: các cường quốc đế quốc chỉ bảo vệ lợi ích thực dân của họ. Độc lập, tự do không thể van xin mà phải tự giành lấy bằng sức mạnh của toàn dân."
+                correctIndex: 2,
+                explanation: "Bản Yêu sách gồm 8 điểm đòi quyền tự do, dân chủ, bình đẳng cho nhân dân An Nam, đánh dấu sự xuất hiện chính thức lần đầu tiên của cái tên Nguyễn Ái Quốc trên trường quốc tế."
             }
         },
         "luan_cuong_lenin": {
@@ -116,15 +116,15 @@ const TTHCM_KNOWLEDGE = {
             coreIdea: "Khẳng định bước ngoặt quyết định trong tư tưởng Hồ Chí Minh: từ chủ nghĩa yêu nước đến với chủ nghĩa Mác - Lênin. Xác định con đường giải phóng dân tộc Việt Nam: 'Muốn cứu nước và giải phóng dân tộc không có con đường nào khác con đường cách mạng vô sản'.",
             famousQuote: "Luận cương của Lênin làm cho tôi rất cảm động, phấn khởi, sáng tỏ, tin tưởng biết bao! Tôi vui mừng đến phát khóc lên: Hỡi đồng bào bị đọa đày đau khổ! Đây là cái cần thiết cho chúng ta, đây là con đường giải phóng chúng ta!",
             quiz: {
-                question: "Sự kiện đọc Luận cương của Lênin (7/1920) có ý nghĩa quyết định như thế nào đối với tư tưởng của Nguyễn Ái Quốc?",
+                question: "Nguyễn Ái Quốc bắt gặp 'Sơ thảo lần thứ nhất những luận cương về vấn đề dân tộc và vấn đề thuộc địa' của V.I. Lênin vào thời gian nào và ở đâu?",
                 options: [
-                    "Đánh dấu bước chuyển biến từ người yêu nước trở thành chiến sĩ cộng sản, tìm thấy con đường cứu nước đúng đắn",
-                    "Giúp Người quyết định ở lại Pháp hoạt động công đoàn lâu dài",
-                    "Làm cho Người từ bỏ hoàn toàn phương pháp đấu tranh cách mạng",
-                    "Đưa Người trở thành lãnh đạo cao nhất của Quốc tế Cộng sản"
+                    "Tháng 7/1920 - đăng trên báo L'Humanité (Nhân đạo) tại Pháp",
+                    "Tháng 12/1920 - tại Đại hội Tours (Pháp)",
+                    "Tháng 6/1923 - tại Moskva (Liên Xô)",
+                    "Tháng 7/1925 - tại Quảng Châu (Trung Quốc)"
                 ],
                 correctIndex: 0,
-                explanation: "Luận cương Lênin đã chỉ rõ mối quan hệ mật thiết giữa cách mạng giải phóng dân tộc ở thuộc địa với cách mạng vô sản ở chính quốc, giúp Nguyễn Ái Quốc tìm thấy kim chỉ nam cho sự nghiệp cứu nước."
+                explanation: "Tháng 7/1920, khi đọc Luận cương của Lênin trên báo L'Humanité, Nguyễn Ái Quốc tìm thấy con đường cứu nước chân chính: 'Muốn cứu nước và giải phóng dân tộc không có con đường nào khác con đường cách mạng vô sản'."
             }
         },
         "le_paria": {
@@ -138,15 +138,15 @@ const TTHCM_KNOWLEDGE = {
             coreIdea: "Tư tưởng về liên minh chiến đấu giữa các dân tộc thuộc địa và giai cấp vô sản quốc tế. Hồ Chí Minh coi báo chí cách mạng là vũ khí sắc bén để thức tỉnh quần chúng, truyền bá tư tưởng độc lập, tự do.",
             famousQuote: "Chủ nghĩa tư bản là một con đỉa hai vòi: một vòi cắm vào giai cấp vô sản ở chính quốc, một vòi cắm vào các dân tộc thuộc địa.",
             quiz: {
-                question: "Tờ báo 'Le Paria' (Người cùng khổ) do Nguyễn Ái Quốc làm chủ nhiệm kiêm chủ bút nhằm mục đích chính gì?",
+                question: "Tờ báo 'Le Paria' (Người cùng khổ) do Nguyễn Ái Quốc đồng sáng lập và làm chủ nhiệm kiêm chủ bút được xuất bản số đầu tiên tại đâu?",
                 options: [
-                    "Kêu gọi các nước đế quốc tài trợ cho người nghèo ở thuộc địa",
-                    "Vạch trần tội ác thực dân, đoàn kết các dân tộc thuộc địa và truyền bá tư tưởng cách mạng",
-                    "Đăng tải các tác phẩm văn học lãng mạn phương Tây",
-                    "Báo cáo tình hình thương mại giữa Pháp và các nước Đông Dương"
+                    "Quảng Châu (Trung Quốc)",
+                    "Moskva (Liên Xô)",
+                    "Paris (Pháp)",
+                    "Hương Cảng (Hồng Kông)"
                 ],
-                correctIndex: 1,
-                explanation: "Le Paria là diễn đàn đấu tranh trực diện, kết nối những người cùng khổ khắp châu Á, châu Phi, Mỹ Latinh dưới ngọn cờ chống đế quốc thực dân."
+                correctIndex: 2,
+                explanation: "Báo Le Paria ra số đầu tiên ngày 1/4/1922 tại thủ đô Paris (Pháp), là cơ quan ngôn luận của Hội Liên hiệp thuộc địa nhằm vạch trần tội ác thực dân và thức tỉnh các dân tộc bị áp bức."
             }
         },
         "duong_kach_menh": {
@@ -160,15 +160,15 @@ const TTHCM_KNOWLEDGE = {
             coreIdea: "Chuẩn bị trực tiếp về tư tưởng, lý luận và tổ chức cho sự ra đời của Đảng Cộng sản Việt Nam. Khẳng định: Cách mệnh trước hết phải có Đảng lãnh đạo, phải lấy chủ nghĩa Mác - Lênin làm nòng cốt, và người cách mệnh phải rèn luyện đạo đức tiên phong.",
             famousQuote: "Đảng muốn vững thì phải có chủ nghĩa làm cốt, trong đảng ai ai cũng phải hiểu, ai ai cũng phải theo chủ nghĩa ấy. Đảng mà không có chủ nghĩa cũng như người không có trí khôn, tàu không có bàn chỉ nam.",
             quiz: {
-                question: "Theo tác phẩm 'Đường Kách Mệnh' (1927), điều kiện tiên quyết hàng đầu để cách mạng thắng lợi là gì?",
+                question: "Tác phẩm 'Đường Kách mệnh' tập hợp các bài giảng của Nguyễn Ái Quốc tại các lớp huấn luyện chính trị ở Quảng Châu được xuất bản lần đầu tiên vào năm nào?",
                 options: [
-                    "Phải có nhiều tiền bạc và vũ khí tối tân từ nước ngoài",
-                    "Cách mệnh trước hết phải có Đảng cách mệnh để trong thì vận động và tổ chức dân chúng, ngoài thì liên lạc với vô sản quốc tế",
-                    "Chỉ cần lòng dũng cảm của các cá nhân anh hùng mà không cần tổ chức",
-                    "Chờ đợi các cuộc khủng hoảng kinh tế tự phá vỡ chủ nghĩa tư bản"
+                    "Năm 1925",
+                    "Năm 1927",
+                    "Năm 1930",
+                    "Năm 1941"
                 ],
                 correctIndex: 1,
-                explanation: "Nguyễn Ái Quốc nhấn mạnh vai trò quyết định của Đảng Cộng sản với tư cách là đội tiên phong của giai cấp công nhân và nhân dân lao động, lấy chủ nghĩa Mác - Lênin làm kim chỉ nam."
+                explanation: "Đường Kách mệnh xuất bản năm 1927 tại Quảng Châu, là cuốn cẩm nang lý luận chuẩn bị trực tiếp về tư tưởng, chính trị và tổ chức cho sự ra đời của Đảng Cộng sản Việt Nam."
             }
         },
         "cuong_linh_1930": {
@@ -182,15 +182,15 @@ const TTHCM_KNOWLEDGE = {
             coreIdea: "Xác định đường lối chiến lược: 'Làm tư sản dân quyền cách mạng và thổ địa cách mạng để đi tới xã hội cộng sản'. Đặt nhiệm vụ chống đế quốc, giành độc lập dân tộc lên hàng đầu. Xác định lực lượng cách mạng là toàn thể nhân dân yêu nước (công nông là gốc).",
             famousQuote: "Đảng là đội tiên phong của vô sản giai cấp, phải thu phục cho được đại bộ phận giai cấp mình... và lôi kéo tiểu tư sản, trí thức, trung nông về phía vô sản.",
             quiz: {
-                question: "Cương lĩnh chính trị đầu tiên của Đảng (2/1930) do Nguyễn Ái Quốc soạn thảo đã giải quyết đúng đắn mối quan hệ nào?",
+                question: "Cương lĩnh chính trị đầu tiên của Đảng (đầu năm 1930) do Nguyễn Ái Quốc soạn thảo xác định đường lối chiến lược của cách mạng Việt Nam là gì?",
                 options: [
-                    "Giải quyết sáng tạo mối quan hệ giữa nhiệm vụ Dân tộc và Giai cấp, đặt giải phóng dân tộc lên hàng đầu",
-                    "Ưu tiên tuyệt đối đấu tranh giai cấp, xem nhẹ nhiệm vụ chống đế quốc",
-                    "Chỉ vận động công nhân nhà máy, loại trừ hoàn toàn các tầng lớp trí thức và nông dân",
-                    "Chủ trương liên minh quân sự với các cường quốc đế quốc"
+                    "Làm tư sản dân quyền cách mạng và thổ địa cách mạng để đi tới xã hội cộng sản",
+                    "Tiến hành ngay cách mạng xã hội chủ nghĩa bỏ qua giai đoạn tư bản chủ nghĩa",
+                    "Chỉ tập trung đấu tranh đòi cải cách dân sinh trong khuôn khổ pháp luật thực dân",
+                    "Đánh đổ phong kiến địa chủ trước, đánh đổ đế quốc thực dân sau"
                 ],
                 correctIndex: 0,
-                explanation: "Đây là sự vận dụng sáng tạo chủ nghĩa Mác - Lênin vào hoàn cảnh thuộc địa nửa phong kiến: kẻ thù lớn nhất là đế quốc thực dân, vì vậy độc lập dân tộc là nhiệm vụ cấp bách số một của toàn thể đồng bào."
+                explanation: "Cương lĩnh chính trị đầu tiên do Nguyễn Ái Quốc soạn thảo đã xác định đúng đắn mục tiêu chiến lược: 'Làm tư sản dân quyền cách mạng và thổ địa cách mạng để đi tới xã hội cộng sản'."
             }
         },
         "cot_moc_108": {
@@ -204,15 +204,15 @@ const TTHCM_KNOWLEDGE = {
             coreIdea: "Tư tưởng chuyển hướng chiến lược: Đặt quyền lợi dân tộc lên trên hết, thành lập Mặt trận Việt Minh nhằm thực hiện đại đoàn kết toàn dân, chuẩn bị khởi nghĩa vũ trang giành chính quyền.",
             famousQuote: "Bác đã về đây, Tổ quốc ơi! / Nhớ thương hòn đất ấm hơi Người / Ba mươi năm ấy, chân không nghỉ / Mà đến bây giờ mới tới nơi! (Thơ Tố Hữu)",
             quiz: {
-                question: "Sự kiện Nguyễn Ái Quốc về nước tại Pác Bó (28/1/1941) mang ý nghĩa lịch sử gì đối với phong trào cách mạng Việt Nam?",
+                question: "Ngày 28/1/1941, sau 30 năm bôn ba tìm đường cứu nước, lãnh tụ Nguyễn Ái Quốc đã trở về Tổ quốc trực tiếp lãnh đạo cách mạng qua cột mốc biên giới nào?",
                 options: [
-                    "Chấm dứt thời kỳ hoạt động bí mật của các chiến sĩ cộng sản",
-                    "Đánh dấu sự lãnh đạo trực tiếp của Lãnh tụ Hồ Chí Minh đối với cách mạng trong nước, chuẩn bị cho Tổng khởi nghĩa",
-                    "Thực hiện ký kết hiệp ước hòa bình với chính phủ thực dân Pháp",
-                    "Bắt đầu công cuộc cải cách ruộng đất trên quy mô toàn quốc"
+                    "Cột mốc số 0 (Hà Giang)",
+                    "Cột mốc số 13 (Lạng Sơn)",
+                    "Cột mốc số 108 (tại Pác Bó, Cao Bằng)",
+                    "Cột mốc Tân Trào (Tuyên Quang)"
                 ],
-                correctIndex: 1,
-                explanation: "Việc Người trực tiếp về nước lãnh đạo giúp phong trào cách mạng Việt Nam có người cầm lái vĩ đại, kịp thời đón thời cơ quốc tế và trong nước để tiến tới thắng lợi Cách mạng Tháng Tám."
+                correctIndex: 2,
+                explanation: "Ngày 28/1/1941, Bác vượt qua cột mốc 108 trên biên giới Việt - Trung (xã Trường Hà, huyện Hà Quảng, tỉnh Cao Bằng) để trở về đất mẹ trực tiếp lãnh đạo cách mạng."
             }
         },
         "doi_tuyentruyen_1944": {
@@ -226,15 +226,15 @@ const TTHCM_KNOWLEDGE = {
             coreIdea: "Tư tưởng Hồ Chí Minh về xây dựng lực lượng vũ trang nhân dân: 'Chính trị trọng hơn quân sự', quân đội từ nhân dân mà ra, vì nhân dân mà chiến đấu; kết hợp đấu tranh chính trị với đấu tranh vũ trang.",
             famousQuote: "Tên nó là Đội Việt Nam Tuyên truyền Giải phóng quân, nghĩa là chính trị trọng hơn quân sự. Nó là đội tuyên truyền... Tuy lúc đầu quy mô nhỏ, nhưng tiền đồ của nó rất vẻ vang.",
             quiz: {
-                question: "Trong bản chỉ thị thành lập Đội VN Tuyên truyền Giải phóng quân (1944), Bác Hồ đã nhấn mạnh nguyên tắc căn bản nào?",
+                question: "Đội Việt Nam Tuyên truyền Giải phóng quân được thành lập ngày 22/12/1944 theo chỉ thị của ai, ban đầu có bao nhiêu đội viên?",
                 options: [
-                    "Chính trị trọng hơn quân sự, coi trọng công tác tuyên truyền vận động quần chúng nhân dân",
-                    "Tập trung mua sắm vũ khí hạng nặng trước khi xây dựng cơ sở lòng dân",
-                    "Chỉ tuyển chọn quân nhân chuyên nghiệp, không tiếp nhận du kích địa phương",
-                    "Chỉ tiến hành chiến tranh quy ước, không áp dụng lối đánh du kích"
+                    "Theo chỉ thị của Trường Chinh, gồm 50 đội viên do đồng chí Hoàng Văn Thái chỉ huy",
+                    "Theo chỉ thị của Hồ Chí Minh, gồm 34 đội viên do đồng chí Võ Nguyên Giáp chỉ huy",
+                    "Theo chỉ thị của Tổng bộ Việt Minh, gồm 100 đội viên du kích",
+                    "Theo chỉ thị của Trung ương Đảng, gồm 12 đội viên cứu quốc"
                 ],
-                correctIndex: 0,
-                explanation: "Bác khẳng định quân đội cách mạng phải dựa vào dân, giác ngộ dân, 'chính trị trọng hơn quân sự'. Khi lòng dân đã hướng về cách mạng thì sức mạnh quân sự sẽ nhân lên gấp bội."
+                correctIndex: 1,
+                explanation: "Ngày 22/12/1944, tại rừng Trần Hưng Đạo (Cao Bằng), Đội Việt Nam Tuyên truyền Giải phóng quân được thành lập theo chỉ thị của lãnh tụ Hồ Chí Minh gồm 34 chiến sĩ, do đồng chí Võ Nguyên Giáp chỉ huy."
             }
         },
         "nhat_phap_1945": {
@@ -248,15 +248,15 @@ const TTHCM_KNOWLEDGE = {
             coreIdea: "Nghệ thuật dự báo và chớp thời cơ cách mạng của Hồ Chí Minh: Khi thời cơ đến thì dù phải hy sinh đến đâu cũng phải kiên quyết giành cho được độc lập.",
             famousQuote: "Dù phải đốt cháy cả dãy Trường Sơn cũng phải kiên quyết giành cho được độc lập!",
             quiz: {
-                question: "Câu nói bất hủ 'Dù phải đốt cháy cả dãy Trường Sơn cũng phải kiên quyết giành cho được độc lập' được Bác Hồ căn dặn trong thời điểm lịch sử nào?",
+                question: "Câu nói nổi tiếng: 'Dù phải đốt cháy cả dãy Trường Sơn cũng phải kiên quyết giành cho được độc lập' được Bác Hồ căn dặn đồng chí Võ Nguyên Giáp vào thời điểm lịch sử nào?",
                 options: [
-                    "Hội nghị Tân Trào chuẩn bị Tổng khởi nghĩa Tháng Tám năm 1945",
                     "Chiến dịch Điện Biên Phủ năm 1954",
-                    "Hiệp định Genève năm 1954",
-                    "Kháng chiến chống Mỹ cứu nước năm 1968"
+                    "Trước khi ký Hiệp định Sơ bộ ngày 6/3/1946",
+                    "Lời kêu gọi Toàn quốc kháng chiến tháng 12/1946",
+                    "Hội nghị Tân Trào chuẩn bị Tổng khởi nghĩa Tháng Tám năm 1945"
                 ],
-                correctIndex: 0,
-                explanation: "Khi Bác ốm nặng tại lán Nà Nưa (Tân Trào), Người đã dặn dò đồng chí Võ Nguyên Giáp thể hiện ý chí gang thép và quyết tâm sắt đá giành độc lập cho Tổ quốc khi thời cơ ngàn năm có một đã tới."
+                correctIndex: 3,
+                explanation: "Tháng 8/1945, khi đang lâm bệnh nặng tại lán Nà Nưa (Tân Trào), Bác đã căn dặn đồng chí Võ Nguyên Giáp thể hiện quyết tâm sắt đá phải chớp thời cơ ngàn năm có một để giành độc lập."
             }
         },
         "tong_khoi_nghia": {
@@ -270,15 +270,15 @@ const TTHCM_KNOWLEDGE = {
             coreIdea: "Tư tưởng phát huy sức mạnh khối Đại đoàn kết toàn dân tộc, kết hợp sức mạnh dân tộc với sức mạnh thời đại, kiên quyết tự lực cánh sinh để làm chủ vận mệnh của mình.",
             famousQuote: "Hỡi đồng bào yêu quý! Giờ quyết định cho vận mệnh dân tộc ta đã đến. Toàn quốc đồng bào hãy đứng dậy đem sức ta mà tự giải phóng cho ta!",
             quiz: {
-                question: "Khẩu hiệu 'Đem sức ta mà tự giải phóng cho ta' trong thư kêu gọi Tổng khởi nghĩa của Bác thể hiện sâu sắc quan điểm nào?",
+                question: "Khẩu hiệu hành động nổi tiếng: 'Toàn quốc đồng bào hãy đứng dậy đem sức ta mà tự giải phóng cho ta!' được Chủ tịch Hồ Chí Minh nêu ra trong văn kiện nào?",
                 options: [
-                    "Tinh thần độc lập, tự chủ, tự lực cánh sinh dựa trên sức mạnh đại đoàn kết toàn dân tộc",
-                    "Sự cô lập hoàn toàn phong trào cách mạng trong nước với thế giới",
-                    "Lời cảnh báo trước nguy cơ thất bại của cách mạng",
-                    "Đề cao chủ nghĩa cá nhân trong chiến đấu"
+                    "Thư kêu gọi Tổng khởi nghĩa Tháng Tám năm 1945",
+                    "Bản Tuyên ngôn Độc lập ngày 2/9/1945",
+                    "Lời kêu gọi đồng bào và chiến sĩ cả nước năm 1966",
+                    "Báo cáo chính trị tại Đại hội II của Đảng năm 1951"
                 ],
                 correctIndex: 0,
-                explanation: "Hồ Chí Minh luôn quán triệt nguyên lý: sức mạnh nội lực của dân tộc là nhân tố quyết định nhất. Ngoại viện chỉ phát huy tác dụng khi nội lực tự thân đủ mạnh mẽ."
+                explanation: "Tháng 8/1945, trong Thư kêu gọi Tổng khởi nghĩa, Hồ Chí Minh kêu gọi toàn dân phát huy tinh thần độc lập tự chủ, dựa vào sức mạnh đại đoàn kết dân tộc để tự giải phóng cho mình."
             }
         },
         "tuyen_ngon_1945": {
@@ -292,15 +292,15 @@ const TTHCM_KNOWLEDGE = {
             coreIdea: "Đỉnh cao của tư tưởng Hồ Chí Minh về quyền con người và quyền dân tộc: Khéo léo nâng quyền tự nhiên của con người (trong Tuyên ngôn Độc lập Mỹ 1776 và Tuyên ngôn Nhân quyền Pháp 1789) lên thành Quyền độc lập tự do của tất cả các dân tộc trên thế giới.",
             famousQuote: "Nước Việt Nam có quyền hưởng tự do và độc lập, và sự thật đã thành một nước tự do, độc lập. Toàn thể dân tộc Việt Nam quyết đem tất cả tinh thần và lực lượng, tính mạng và của cải để giữ vững quyền tự do, độc lập ấy!",
             quiz: {
-                question: "Điểm cống hiến lý luận vĩ đại của Chủ tịch Hồ Chí Minh trong phần mở đầu bản Tuyên ngôn Độc lập 2/9/1945 là gì?",
+                question: "Trong bản 'Tuyên ngôn Độc lập' ngày 2/9/1945, Chủ tịch Hồ Chí Minh đã trích dẫn những câu bất hủ từ các bản tuyên ngôn lịch sử nào của thế giới?",
                 options: [
-                    "Trích dẫn các bản Tuyên ngôn của Mỹ và Pháp để phát triển sáng tạo từ 'Quyền con người' thành 'Quyền dân tộc thiêng liêng'",
-                    "Tuyên bố xóa bỏ hoàn toàn quyền sở hữu tư nhân về tư liệu sản xuất",
-                    "Đề nghị các cường quốc quốc tế đến giám sát nền độc lập Việt Nam",
-                    "Phủ nhận sạch trơn các giá trị văn minh phương Tây tiến bộ"
+                    "Tuyên ngôn của Đảng Cộng sản năm 1848 của C.Mác và Ph.Ăngghen",
+                    "Tuyên ngôn Độc lập năm 1776 của Mỹ và Tuyên ngôn Nhân quyền, Dân quyền năm 1789 của Pháp",
+                    "Tuyên ngôn Quốc tế Nhân quyền năm 1948 của Liên Hợp Quốc",
+                    "Tuyên ngôn Giải phóng Nô lệ năm 1863 của Tổng thống Abraham Lincoln"
                 ],
-                correctIndex: 0,
-                explanation: "Hồ Chí Minh đã phát triển sáng tạo: Tất cả mọi người sinh ra đều có quyền bình đẳng -> suy rộng ra là Tất cả các dân tộc trên thế giới đều sinh ra bình đẳng, dân tộc nào cũng có quyền sống, quyền sung sướng và quyền tự do."
+                correctIndex: 1,
+                explanation: "Chủ tịch Hồ Chí Minh đã trích dẫn Tuyên ngôn Độc lập 1776 của Mỹ và Tuyên ngôn Nhân quyền & Dân quyền 1789 của Pháp, khẳng định quyền bình đẳng và độc lập tự do thiêng liêng của mọi dân tộc trên thế giới."
             }
         }
     },
