@@ -1,23 +1,233 @@
-// Web Audio API Sound Synthesizer & Procedural BGM
-// Không cần file mp3 bên ngoài, chạy 100% offline không bị lỗi CORS/404
+// Web Audio API Sound Synthesizer & Procedural BGM - Chủ đề Tư tưởng Hồ Chí Minh
+// 100% Offline, hoạt động mượt mà không cần nạp file MP3 từ bên ngoài (tránh lỗi CORS / 404)
+
+// Bảng tần số chuẩn các nốt nhạc (Hz)
+const TTHCM_NOTES = {
+    REST: 0,
+    G2: 98.00,  A2: 110.00, B2: 123.47,
+    C3: 130.81, D3: 146.83, E3: 164.81, F3: 174.61, G3: 196.00, A3: 220.00, B3: 246.94,
+    C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, B4: 493.88,
+    C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99, A5: 880.00
+};
+
+// Tuyển tập các tuyệt phẩm âm nhạc cách mạng bất hủ về Chủ tịch Hồ Chí Minh
+const BAC_HO_TRACKS = [
+    {
+        id: 'nhu-co-bac-ho',
+        title: 'Như Có Bác Hồ Trong Ngày Vui Đại Thắng',
+        composer: 'Nhạc sĩ Phạm Tuyên (1975)',
+        tempoMs: 440,
+        notes: [
+            // "Như có Bác Hồ trong ngày vui đại thắng"
+            { f: TTHCM_NOTES.G3, b: 0.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.C4, b: 0.5 },
+            { f: TTHCM_NOTES.C4, b: 0.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.D4, b: 0.5 },
+            { f: TTHCM_NOTES.E4, b: 0.5, bass: TTHCM_NOTES.E3 },
+            { f: TTHCM_NOTES.C4, b: 0.5 },
+            { f: TTHCM_NOTES.D4, b: 0.5, bass: TTHCM_NOTES.G2 },
+            { f: TTHCM_NOTES.E4, b: 0.5 },
+            { f: TTHCM_NOTES.G4, b: 1.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.REST, b: 0.5 },
+
+            // "Lời Bác nay đã thành chiến thắng vẻ vang"
+            { f: TTHCM_NOTES.A4, b: 0.5, bass: TTHCM_NOTES.A2 },
+            { f: TTHCM_NOTES.C5, b: 0.5 },
+            { f: TTHCM_NOTES.A4, b: 0.5, bass: TTHCM_NOTES.F3 },
+            { f: TTHCM_NOTES.G4, b: 0.5 },
+            { f: TTHCM_NOTES.E4, b: 0.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.G4, b: 0.5 },
+            { f: TTHCM_NOTES.A4, b: 0.5, bass: TTHCM_NOTES.G2 },
+            { f: TTHCM_NOTES.G4, b: 0.25 },
+            { f: TTHCM_NOTES.E4, b: 0.25 },
+            { f: TTHCM_NOTES.D4, b: 1.5, bass: TTHCM_NOTES.G2 },
+            { f: TTHCM_NOTES.REST, b: 0.5 },
+
+            // "Ba mươi năm đấu tranh giành toàn vẹn non sông"
+            { f: TTHCM_NOTES.C4, b: 0.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.C4, b: 0.5 },
+            { f: TTHCM_NOTES.C4, b: 0.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.D4, b: 0.5 },
+            { f: TTHCM_NOTES.E4, b: 0.5, bass: TTHCM_NOTES.E3 },
+            { f: TTHCM_NOTES.C4, b: 0.5 },
+            { f: TTHCM_NOTES.D4, b: 0.5, bass: TTHCM_NOTES.G2 },
+            { f: TTHCM_NOTES.E4, b: 0.5 },
+            { f: TTHCM_NOTES.G4, b: 1.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.REST, b: 0.5 },
+
+            // "Ba mươi năm dân chủ cộng hòa kháng chiến đã thành công"
+            { f: TTHCM_NOTES.A4, b: 0.5, bass: TTHCM_NOTES.A2 },
+            { f: TTHCM_NOTES.C5, b: 0.5 },
+            { f: TTHCM_NOTES.A4, b: 0.5, bass: TTHCM_NOTES.F3 },
+            { f: TTHCM_NOTES.G4, b: 0.5 },
+            { f: TTHCM_NOTES.E4, b: 0.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.G4, b: 0.5 },
+            { f: TTHCM_NOTES.A4, b: 0.5, bass: TTHCM_NOTES.G2 },
+            { f: TTHCM_NOTES.C5, b: 0.5 },
+            { f: TTHCM_NOTES.D5, b: 0.5, bass: TTHCM_NOTES.G2 },
+            { f: TTHCM_NOTES.C5, b: 1.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.REST, b: 0.5 },
+
+            // Điệp khúc: "Việt Nam - Hồ Chí Minh!"
+            { f: TTHCM_NOTES.C5, b: 0.75, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.C5, b: 0.75, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.REST, b: 0.5 },
+            { f: TTHCM_NOTES.G4, b: 0.5, bass: TTHCM_NOTES.G2 },
+            { f: TTHCM_NOTES.A4, b: 0.5 },
+            { f: TTHCM_NOTES.C5, b: 1.0, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.REST, b: 0.5 },
+
+            // "Việt Nam - Hồ Chí Minh!"
+            { f: TTHCM_NOTES.C5, b: 0.75, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.C5, b: 0.75, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.REST, b: 0.5 },
+            { f: TTHCM_NOTES.G4, b: 0.5, bass: TTHCM_NOTES.G2 },
+            { f: TTHCM_NOTES.A4, b: 0.5 },
+            { f: TTHCM_NOTES.C5, b: 1.0, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.REST, b: 0.5 },
+
+            // "Việt Nam - Hồ Chí Minh! Việt Nam - Hồ Chí Minh!"
+            { f: TTHCM_NOTES.C5, b: 0.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.C5, b: 0.5 },
+            { f: TTHCM_NOTES.D5, b: 0.5, bass: TTHCM_NOTES.G2 },
+            { f: TTHCM_NOTES.C5, b: 0.5 },
+            { f: TTHCM_NOTES.A4, b: 1.0, bass: TTHCM_NOTES.A2 },
+
+            { f: TTHCM_NOTES.G4, b: 0.5, bass: TTHCM_NOTES.G2 },
+            { f: TTHCM_NOTES.A4, b: 0.5 },
+            { f: TTHCM_NOTES.C5, b: 0.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.D5, b: 0.5, bass: TTHCM_NOTES.G2 },
+            { f: TTHCM_NOTES.C5, b: 1.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.REST, b: 1.0 }
+        ]
+    },
+    {
+        id: 'bac-dang-cung-chung-chau',
+        title: 'Bác Đang Cùng Chúng Cháu Hành Quân',
+        composer: 'Nhạc sĩ Huy Thục (1969)',
+        tempoMs: 420,
+        notes: [
+            // "Đêm nay trên đường hành quân ra mặt trận"
+            { f: TTHCM_NOTES.A3, b: 0.5, bass: TTHCM_NOTES.A2 },
+            { f: TTHCM_NOTES.C4, b: 0.5 },
+            { f: TTHCM_NOTES.D4, b: 0.5, bass: TTHCM_NOTES.D3 },
+            { f: TTHCM_NOTES.D4, b: 0.5 },
+            { f: TTHCM_NOTES.D4, b: 0.5, bass: TTHCM_NOTES.D3 },
+            { f: TTHCM_NOTES.G4, b: 0.5 },
+            { f: TTHCM_NOTES.E4, b: 0.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.D4, b: 1.0, bass: TTHCM_NOTES.D3 },
+            { f: TTHCM_NOTES.REST, b: 0.5 },
+
+            // "Trùng trùng đoàn quân tiến bước theo con đường của Bác"
+            { f: TTHCM_NOTES.C4, b: 0.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.C4, b: 0.5 },
+            { f: TTHCM_NOTES.D4, b: 0.5, bass: TTHCM_NOTES.D3 },
+            { f: TTHCM_NOTES.E4, b: 0.5 },
+            { f: TTHCM_NOTES.G4, b: 0.5, bass: TTHCM_NOTES.G2 },
+            { f: TTHCM_NOTES.G4, b: 0.5 },
+            { f: TTHCM_NOTES.E4, b: 0.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.C4, b: 0.5 },
+            { f: TTHCM_NOTES.D4, b: 0.5, bass: TTHCM_NOTES.D3 },
+            { f: TTHCM_NOTES.E4, b: 0.5 },
+            { f: TTHCM_NOTES.D4, b: 1.0, bass: TTHCM_NOTES.D3 },
+            { f: TTHCM_NOTES.REST, b: 0.5 },
+
+            // "Nở ngàn hoa chiến công dâng lên Người"
+            { f: TTHCM_NOTES.G4, b: 0.5, bass: TTHCM_NOTES.G2 },
+            { f: TTHCM_NOTES.A4, b: 0.5 },
+            { f: TTHCM_NOTES.C5, b: 0.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.D5, b: 0.5 },
+            { f: TTHCM_NOTES.C5, b: 0.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.A4, b: 0.5 },
+            { f: TTHCM_NOTES.G4, b: 1.0, bass: TTHCM_NOTES.G2 },
+            { f: TTHCM_NOTES.REST, b: 0.5 },
+
+            // Điệp khúc: "Bác vẫn cùng chúng cháu hành quân!"
+            { f: TTHCM_NOTES.C5, b: 0.75, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.A4, b: 0.5 },
+            { f: TTHCM_NOTES.G4, b: 0.5, bass: TTHCM_NOTES.G2 },
+            { f: TTHCM_NOTES.A4, b: 0.5 },
+            { f: TTHCM_NOTES.C5, b: 0.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.D5, b: 0.5, bass: TTHCM_NOTES.G2 },
+            { f: TTHCM_NOTES.C5, b: 1.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.REST, b: 1.0 }
+        ]
+    },
+    {
+        id: 'ai-yeu-bac-ho',
+        title: 'Ai Yêu Bác Hồ Chí Minh Hơn Thiếu Niên Nhi Đồng',
+        composer: 'Nhạc sĩ Phong Nhã (1945)',
+        tempoMs: 440,
+        notes: [
+            // "Ai yêu Bác Hồ Chí Minh hơn thiếu niên nhi đồng"
+            { f: TTHCM_NOTES.E4, b: 0.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.G4, b: 0.5 },
+            { f: TTHCM_NOTES.A4, b: 0.5, bass: TTHCM_NOTES.A2 },
+            { f: TTHCM_NOTES.C5, b: 0.75 },
+            { f: TTHCM_NOTES.A4, b: 0.25 },
+            { f: TTHCM_NOTES.G4, b: 0.5, bass: TTHCM_NOTES.G2 },
+            { f: TTHCM_NOTES.E4, b: 0.5 },
+            { f: TTHCM_NOTES.G4, b: 0.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.D4, b: 0.5 },
+            { f: TTHCM_NOTES.C4, b: 1.0, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.REST, b: 0.5 },
+
+            // "Ai yêu Bác Hồ Chí Minh hơn thiếu niên nhi đồng"
+            { f: TTHCM_NOTES.E4, b: 0.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.G4, b: 0.5 },
+            { f: TTHCM_NOTES.A4, b: 0.5, bass: TTHCM_NOTES.A2 },
+            { f: TTHCM_NOTES.C5, b: 0.75 },
+            { f: TTHCM_NOTES.A4, b: 0.25 },
+            { f: TTHCM_NOTES.G4, b: 0.5, bass: TTHCM_NOTES.G2 },
+            { f: TTHCM_NOTES.E4, b: 0.5 },
+            { f: TTHCM_NOTES.G4, b: 0.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.D4, b: 0.5 },
+            { f: TTHCM_NOTES.C4, b: 1.0, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.REST, b: 0.5 },
+
+            // "Bác chúng em dáng cao cao người thanh thanh"
+            { f: TTHCM_NOTES.G4, b: 0.5, bass: TTHCM_NOTES.G2 },
+            { f: TTHCM_NOTES.A4, b: 0.5 },
+            { f: TTHCM_NOTES.C5, b: 0.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.C5, b: 0.5 },
+            { f: TTHCM_NOTES.A4, b: 0.5, bass: TTHCM_NOTES.F3 },
+            { f: TTHCM_NOTES.G4, b: 0.5 },
+            { f: TTHCM_NOTES.G4, b: 0.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.A4, b: 0.5 },
+            { f: TTHCM_NOTES.C5, b: 1.0, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.REST, b: 0.5 },
+
+            // "Hồ Chí Minh kính yêu, chúng em kính yêu Bác Hồ Chí Minh trọn một đời"
+            { f: TTHCM_NOTES.C5, b: 0.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.C5, b: 0.5 },
+            { f: TTHCM_NOTES.D5, b: 0.5, bass: TTHCM_NOTES.G2 },
+            { f: TTHCM_NOTES.E5, b: 0.75 },
+            { f: TTHCM_NOTES.D5, b: 0.25 },
+            { f: TTHCM_NOTES.C5, b: 0.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.A4, b: 0.5 },
+            { f: TTHCM_NOTES.G4, b: 0.5, bass: TTHCM_NOTES.G2 },
+            { f: TTHCM_NOTES.A4, b: 0.5 },
+            { f: TTHCM_NOTES.C5, b: 1.5, bass: TTHCM_NOTES.C3 },
+            { f: TTHCM_NOTES.REST, b: 1.0 }
+        ]
+    }
+];
 
 class SoundManager {
     constructor() {
         this.ctx = null;
         this.isMuted = false;
         this.isInitialized = false;
+
+        // BGM Playback state
+        this.tracks = BAC_HO_TRACKS;
+        this.currentTrackIndex = 0;
+        this.noteIndex = 0;
         this.bgmPlaying = false;
         this.bgmTimer = null;
-        this.noteIndex = 0;
 
-        // Patriotic / Heroic pentatonic melody notes (Hz)
-        // Dựa trên âm hưởng ngũ cung và hào hùng cách mạng
-        this.melody = [
-            261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 440.00, 392.00,
-            329.63, 392.00, 440.00, 523.25, 587.33, 659.25, 523.25, 440.00,
-            392.00, 329.63, 293.66, 261.63, 293.66, 329.63, 392.00, 329.63,
-            261.63, 220.00, 261.63, 293.66, 329.63, 293.66, 261.63, 196.00
-        ];
+        // Tương thích ngược với các hàm cũ
+        this.melody = this.tracks[0].notes.map(n => n.f);
     }
 
     init() {
@@ -41,6 +251,42 @@ class SoundManager {
         return this.isMuted;
     }
 
+    // Lấy thông tin bài hát hiện tại
+    getCurrentTrack() {
+        const track = this.tracks[this.currentTrackIndex] || this.tracks[0];
+        return {
+            title: track.title,
+            composer: track.composer,
+            index: this.currentTrackIndex,
+            total: this.tracks.length
+        };
+    }
+
+    // Chuyển sang bài tiếp theo trong danh sách các bài hát về Bác Hồ
+    nextTrack() {
+        this.currentTrackIndex = (this.currentTrackIndex + 1) % this.tracks.length;
+        this.noteIndex = 0;
+        if (this.bgmPlaying && !this.isMuted) {
+            this.stopBGM();
+            this.startBGM();
+        }
+        return this.getCurrentTrack();
+    }
+
+    // Chọn bài theo vị trí index
+    setTrack(index) {
+        if (index >= 0 && index < this.tracks.length) {
+            this.currentTrackIndex = index;
+            this.noteIndex = 0;
+            if (this.bgmPlaying && !this.isMuted) {
+                this.stopBGM();
+                this.startBGM();
+            }
+        }
+        return this.getCurrentTrack();
+    }
+
+    // Phát âm thanh đơn lẻ (SFX)
     playTone(freq, type = 'sine', duration = 0.15, gainVal = 0.1, decay = true) {
         if (this.isMuted) return;
         this.init();
@@ -67,6 +313,57 @@ class SoundManager {
         }
     }
 
+    // Phát nốt nhạc giai điệu BGM với âm sắc êm dịu, không click loa
+    playBgmMelodyNote(freq, durationSec, gainVal = 0.065) {
+        if (this.isMuted || !freq || freq <= 0) return;
+        this.init();
+        try {
+            const now = this.ctx.currentTime;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+
+            // Kết hợp sóng triangle tạo âm thanh phong cách cổ điển, trang trọng và ấm áp
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now);
+
+            // Envelope mềm: attack êm trong 0.02s tránh click loa, sustain và release mượt mà
+            gain.gain.setValueAtTime(0.0001, now);
+            gain.gain.linearRampToValueAtTime(gainVal, now + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + durationSec);
+
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+
+            osc.start(now);
+            osc.stop(now + durationSec);
+        } catch (e) {}
+    }
+
+    // Phát nốt trầm Bass BGM đệm nhịp phách hành tiến
+    playBgmBassNote(freq, durationSec, gainVal = 0.05) {
+        if (this.isMuted || !freq || freq <= 0) return;
+        this.init();
+        try {
+            const now = this.ctx.currentTime;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now);
+
+            gain.gain.setValueAtTime(0.0001, now);
+            gain.gain.linearRampToValueAtTime(gainVal, now + 0.025);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + durationSec);
+
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+
+            osc.start(now);
+            osc.stop(now + durationSec);
+        } catch (e) {}
+    }
+
+    // Nhảy
     playJump() {
         if (this.isMuted) return;
         this.init();
@@ -86,6 +383,7 @@ class SoundManager {
         } catch (e) {}
     }
 
+    // Nhảy đúp
     playDoubleJump() {
         if (this.isMuted) return;
         this.init();
@@ -105,6 +403,7 @@ class SoundManager {
         } catch (e) {}
     }
 
+    // Nhặt ngôi sao / điểm thưởng
     playCollect() {
         if (this.isMuted) return;
         this.init();
@@ -116,6 +415,7 @@ class SoundManager {
         });
     }
 
+    // Báo động khi lọt vào tầm nhìn mật thám
     playAlert() {
         if (this.isMuted) return;
         this.init();
@@ -167,6 +467,7 @@ class SoundManager {
         }
     }
 
+    // Trúng đạn / Mất máu
     playHit() {
         if (this.isMuted) return;
         this.init();
@@ -186,6 +487,7 @@ class SoundManager {
         } catch (e) {}
     }
 
+    // Hồi sinh tại checkpoint
     playRespawn() {
         if (this.isMuted) return;
         this.init();
@@ -197,6 +499,7 @@ class SoundManager {
         });
     }
 
+    // Trả lời đúng trắc nghiệm
     playQuizSuccess() {
         if (this.isMuted) return;
         this.init();
@@ -208,6 +511,7 @@ class SoundManager {
         });
     }
 
+    // Trả lời sai trắc nghiệm
     playQuizFail() {
         if (this.isMuted) return;
         this.init();
@@ -217,6 +521,7 @@ class SoundManager {
         }, 150);
     }
 
+    // Hoàn thành màn chơi / Vượt ải
     playLevelComplete() {
         if (this.isMuted) return;
         this.init();
@@ -235,16 +540,17 @@ class SoundManager {
         });
     }
 
+    // Game Over
     playGameOver() {
         if (this.isMuted) return;
         this.init();
         const jingle = [
-            { f: 392.00, d: 0.16, wait: 0 },    // G4
-            { f: 369.99, d: 0.16, wait: 160 },  // F#4
-            { f: 349.23, d: 0.16, wait: 320 },  // F4
-            { f: 329.63, d: 0.42, wait: 480 },  // E4
-            { f: 261.63, d: 0.2,  wait: 780 },  // C4
-            { f: 196.00, d: 0.6,  wait: 980 }   // G3
+            { f: 392.00, d: 0.16, wait: 0 },
+            { f: 369.99, d: 0.16, wait: 160 },
+            { f: 349.23, d: 0.16, wait: 320 },
+            { f: 329.63, d: 0.42, wait: 480 },
+            { f: 261.63, d: 0.2,  wait: 780 },
+            { f: 196.00, d: 0.6,  wait: 980 }
         ];
         jingle.forEach(item => {
             setTimeout(() => {
@@ -253,32 +559,53 @@ class SoundManager {
         });
     }
 
+    // Âm thanh nấp bụi rậm
     playHide() {
         this.playTone(180, 'sine', 0.1, 0.05);
     }
 
+    // Bắt đầu phát BGM giai điệu bài hát về Bác Hồ
     startBGM() {
         if (this.isMuted || this.bgmPlaying) return;
         this.init();
         this.bgmPlaying = true;
-        this.noteIndex = 0;
 
-        const playNext = () => {
+        const playNextStep = () => {
             if (!this.bgmPlaying || this.isMuted) return;
-            const freq = this.melody[this.noteIndex % this.melody.length];
-            this.playTone(freq, 'sine', 0.3, 0.04);
 
-            // Add soft bass accompaniment every 4 beats
-            if (this.noteIndex % 4 === 0) {
-                this.playTone(freq / 2, 'triangle', 0.4, 0.06);
+            const track = this.tracks[this.currentTrackIndex];
+            if (!track || !track.notes || track.notes.length === 0) return;
+
+            const note = track.notes[this.noteIndex];
+            const stepDurationMs = note.b * track.tempoMs;
+            const playDurationSec = Math.max(0.08, (note.b * track.tempoMs * 0.92) / 1000);
+
+            // Phát nốt giai điệu chính
+            if (note.f && note.f > 0) {
+                this.playBgmMelodyNote(note.f, playDurationSec, 0.065);
+            }
+
+            // Phát nốt đệm bè trầm Bass
+            if (note.bass && note.bass > 0) {
+                this.playBgmBassNote(note.bass, Math.min(0.38, playDurationSec * 1.1), 0.055);
             }
 
             this.noteIndex++;
-            this.bgmTimer = setTimeout(playNext, 380);
+
+            // Khi hết bài, chuyển bài tiếp theo hoặc lặp lại
+            if (this.noteIndex >= track.notes.length) {
+                this.noteIndex = 0;
+                // Tự động chuyển tuần hoàn sang bài tiếp theo về Bác Hồ
+                this.currentTrackIndex = (this.currentTrackIndex + 1) % this.tracks.length;
+            }
+
+            this.bgmTimer = setTimeout(playNextStep, stepDurationMs);
         };
-        playNext();
+
+        playNextStep();
     }
 
+    // Dừng phát BGM
     stopBGM() {
         this.bgmPlaying = false;
         if (this.bgmTimer) {
@@ -289,4 +616,3 @@ class SoundManager {
 }
 
 const audio = new SoundManager();
-

@@ -44,7 +44,11 @@ class GameManager {
         if (btnStart) {
             btnStart.onclick = () => {
                 audio.startBGM();
+                const track = audio.getCurrentTrack();
                 this.startChapter(0);
+                setTimeout(() => {
+                    if (this.engine) this.engine.triggerScreenNotice(`🎵 Nhạc nền: ${track.title}`, "info");
+                }, 400);
             };
         }
 
@@ -100,6 +104,36 @@ class GameManager {
             };
         });
 
+        // Cập nhật thông tin bài hát Bác Hồ trên UI
+        const updateTrackUI = () => {
+            const track = audio.getCurrentTrack();
+            const bgmBadgeText = document.getElementById("menu-bgm-title");
+            if (bgmBadgeText) {
+                bgmBadgeText.innerText = track.title;
+            }
+            const tip = `Đổi bài hát về Bác Hồ (Hiện tại: ${track.title} - ${track.composer})`;
+            const btnNext1 = document.getElementById("btn-next-track");
+            const btnNext2 = document.getElementById("btn-game-next-track");
+            if (btnNext1) btnNext1.title = tip;
+            if (btnNext2) btnNext2.title = tip;
+        };
+
+        const handleNextTrack = () => {
+            const track = audio.nextTrack();
+            updateTrackUI();
+            if (this.engine && this.engine.triggerScreenNotice) {
+                this.engine.triggerScreenNotice(`🎵 ${track.title}`, "info");
+            }
+        };
+
+        const btnNextTrack = document.getElementById("btn-next-track");
+        if (btnNextTrack) btnNextTrack.onclick = handleNextTrack;
+
+        const btnGameNextTrack = document.getElementById("btn-game-next-track");
+        if (btnGameNextTrack) btnGameNextTrack.onclick = handleNextTrack;
+
+        updateTrackUI();
+
         // Nút bật / tắt âm thanh (đồng bộ cả Header và trong HUD Game)
         const updateSoundIcons = (muted) => {
             const icon = muted ? "🔇" : "🔊";
@@ -112,6 +146,10 @@ class GameManager {
         const toggleAudio = () => {
             const isMuted = audio.toggleMute();
             updateSoundIcons(isMuted);
+            if (!isMuted && this.engine && this.engine.triggerScreenNotice) {
+                const track = audio.getCurrentTrack();
+                this.engine.triggerScreenNotice(`🎵 Nhạc nền: ${track.title}`, "info");
+            }
         };
 
         const btnMute = document.getElementById("btn-toggle-sound");
@@ -263,7 +301,11 @@ class GameManager {
 
             card.querySelector(".btn-play-chapter").onclick = () => {
                 audio.startBGM();
+                const track = audio.getCurrentTrack();
                 this.startChapter(idx);
+                setTimeout(() => {
+                    if (this.engine) this.engine.triggerScreenNotice(`🎵 Nhạc nền: ${track.title}`, "info");
+                }, 400);
             };
 
             container.appendChild(card);

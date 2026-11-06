@@ -23,6 +23,7 @@
         </div>
         <div class="header-actions">
             <button id="btn-toggle-sound" class="btn btn-sm btn-icon" title="Bật/Tắt Âm thanh">🔊</button>
+            <button id="btn-next-track" class="btn btn-sm btn-icon" title="Đổi bài nhạc về Bác Hồ">⏭️</button>
             <button id="btn-toggle-fullscreen" class="btn btn-sm btn-icon" title="Toàn màn hình">⛶</button>
             <button id="btn-guide-top" class="btn btn-sm btn-outline-subtle" title="Hướng dẫn học tập & chơi">📖 Hướng Dẫn</button>
             <button id="btn-leaderboard-top" class="btn btn-sm btn-outline-subtle" title="Bảng vàng thành tích">🏆 Bảng Vàng</button>
@@ -70,6 +71,11 @@
 
                 <div class="menu-footer-info">
                     <span id="menu-high-score-preview" style="color: var(--accent-gold); font-weight: 700;">🏆 Bảng Vàng: Đang tải...</span>
+                    <div id="menu-bgm-badge" class="menu-bgm-badge" title="Bấm nút ⏭️ để chuyển bài hát về Bác Hồ">
+                        <span class="bgm-icon">🎵</span>
+                        <span class="bgm-label">Nhạc nền:</span>
+                        <strong id="menu-bgm-title">Như Có Bác Hồ Trong Ngày Vui Đại Thắng</strong>
+                    </div>
                 </div>
             </div>
         </section>
@@ -146,6 +152,7 @@
 
                 <div class="hud-right">
                     <button id="btn-game-sound" class="btn btn-sm btn-icon-hud" title="Bật/Tắt Âm thanh">🔊</button>
+                    <button id="btn-game-next-track" class="btn btn-sm btn-icon-hud" title="Đổi bài nhạc về Bác Hồ">⏭️</button>
                     <button id="btn-game-fullscreen" class="btn btn-sm btn-icon-hud" title="Toàn màn hình">⛶</button>
                     <button class="btn btn-sm btn-danger-subtle btn-back-menu" title="Về Menu chính">✕ Thoát</button>
                 </div>

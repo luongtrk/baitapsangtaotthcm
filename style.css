@@ -304,8 +304,36 @@ body {
     padding-top: 15px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
     align-items: center;
+}
+
+.menu-bgm-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(217, 119, 6, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    color: #fef08a;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    transition: all 0.2s ease;
+}
+
+.menu-bgm-badge:hover {
+    background: rgba(217, 119, 6, 0.25);
+    border-color: rgba(245, 158, 11, 0.6);
+}
+
+.menu-bgm-badge .bgm-icon {
+    font-size: 0.95rem;
+}
+
+.menu-bgm-badge .bgm-label {
+    color: #e2e8f0;
+    opacity: 0.85;
 }
 
 .btn-text-link {
