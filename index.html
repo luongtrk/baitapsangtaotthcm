@@ -65,17 +65,48 @@
                     <div class="menu-sub-row">
                         <button id="btn-select-chapter" class="btn btn-secondary">🗺️ 4 Chương Lịch Sử</button>
                         <button id="btn-open-museum" class="btn btn-secondary">🏛️ Bảo Tàng (12 Văn Kiện)</button>
-                        <button id="btn-open-leaderboard" class="btn btn-secondary">🏆 Bảng Vàng Kỷ Lục</button>
                     </div>
                 </div>
 
                 <div class="menu-footer-info">
-                    <span id="menu-high-score-preview" style="color: var(--accent-gold); font-weight: 700;">🏆 Bảng Vàng: Đang tải...</span>
                     <div id="menu-bgm-badge" class="menu-bgm-badge" title="Bấm nút ⏭️ để chuyển bài hát về Bác Hồ">
                         <span class="bgm-icon">🎵</span>
                         <span class="bgm-label">Nhạc nền:</span>
                         <strong id="menu-bgm-title">Như Có Bác Hồ Trong Ngày Vui Đại Thắng</strong>
                     </div>
+                </div>
+            </div>
+
+            <!-- ==============================================
+                 BẢNG VÀNG KỶ LỤC HIỂN THỊ TRỰC TIẾP TRÊN TRANG CHỦ
+                 ============================================== -->
+            <div id="home-leaderboard-section" class="home-leaderboard-card">
+                <div class="home-leaderboard-header">
+                    <div class="home-leaderboard-title-group">
+                        <span class="home-leaderboard-icon">🏆</span>
+                        <div>
+                            <h2 class="home-leaderboard-heading">BẢNG VÀNG THÀNH TÍCH TƯ TƯỞNG HỒ CHÍ MINH</h2>
+                            <p class="home-leaderboard-desc">Vinh danh điểm số và thời gian hoàn thành 4 chương của các sinh viên & người chơi</p>
+                        </div>
+                    </div>
+                    <button id="btn-clear-leaderboard-home" class="btn btn-sm btn-danger-subtle" title="Đặt lại Bảng Vàng trên thiết bị này">🗑️ Đặt Lại Bảng Vàng</button>
+                </div>
+
+                <div class="leaderboard-table-wrap">
+                    <table class="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 16%;">Hạng</th>
+                                <th style="width: 36%;">Sinh Viên / Người Chơi</th>
+                                <th style="width: 16%;">⭐ Điểm</th>
+                                <th style="width: 16%;">⏱️ Thời Gian</th>
+                                <th style="width: 16%;">📅 Ngày Lưu</th>
+                            </tr>
+                        </thead>
+                        <tbody id="home-leaderboard-tbody">
+                            <!-- Rendered dynamically by JS -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>

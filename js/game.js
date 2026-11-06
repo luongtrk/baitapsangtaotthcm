@@ -82,18 +82,37 @@ class GameManager {
         }
         this.updateHUDPlayerName();
 
-        // Nút Hướng dẫn & Bảng Vàng trên Header & Menu
+        // Nút Hướng dẫn trên Header
         const btnGuideTop = document.getElementById("btn-guide-top");
         if (btnGuideTop) btnGuideTop.onclick = () => this.openGuideModal();
 
+        // Nút Bảng Vàng trên Header: Cuộn mượt xuống thẳng Bảng Vàng ở Trang Chủ
+        const scrollToLeaderboard = () => {
+            this.closeAllModals();
+            this.showScreen("screen-menu");
+            setTimeout(() => {
+                const lbSection = document.getElementById("home-leaderboard-section");
+                if (lbSection) {
+                    lbSection.scrollIntoView({ behavior: "smooth" });
+                }
+            }, 100);
+        };
+
         const btnLeaderboardTop = document.getElementById("btn-leaderboard-top");
-        if (btnLeaderboardTop) btnLeaderboardTop.onclick = () => this.openLeaderboardModal();
+        if (btnLeaderboardTop) btnLeaderboardTop.onclick = scrollToLeaderboard;
 
         const btnOpenLeaderboard = document.getElementById("btn-open-leaderboard");
-        if (btnOpenLeaderboard) btnOpenLeaderboard.onclick = () => this.openLeaderboardModal();
+        if (btnOpenLeaderboard) btnOpenLeaderboard.onclick = scrollToLeaderboard;
 
+        // Nút Đặt lại Bảng Vàng (cả trên Modal lẫn trên Card Bảng Vàng Trang Chủ)
         const btnClearLeaderboard = document.getElementById("btn-clear-leaderboard");
         if (btnClearLeaderboard) btnClearLeaderboard.onclick = () => this.clearLeaderboard();
+
+        const btnClearHome = document.getElementById("btn-clear-leaderboard-home");
+        if (btnClearHome) btnClearHome.onclick = () => this.clearLeaderboard();
+
+        // Hiển thị ngay Bảng Vàng khi tải trang
+        this.renderLeaderboardTable();
 
         // Nút quay lại Menu từ các màn hình khác và trong các Popup/Modal
         document.querySelectorAll(".btn-back-menu").forEach(btn => {
@@ -237,6 +256,9 @@ class GameManager {
         });
         const target = document.getElementById(screenId);
         if (target) target.classList.add("active");
+        if (screenId === "screen-menu") {
+            this.renderLeaderboardTable();
+        }
         this.checkOrientationHint();
     }
 
@@ -534,7 +556,14 @@ class GameManager {
         const btnViewLb = document.getElementById("btn-grand-view-leaderboard");
         if (btnViewLb) {
             btnViewLb.onclick = () => {
-                this.openLeaderboardModal();
+                this.closeAllModals();
+                this.showScreen("screen-menu");
+                setTimeout(() => {
+                    const lbSection = document.getElementById("home-leaderboard-section");
+                    if (lbSection) {
+                        lbSection.scrollIntoView({ behavior: "smooth" });
+                    }
+                }, 120);
             };
         }
 
@@ -660,34 +689,42 @@ class GameManager {
     }
 
     renderLeaderboardTable(customList) {
-        const tbody = document.getElementById("leaderboard-tbody");
-        if (!tbody) return;
         const list = customList !== undefined ? customList : this.loadLeaderboard();
+        const tbodies = [
+            document.getElementById("home-leaderboard-tbody"),
+            document.getElementById("leaderboard-tbody")
+        ].filter(Boolean);
 
+        if (tbodies.length === 0) return;
+
+        let html = "";
         if (!list || list.length === 0) {
-            tbody.innerHTML = `
+            html = `
                 <tr>
-                    <td colspan="5" style="text-align: center; padding: 35px 16px; color: #94a3b8; font-style: italic;">
-                        <span style="font-size: 1.6rem; display: block; margin-bottom: 8px;">🏅</span>
+                    <td colspan="5" style="text-align: center; padding: 36px 16px; color: #94a3b8; font-style: italic;">
+                        <span style="font-size: 1.8rem; display: block; margin-bottom: 8px;">🏅</span>
                         Chưa có sinh viên nào ghi danh trên Bảng Vàng.<br>
-                        <span style="color: var(--accent-gold); font-size: 0.9rem; font-style: normal; font-weight: 600;">
-                            Hãy nhập tên của bạn và hoàn thành 4 chương lịch sử để trở thành Thủ khoa đầu tiên!
+                        <span style="color: var(--accent-gold); font-size: 0.92rem; font-style: normal; font-weight: 600; display: inline-block; margin-top: 4px;">
+                            Hãy nhập tên của bạn ở trên và hoàn thành 4 chương lịch sử để trở thành Thủ Khoa đầu tiên!
                         </span>
                     </td>
                 </tr>
             `;
-            return;
+        } else {
+            html = list.map((item, idx) => `
+                <tr class="leaderboard-row ${idx === 0 ? 'rank-gold' : idx === 1 ? 'rank-silver' : idx === 2 ? 'rank-bronze' : ''}">
+                    <td class="leaderboard-rank leaderboard-rank-${idx + 1}">${idx === 0 ? "🥇 Thủ Khoa" : idx === 1 ? "🥈 Á Khoa" : idx === 2 ? "🥉 Quý Quân" : "#" + (idx + 1)}</td>
+                    <td style="font-weight: 700; color: #f8fafc;">${item.name}</td>
+                    <td style="color: var(--accent-gold); font-weight: 800; font-family: monospace;">⭐ ${item.score}</td>
+                    <td style="color: #38bdf8; font-family: monospace;">⏱️ ${item.time}</td>
+                    <td style="color: #94a3b8; font-size: 0.85rem;">${item.date}</td>
+                </tr>
+            `).join("");
         }
 
-        tbody.innerHTML = list.map((item, idx) => `
-            <tr>
-                <td class="leaderboard-rank leaderboard-rank-${idx + 1}">${idx === 0 ? "🥇 1" : idx === 1 ? "🥈 2" : idx === 2 ? "🥉 3" : "#" + (idx + 1)}</td>
-                <td style="font-weight: 700; color: #f8fafc;">${item.name}</td>
-                <td style="color: var(--accent-gold); font-weight: 800; font-family: monospace;">${item.score}</td>
-                <td style="color: #38bdf8; font-family: monospace;">⏱️ ${item.time}</td>
-                <td style="color: #94a3b8; font-size: 0.85rem;">${item.date}</td>
-            </tr>
-        `).join("");
+        tbodies.forEach(tb => {
+            tb.innerHTML = html;
+        });
     }
 
     openGuideModal() {

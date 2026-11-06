@@ -1168,6 +1168,80 @@ body.touch-device .mobile-controls-panel {
     font-size: 0.95rem;
 }
 
+/* Direct Home Leaderboard Card */
+.home-leaderboard-card {
+    width: 100%;
+    max-width: 660px;
+    margin: 0 auto 50px;
+    background: rgba(15, 23, 42, 0.9);
+    border: 2px solid rgba(251, 191, 36, 0.45);
+    border-radius: 20px;
+    padding: 24px 26px;
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.75), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    animation: fadeIn 0.4s ease-out;
+}
+
+.home-leaderboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(251, 191, 36, 0.25);
+    margin-bottom: 12px;
+}
+
+.home-leaderboard-title-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+}
+
+.home-leaderboard-icon {
+    font-size: 2rem;
+    filter: drop-shadow(0 2px 8px rgba(250, 204, 21, 0.5));
+}
+
+.home-leaderboard-heading {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--accent-gold);
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+.home-leaderboard-desc {
+    font-size: 0.82rem;
+    color: #94a3b8;
+    margin: 3px 0 0;
+}
+
+.leaderboard-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.leaderboard-table-wrap .leaderboard-table {
+    margin: 5px 0 0;
+}
+
+.leaderboard-row.rank-gold td {
+    background: rgba(250, 204, 21, 0.08);
+}
+
+.leaderboard-row.rank-silver td {
+    background: rgba(203, 213, 225, 0.04);
+}
+
+.leaderboard-row.rank-bronze td {
+    background: rgba(249, 115, 22, 0.04);
+}
+
 .leaderboard-table th {
     background: rgba(30, 41, 59, 0.85);
     color: var(--accent-gold);
@@ -1481,5 +1555,24 @@ body.touch-device .mobile-controls-panel {
     font-size: 0.94rem;
     line-height: 1.6;
     margin-bottom: 20px;
+}
+
+/* Responsive cho Bảng Vàng trên di động */
+@media (max-width: 640px) {
+    .home-leaderboard-card {
+        padding: 16px 12px;
+        margin-bottom: 25px;
+    }
+    .home-leaderboard-heading {
+        font-size: 1rem;
+    }
+    .home-leaderboard-icon {
+        font-size: 1.6rem;
+    }
+    .home-leaderboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
 }
 
