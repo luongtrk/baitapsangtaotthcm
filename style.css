@@ -1269,6 +1269,74 @@ body.touch-device .mobile-controls-panel {
 .leaderboard-rank-2 { color: #cbd5e1; font-size: 1.05rem; }
 .leaderboard-rank-3 { color: #f97316; font-size: 1.05rem; }
 
+/* =========================================================================
+   FONT AWESOME ICON HELPERS & COLOR THEMING (FA* ICONS)
+   ========================================================================= */
+.text-gold {
+    color: #facc15 !important;
+    filter: drop-shadow(0 0 6px rgba(250, 204, 21, 0.45));
+}
+
+.text-silver {
+    color: #cbd5e1 !important;
+    filter: drop-shadow(0 0 5px rgba(203, 213, 225, 0.4));
+}
+
+.text-bronze {
+    color: #f97316 !important;
+    filter: drop-shadow(0 0 5px rgba(249, 115, 22, 0.4));
+}
+
+.text-danger {
+    color: #ef4444 !important;
+}
+
+.text-success {
+    color: #22c55e !important;
+}
+
+.text-cyan {
+    color: #38bdf8 !important;
+}
+
+.text-yellow {
+    color: #fde047 !important;
+}
+
+.text-muted {
+    color: #94a3b8 !important;
+}
+
+.brand-star i {
+    color: #facc15;
+    filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.85));
+}
+
+/* Tinh chỉnh Icon trong Nút bấm */
+.btn i, .btn-sm i, .btn-icon i, .btn-icon-hud i {
+    pointer-events: none;
+    transition: transform 0.2s ease;
+}
+
+.btn:hover i {
+    transform: scale(1.15);
+}
+
+.btn-icon, .btn-icon-hud {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.touch-btn i {
+    font-size: 1.35rem;
+    pointer-events: none;
+}
+
+.touch-btn-dpad i {
+    font-size: 1.25rem;
+}
+
 /* Touch Interact Button */
 .touch-btn-interact {
     background: linear-gradient(135deg, rgba(234, 179, 8, 0.9), rgba(202, 138, 4, 0.9)) !important;

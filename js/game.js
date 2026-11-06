@@ -155,11 +155,11 @@ class GameManager {
 
         // Nút bật / tắt âm thanh (đồng bộ cả Header và trong HUD Game)
         const updateSoundIcons = (muted) => {
-            const icon = muted ? "🔇" : "🔊";
+            const iconHtml = muted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
             const btn1 = document.getElementById("btn-toggle-sound");
             const btn2 = document.getElementById("btn-game-sound");
-            if (btn1) btn1.innerText = icon;
-            if (btn2) btn2.innerText = icon;
+            if (btn1) btn1.innerHTML = iconHtml;
+            if (btn2) btn2.innerHTML = iconHtml;
         };
 
         const toggleAudio = () => {
@@ -318,7 +318,7 @@ class GameManager {
                         <div class="progress-fill" style="width: ${(unlockedCount / chapterDocs.length) * 100}%"></div>
                     </div>
                 </div>
-                <button class="btn btn-primary btn-play-chapter">Chơi màn này</button>
+                <button class="btn btn-primary btn-play-chapter"><i class="fa-solid fa-play"></i> Chơi màn này</button>
             `;
 
             card.querySelector(".btn-play-chapter").onclick = () => {
@@ -526,7 +526,7 @@ class GameManager {
                 localStorage.setItem("tthcm_player_name", name);
                 this.addLeaderboardEntry(name, finalScore, finalTime);
                 btnSaveScore.disabled = true;
-                btnSaveScore.innerText = "✓ Đã Ghi Danh";
+                btnSaveScore.innerHTML = '<i class="fa-solid fa-check"></i> Đã Ghi Danh';
                 if (saveNotice) {
                     saveNotice.innerText = "Đã vinh danh thành tích lên Bảng Vàng!";
                     saveNotice.style.color = "#4ade80";
@@ -587,12 +587,12 @@ class GameManager {
             card.className = `museum-card ${isUnlocked ? "unlocked" : "locked"}`;
 
             card.innerHTML = `
-                <div class="card-status-badge">${isUnlocked ? "Đã mở khóa" : "Chưa mở khóa"}</div>
-                <div class="card-icon">${isUnlocked ? "📜" : "❓"}</div>
+                <div class="card-status-badge">${isUnlocked ? '<i class="fa-solid fa-lock-open"></i> Đã mở khóa' : '<i class="fa-solid fa-lock"></i> Chưa mở khóa'}</div>
+                <div class="card-icon">${isUnlocked ? '<i class="fa-solid fa-scroll text-gold"></i>' : '<i class="fa-solid fa-lock text-muted"></i>'}</div>
                 <h4>${isUnlocked ? doc.name : "Chưa mở khóa"}</h4>
                 <div class="card-year">${isUnlocked ? doc.year : "Chương " + doc.chapterId}</div>
                 <p>${isUnlocked ? doc.famousQuote : "Tìm và nhặt văn kiện này trong màn chơi."}</p>
-                ${isUnlocked ? `<button class="btn btn-sm btn-outline">Xem</button>` : ""}
+                ${isUnlocked ? `<button class="btn btn-sm btn-outline"><i class="fa-solid fa-eye"></i> Xem</button>` : ""}
             `;
 
             if (isUnlocked) {
@@ -702,7 +702,7 @@ class GameManager {
             html = `
                 <tr>
                     <td colspan="5" style="text-align: center; padding: 36px 16px; color: #94a3b8; font-style: italic;">
-                        <span style="font-size: 1.8rem; display: block; margin-bottom: 8px;">🏅</span>
+                        <span style="font-size: 2rem; display: block; margin-bottom: 8px; color: var(--accent-gold);"><i class="fa-solid fa-award"></i></span>
                         Chưa có sinh viên nào ghi danh trên Bảng Vàng.<br>
                         <span style="color: var(--accent-gold); font-size: 0.92rem; font-style: normal; font-weight: 600; display: inline-block; margin-top: 4px;">
                             Hãy nhập tên của bạn ở trên và hoàn thành 4 chương lịch sử để trở thành Thủ Khoa đầu tiên!
@@ -713,11 +713,13 @@ class GameManager {
         } else {
             html = list.map((item, idx) => `
                 <tr class="leaderboard-row ${idx === 0 ? 'rank-gold' : idx === 1 ? 'rank-silver' : idx === 2 ? 'rank-bronze' : ''}">
-                    <td class="leaderboard-rank leaderboard-rank-${idx + 1}">${idx === 0 ? "🥇 Thủ Khoa" : idx === 1 ? "🥈 Á Khoa" : idx === 2 ? "🥉 Quý Quân" : "#" + (idx + 1)}</td>
+                    <td class="leaderboard-rank leaderboard-rank-${idx + 1}">
+                        ${idx === 0 ? '<i class="fa-solid fa-medal text-gold"></i> 1' : idx === 1 ? '<i class="fa-solid fa-medal text-silver"></i> 2' : idx === 2 ? '<i class="fa-solid fa-medal text-bronze"></i> 3' : '#' + (idx + 1)}
+                    </td>
                     <td style="font-weight: 700; color: #f8fafc;">${item.name}</td>
-                    <td style="color: var(--accent-gold); font-weight: 800; font-family: monospace;">⭐ ${item.score}</td>
-                    <td style="color: #38bdf8; font-family: monospace;">⏱️ ${item.time}</td>
-                    <td style="color: #94a3b8; font-size: 0.85rem;">${item.date}</td>
+                    <td style="color: var(--accent-gold); font-weight: 800; font-family: monospace;"><i class="fa-solid fa-star text-gold"></i> ${item.score}</td>
+                    <td style="color: #38bdf8; font-family: monospace;"><i class="fa-solid fa-stopwatch text-cyan"></i> ${item.time}</td>
+                    <td style="color: #94a3b8; font-size: 0.85rem;"><i class="fa-solid fa-calendar-day" style="font-size: 0.75rem; opacity: 0.7; margin-right: 4px;"></i>${item.date}</td>
                 </tr>
             `).join("");
         }
