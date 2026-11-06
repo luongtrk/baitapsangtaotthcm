@@ -32,6 +32,13 @@ class GameEngine {
         this.maxHp = 100;
         this.hp = 100;
         this.bullets = [];
+        this.pebbles = []; // Sỏi nghi binh đang bay / nảy
+        this.supplies = []; // Vật phẩm tiếp tế (Áo Trấn Thủ, Dép Cao Su, Hòm Cải Trang)
+        this.npcs = []; // Đồng chí liên lạc bí mật
+        this.shortcuts = []; // Cầu/lối tắt bí mật
+        this.nearNpc = null; // NPC đang đứng gần
+        this.nearGuardForTakedown = null; // Mật thám có thể khống chế sau lưng
+
         this.playTime = 0; // Tổng thời gian chơi tính bằng giây
         this.chapterStartTime = 0;
         this.nearDocument = null; // Văn kiện đang đứng gần để bấm [E] mở
@@ -61,9 +68,24 @@ class GameEngine {
                 }
                 this.controls.up = true;
             }
-            // Phím E hoặc F tương tác mở đọc văn kiện khi đứng gần
-            if (e.key.toLowerCase() === "e" || e.key.toLowerCase() === "f") {
-                this.readNearDocument();
+
+            // Phím E: Tương tác mở đọc văn kiện HOẶC trò chuyện với đồng chí liên lạc
+            if (e.key.toLowerCase() === "e") {
+                if (this.nearDocument) {
+                    this.readNearDocument();
+                } else if (this.nearNpc) {
+                    this.interactWithNpc();
+                }
+            }
+
+            // Phím F: Tung Nghi Binh (Ném sỏi đánh lạc hướng mật thám)
+            if (e.key.toLowerCase() === "f") {
+                this.throwPebble();
+            }
+
+            // Phím Q: Khống Chế Từ Phía Sau (Stealth Takedown)
+            if (e.key.toLowerCase() === "q") {
+                this.performTakedown();
             }
         });
 
@@ -109,7 +131,21 @@ class GameEngine {
                 }
             }
         }, () => {});
-        bindTouchBtn("btn-touch-interact", () => this.readNearDocument(), () => {});
+
+        // Nút đọc văn kiện / trò chuyện với NPC
+        bindTouchBtn("btn-touch-interact", () => {
+            if (this.nearDocument) {
+                this.readNearDocument();
+            } else if (this.nearNpc) {
+                this.interactWithNpc();
+            }
+        }, () => {});
+
+        // Nút tung sỏi nghi binh trên mobile
+        bindTouchBtn("btn-touch-distract", () => this.throwPebble(), () => {});
+
+        // Nút khống chế mật thám sau lưng trên mobile
+        bindTouchBtn("btn-touch-takedown", () => this.performTakedown(), () => {});
 
         // Đảm bảo không bị kẹt phím khi người chơi nhấc toàn bộ ngón tay hoặc chuyển ứng dụng
         window.addEventListener("touchend", (e) => {
@@ -135,13 +171,87 @@ class GameEngine {
         return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
     }
 
+    // Kỹ năng Nghi Binh (Phím F hoặc nút cảm ứng): Ném sỏi đánh lạc hướng
+    throwPebble() {
+        if (!this.player || !this.isRunning || this.isPaused || this.player.isDying) return;
+        const pebble = this.player.throwPebble();
+        if (pebble) {
+            this.pebbles.push(pebble);
+            this.triggerScreenNotice("🎯 Nghi Binh: Đã ném sỏi đánh lạc hướng!", "info");
+            this.particles.addFloatingText(this.player.x + 14, this.player.y - 25, "NGHI BINH", "#38bdf8", 14, 140);
+        } else if (this.player.pebbleCooldown > 0) {
+            const sec = (this.player.pebbleCooldown / 60).toFixed(1);
+            this.triggerScreenNotice(`Sỏi đang hồi: ${sec}s`, "info");
+        }
+    }
+
+    // Kỹ năng Tự Vệ Khống Chế Từ Phía Sau (Phím Q hoặc nút cảm ứng)
+    performTakedown() {
+        if (!this.player || !this.isRunning || this.isPaused || this.player.isDying) return;
+        for (const guard of this.guards) {
+            if (this.player.canTakedown(guard)) {
+                guard.stun(720); // Choáng 12 giây
+                this.score += 150;
+                this.updateHUD();
+                this.particles.addTakedownBurst(guard.x + guard.width / 2, guard.y + 10);
+                this.triggerScreenNotice("🥋 Khống chế thành công! Mật thám bị bất tỉnh.", "info");
+                if (typeof audio !== "undefined" && audio.playTone) {
+                    audio.playTone(320, "triangle", 0.15, 0.25);
+                    setTimeout(() => { if (audio.playTone) audio.playTone(480, "triangle", 0.2, 0.25); }, 80);
+                }
+                this.screenShake = 6;
+                this.player.invulnerableTimer = 35;
+                this.updateActionButtons();
+                return;
+            }
+        }
+    }
+
+    // Trò chuyện & Nhận tiếp tế từ Đồng chí liên lạc bí mật
+    interactWithNpc() {
+        if (!this.nearNpc || this.isPaused || !this.isRunning) return;
+        const npc = this.nearNpc;
+        if (!npc.talked) {
+            npc.talked = true;
+            if (npc.giftType === "shield") {
+                this.player.hasShield = true;
+                this.particles.addFloatingText(npc.x + 14, npc.y - 30, "+ÁO TRẤN THỦ", "#10b981", 15, 170);
+                this.triggerScreenNotice(`🤝 ${npc.name}: "${npc.quote}" (Nhận Áo Trấn Thủ!)`, "info");
+            } else if (npc.giftType === "speed") {
+                this.player.speedBoostTimer = 480;
+                this.particles.addFloatingText(npc.x + 14, npc.y - 30, "+DÉP CAO SU", "#facc15", 15, 170);
+                this.triggerScreenNotice(`🤝 ${npc.name}: "${npc.quote}" (Tăng tốc độ di chuyển!)`, "info");
+            } else {
+                this.hp = Math.min(this.maxHp, this.hp + 35);
+                this.updateHUD();
+                this.particles.addFloatingText(npc.x + 14, npc.y - 30, "+35 HP HỒI PHỤC", "#4ade80", 15, 170);
+                this.triggerScreenNotice(`🤝 ${npc.name}: "${npc.quote}" (+35 HP Tiếp Tế)`, "info");
+            }
+
+            // Mở lối tắt bí mật nếu có
+            if (npc.shortcutId) {
+                for (const sc of this.shortcuts) {
+                    if (sc.id === npc.shortcutId) {
+                        sc.isOpen = true;
+                        this.particles.addBurst(sc.x + sc.w / 2, sc.y + sc.h / 2, "#10b981", 24);
+                        this.particles.addFloatingText(sc.x + sc.w / 2, sc.y - 20, "LỐI TẮT MỞ", "#10b981", 14, 160);
+                    }
+                }
+            }
+
+            if (typeof audio !== "undefined" && audio.playCollect) audio.playCollect();
+        } else {
+            this.triggerScreenNotice(`🤝 ${npc.name}: "${npc.quote}"`, "info");
+        }
+    }
+
     readNearDocument() {
         if (!this.nearDocument || this.nearDocument.collected || this.isPaused || !this.isRunning) return;
         const doc = this.nearDocument;
         doc.collected = true;
         doc.isNear = false;
         this.nearDocument = null;
-        this.updateInteractBtn();
+        this.updateActionButtons();
 
         if (typeof audio !== "undefined" && audio.playCollect) {
             audio.playCollect();
@@ -156,11 +266,29 @@ class GameEngine {
         }
     }
 
-    updateInteractBtn() {
-        const btn = document.getElementById("btn-touch-interact");
-        if (btn) {
-            btn.style.display = this.nearDocument ? "flex" : "none";
+    // Cập nhật trạng thái hiển thị của các nút hành động trên màn hình cảm ứng
+    updateActionButtons() {
+        const btnInteract = document.getElementById("btn-touch-interact");
+        if (btnInteract) {
+            if (this.nearDocument) {
+                btnInteract.style.display = "flex";
+                btnInteract.innerHTML = '<i class="fa-solid fa-book-open"></i><span class="btn-subtext">ĐỌC</span>';
+            } else if (this.nearNpc) {
+                btnInteract.style.display = "flex";
+                btnInteract.innerHTML = '<i class="fa-solid fa-comments"></i><span class="btn-subtext">GẶP</span>';
+            } else {
+                btnInteract.style.display = "none";
+            }
         }
+
+        const btnTakedown = document.getElementById("btn-touch-takedown");
+        if (btnTakedown) {
+            btnTakedown.style.display = this.nearGuardForTakedown ? "flex" : "none";
+        }
+    }
+
+    updateInteractBtn() {
+        this.updateActionButtons();
     }
 
     loadLevel(levelIndex) {
@@ -180,7 +308,17 @@ class GameEngine {
         // Khởi tạo sao thưởng
         this.stars = this.currentLevel.stars.map(s => new StarItem(s.x, s.y));
 
+        // Khởi tạo vật phẩm tiếp tế cách mạng mới (Áo Trấn Thủ, Dép Cao Su, Hòm Cải Trang)
+        this.supplies = (this.currentLevel.supplies || []).map(s => new SupplyItem(s));
+
+        // Khởi tạo đồng chí liên lạc viên bí mật
+        this.npcs = (this.currentLevel.npcs || []).map(n => new ComradeNPC(n));
+
+        // Khởi tạo lối tắt / cầu bí mật
+        this.shortcuts = (this.currentLevel.shortcuts || []).map(sc => ({ ...sc, isOpen: false }));
+
         this.bullets = [];
+        this.pebbles = [];
         this.cameraX = 0;
         this.screenShake = 0;
         this.isPaused = false;
@@ -189,7 +327,9 @@ class GameEngine {
         this.starsCollectedCount = 0;
         this.score = this.chapterStartScore;
         this.nearDocument = null;
-        this.updateInteractBtn();
+        this.nearNpc = null;
+        this.nearGuardForTakedown = null;
+        this.updateActionButtons();
 
         if (levelIndex === 0) {
             this.playTime = 0;
@@ -203,6 +343,20 @@ class GameEngine {
     // Xử lý mất máu khi trúng đạn, cạm bẫy hoặc rơi vực
     handlePlayerDamage(type, amount = 25, label = "") {
         if (this.hp <= 0) return;
+
+        // Nếu người chơi đang có Áo Trấn Thủ (Khiên bảo vệ), đỡ trọn đòn sát thương này (ngoại trừ rơi vực sâu)
+        if (this.player && this.player.hasShield && type !== "pit") {
+            this.player.hasShield = false;
+            this.player.invulnerableTimer = 45;
+            this.particles.addShieldBreak(this.player.x + this.player.width / 2, this.player.y + this.player.height / 2);
+            this.particles.addFloatingText(this.player.x + this.player.width / 2, this.player.y - 25, "KHIÊN ĐỠ TRỌN!", "#38bdf8", 15, 150);
+            this.triggerScreenNotice("🛡️ Áo Trấn Thủ đã đỡ trọn một đòn sát thương!", "info");
+            if (typeof audio !== "undefined" && audio.playTone) {
+                audio.playTone(320, "square", 0.15, 0.2);
+            }
+            return;
+        }
+
         this.hp = Math.max(0, this.hp - amount);
         this.updateHUD();
 
@@ -271,6 +425,12 @@ class GameEngine {
             player: this.player,
             guards: this.guards,
             bullets: this.bullets,
+            pebbles: this.pebbles,
+            supplies: this.supplies,
+            npcs: this.npcs,
+            shortcuts: this.shortcuts,
+            nearGuardForTakedown: this.nearGuardForTakedown,
+            nearNpc: this.nearNpc,
             documents: this.documents,
             stars: this.stars,
             particles: this.particles,
@@ -357,7 +517,16 @@ class GameEngine {
         const maxCameraX = Math.max(0, this.currentLevel.levelWidth - virtualWidth);
         if (this.cameraX > maxCameraX) this.cameraX = maxCameraX;
 
-        // 3. Cập nhật Đạn của mật thám
+        // 3. Cập nhật Sỏi nghi binh (Ném sỏi đánh lạc hướng)
+        for (let i = this.pebbles.length - 1; i >= 0; i--) {
+            const p = this.pebbles[i];
+            const isDead = p.update(this.currentLevel.platforms, this.guards, this.particles);
+            if (isDead) {
+                this.pebbles.splice(i, 1);
+            }
+        }
+
+        // 4. Cập nhật Đạn của mật thám
         for (let i = this.bullets.length - 1; i >= 0; i--) {
             const b = this.bullets[i];
             const bRes = b.update(this.currentLevel.platforms);
@@ -378,7 +547,7 @@ class GameEngine {
             }
         }
 
-        // 4. Cập nhật Mật thám & Bắn súng
+        // 5. Cập nhật Mật thám & Bắn súng
         for (const guard of this.guards) {
             const shot = guard.update(this.player, this.currentLevel.platforms);
             if (shot && shot.fired) {
@@ -400,7 +569,7 @@ class GameEngine {
             }
         }
 
-        // 5. Cập nhật Điểm lưu (Checkpoints)
+        // 6. Cập nhật Điểm lưu (Checkpoints)
         for (const cp of this.currentLevel.checkpoints) {
             if (!cp.reached && Math.abs(this.player.x - cp.x) < 40 && Math.abs(this.player.y - cp.y) < 70) {
                 cp.reached = true;
@@ -411,7 +580,7 @@ class GameEngine {
             }
         }
 
-        // 6. Cập nhật Sao cách mạng (Stars)
+        // 7. Cập nhật Sao cách mạng (Stars)
         for (const star of this.stars) {
             star.update();
             if (star.checkCollect(this.player)) {
@@ -425,7 +594,65 @@ class GameEngine {
             }
         }
 
-        // 7. Cập nhật Tài liệu văn kiện (Documents) - người chơi tự chọn bấm [E] mở hoặc lướt qua
+        // 8. Cập nhật Vật phẩm tiếp tế cách mạng (Áo Trấn Thủ, Dép Cao Su, Hòm Cải Trang, Lương Khô)
+        for (const item of this.supplies) {
+            item.update();
+            if (!item.collected && item.checkCollect(this.player)) {
+                item.collected = true;
+                if (typeof audio !== "undefined" && audio.playCollect) audio.playCollect();
+
+                if (item.type === "shield") {
+                    this.player.hasShield = true;
+                    this.particles.addFloatingText(item.x + 12, item.y - 25, "+ÁO TRẤN THỦ", "#10b981", 14, 160);
+                    this.particles.addBurst(item.x + 12, item.y + 12, "#10b981", 20);
+                    this.triggerScreenNotice("🛡️ Nhặt được Áo Trấn Thủ! Đỡ được 1 đòn sát thương.", "info");
+                } else if (item.type === "speed") {
+                    this.player.speedBoostTimer = 480; // 8 giây chạy vạn dặm
+                    this.particles.addFloatingText(item.x + 12, item.y - 25, "+DÉP CAO SU", "#facc15", 14, 160);
+                    this.particles.addBurst(item.x + 12, item.y + 12, "#facc15", 20);
+                    this.triggerScreenNotice("⚡ Dép Cao Su Vạn Dặm: Tăng tốc độ chạy & nhảy trong 8 giây!", "info");
+                } else if (item.type === "disguise") {
+                    this.player.disguiseTimer = 720; // 12 giây cải trang
+                    this.particles.addFloatingText(item.x + 12, item.y - 25, "+CẢI TRANG", "#c084fc", 14, 160);
+                    this.particles.addBurst(item.x + 12, item.y + 12, "#c084fc", 20);
+                    this.triggerScreenNotice("🎩 Cải Trang Thành Công: Mật thám không thể phát hiện từ xa trong 12s!", "info");
+                } else if (item.type === "heal") {
+                    this.hp = Math.min(this.maxHp, this.hp + 25);
+                    this.updateHUD();
+                    this.particles.addFloatingText(item.x + 12, item.y - 25, "+25 HP LƯƠNG KHÔ", "#4ade80", 14, 160);
+                    this.particles.addBurst(item.x + 12, item.y + 12, "#4ade80", 20);
+                    this.triggerScreenNotice("🥖 Nhặt được Lương Khô Cách Mạng! Hồi phục 25 HP.", "info");
+                }
+                this.score += 75;
+                this.updateHUD();
+            }
+        }
+
+        // 9. Cập nhật Đồng chí liên lạc viên bí mật
+        let foundNearNpc = null;
+        for (const npc of this.npcs) {
+            npc.update(this.player);
+            if (npc.isNear) {
+                foundNearNpc = npc;
+            }
+        }
+        this.nearNpc = foundNearNpc;
+
+        // 10. Cập nhật Lối tắt bí mật (khi mở thì thêm platform vào bản đồ)
+        for (const sc of this.shortcuts) {
+            if (sc.isOpen && !sc.platformAdded) {
+                this.currentLevel.platforms.push({
+                    x: sc.x,
+                    y: sc.y,
+                    w: sc.w,
+                    h: sc.h,
+                    isShortcut: true
+                });
+                sc.platformAdded = true;
+            }
+        }
+
+        // 11. Cập nhật Tài liệu văn kiện (Documents) - người chơi tự chọn bấm [E] mở hoặc lướt qua
         let foundNearDoc = null;
         for (const doc of this.documents) {
             doc.update();
@@ -434,12 +661,22 @@ class GameEngine {
             }
         }
         this.nearDocument = foundNearDoc;
-        this.updateInteractBtn();
 
-        // 8. Cập nhật Hạt hiệu ứng & Chữ nổi
+        // 12. Kiểm tra xem có thể thực hiện đòn khống chế (Takedown) mật thám sau lưng không
+        let canTakedownAny = false;
+        for (const guard of this.guards) {
+            if (this.player.canTakedown(guard)) {
+                canTakedownAny = true;
+                break;
+            }
+        }
+        this.nearGuardForTakedown = canTakedownAny;
+        this.updateActionButtons();
+
+        // 13. Cập nhật Hạt hiệu ứng & Chữ nổi
         this.particles.update();
 
-        // 9. Kiểm tra Đích đến của màn chơi (Level Exit)
+        // 14. Kiểm tra Đích đến của màn chơi (Level Exit)
         const exitX = this.currentLevel.exitPos.x;
         const exitY = this.currentLevel.exitPos.y;
         const pCenterX = this.player.x + this.player.width / 2;

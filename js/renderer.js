@@ -211,7 +211,23 @@ class GameRenderer {
         this.virtualWidth = width;
         this.virtualHeight = height;
 
-        const { currentLevel, player, guards, documents, stars, particles, cameraX, screenShake = 0, bullets = [] } = gameState;
+        const {
+            currentLevel,
+            player,
+            guards,
+            documents,
+            stars,
+            particles,
+            cameraX,
+            screenShake = 0,
+            bullets = [],
+            pebbles = [],
+            supplies = [],
+            npcs = [],
+            shortcuts = [],
+            nearGuardForTakedown = false,
+            nearNpc = null
+        } = gameState;
 
         // Chấn động màn hình (Screen Shake) chân thực như các game danh tiếng
         const shakeX = screenShake > 0.3 ? (Math.random() - 0.5) * screenShake : 0;
@@ -233,11 +249,20 @@ class GameRenderer {
         // 4. Vẽ Mặt đất & Nền tảng với Texture bề mặt nghệ thuật
         this.drawPlatforms(currentLevel.platforms, currentLevel.platformColor, cameraX, width);
 
+        // 4.5. Vẽ Lối tắt bí mật (cầu ván hoặc đường vượt cạm bẫy do đồng chí liên lạc mở)
+        this.drawShortcuts(shortcuts, cameraX, width);
+
         // 5. Vẽ Cột mốc cờ đỏ sao vàng uốn lượn hình sin 3D
         this.drawCheckpoints(currentLevel.checkpoints, cameraX, width);
 
         // 6. Vẽ Điểm đích màn chơi lộng lẫy (Tàu thủy, Tàu hỏa, Hang Pác Bó, Đại Lễ Đài)
         this.drawExit(currentLevel, cameraX, width);
+
+        // 6.5. Vẽ Vật phẩm tiếp tế cách mạng (Áo Trấn Thủ, Dép Cao Su, Hòm Cải Trang, Lương Khô)
+        this.drawSupplies(supplies, cameraX, width);
+
+        // 6.8. Vẽ Đồng chí liên lạc viên bí mật
+        this.drawNpcs(npcs, cameraX, width);
 
         // 7. Vẽ Ngôi sao cách mạng 3D tỏa hào quang
         this.drawStars(stars, cameraX, width);
@@ -248,11 +273,14 @@ class GameRenderer {
         // 9. Vẽ Mật thám áo măng-tô, mũ phớt, đèn bão, nón sáng & súng
         this.drawGuards(guards, cameraX, width);
 
+        // 9.5. Vẽ Sỏi nghi binh bay & nảy trên địa hình
+        this.drawPebbles(pebbles, cameraX, width);
+
         // 10. Vẽ Đường đạn bắn của mật thám
         this.drawBullets(bullets, cameraX, width);
 
-        // 11. Vẽ Người chơi (Sprite Vector sắc nét, nhấp nháy i-frame & hiệu ứng bảo vệ)
-        this.drawPlayer(player, cameraX);
+        // 11. Vẽ Người chơi (Sprite Vector sắc nét, nhấp nháy i-frame, khiên Áo Trấn Thủ, vệt bóng dép cao su & cải trang)
+        this.drawPlayer(player, cameraX, nearGuardForTakedown, nearNpc);
 
         // 12. Vẽ Hạt hiệu ứng & Chữ nổi Canvas
         particles.draw(ctx, cameraX);
@@ -949,34 +977,38 @@ class GameRenderer {
             const eyeX = guard.dir === 1 ? screenX + guard.width : screenX;
             const eyeY = guard.y + 18;
 
-            // A. CHÙM ÁNH SÁNG VOLUMETRIC NÓN ĐÈN TUẦN TRA (Volumetric Lighting Cone)
-            const targetX = eyeX + guard.dir * guard.visionRange;
-            const spread = Math.tan(guard.visionAngle) * guard.visionRange;
+            const isStunned = guard.stunTimer && guard.stunTimer > 0;
 
-            const coneGrad = ctx.createRadialGradient(eyeX, eyeY, 8, eyeX, eyeY, guard.visionRange);
-            const isSuspicious = guard.crouchSuspicionTimer && guard.crouchSuspicionTimer > 40;
-            if (isSuspicious) {
-                // Ánh sáng chuyển sang vàng cam cảnh báo khi nghi ngờ
-                coneGrad.addColorStop(0, "rgba(249, 115, 22, 0.65)");
-                coneGrad.addColorStop(0.6, "rgba(239, 68, 68, 0.25)");
-                coneGrad.addColorStop(1, "rgba(239, 68, 68, 0.0)");
-            } else {
-                coneGrad.addColorStop(0, "rgba(254, 240, 138, 0.5)");
-                coneGrad.addColorStop(0.6, "rgba(254, 240, 138, 0.2)");
-                coneGrad.addColorStop(1, "rgba(254, 240, 138, 0.0)");
+            // A. CHÙM ÁNH SÁNG VOLUMETRIC NÓN ĐÈN TUẦN TRA (Chỉ bật khi không bị choáng/bất tỉnh)
+            if (!isStunned) {
+                const targetX = eyeX + guard.dir * guard.visionRange;
+                const spread = Math.tan(guard.visionAngle) * guard.visionRange;
+
+                const coneGrad = ctx.createRadialGradient(eyeX, eyeY, 8, eyeX, eyeY, guard.visionRange);
+                const isSuspicious = guard.crouchSuspicionTimer && guard.crouchSuspicionTimer > 40;
+                if (isSuspicious) {
+                    // Ánh sáng chuyển sang vàng cam cảnh báo khi nghi ngờ
+                    coneGrad.addColorStop(0, "rgba(249, 115, 22, 0.65)");
+                    coneGrad.addColorStop(0.6, "rgba(239, 68, 68, 0.25)");
+                    coneGrad.addColorStop(1, "rgba(239, 68, 68, 0.0)");
+                } else {
+                    coneGrad.addColorStop(0, "rgba(254, 240, 138, 0.5)");
+                    coneGrad.addColorStop(0.6, "rgba(254, 240, 138, 0.2)");
+                    coneGrad.addColorStop(1, "rgba(254, 240, 138, 0.0)");
+                }
+
+                ctx.fillStyle = coneGrad;
+                ctx.beginPath();
+                ctx.moveTo(eyeX, eyeY);
+                ctx.lineTo(targetX, eyeY - spread);
+                ctx.lineTo(targetX, eyeY + spread);
+                ctx.closePath();
+                ctx.fill();
             }
 
-            ctx.fillStyle = coneGrad;
-            ctx.beginPath();
-            ctx.moveTo(eyeX, eyeY);
-            ctx.lineTo(targetX, eyeY - spread);
-            ctx.lineTo(targetX, eyeY + spread);
-            ctx.closePath();
-            ctx.fill();
-
-            // B. TH N HÌNH MẬT THÁM PHÁP (Áo Măng-tô Xám Than & Mũ Phớt Fedora)
+            // B. THÂN HÌNH MẬT THÁM PHÁP (Áo Măng-tô Xám Than & Mũ Phớt Fedora)
             // Áo khoác măng tô dài (Trench coat)
-            ctx.fillStyle = "#1e293b";
+            ctx.fillStyle = isStunned ? "#334155" : "#1e293b";
             ctx.fillRect(screenX + 4, guard.y + 16, 22, 28);
             // Ve áo măng-tô
             ctx.fillStyle = "#334155";
@@ -994,33 +1026,34 @@ class GameRenderer {
             ctx.fill();
 
             // Đầu & Khuôn mặt bí ẩn dưới vành mũ
-            ctx.fillStyle = "#fed7aa";
+            ctx.fillStyle = isStunned ? "#cbd5e1" : "#fed7aa";
             ctx.beginPath();
             ctx.arc(screenX + 15, guard.y + 11, 7.5, 0, Math.PI * 2);
             ctx.fill();
 
-            // Mũ phớt Fedora cổ điển
+            // Mũ phớt Fedora cổ điển (nếu bị choáng thì mũ hơi lệch)
             ctx.fillStyle = "#0f172a";
-            ctx.fillRect(screenX + 2, guard.y + 4, 26, 4); // Vành mũ rộng che nửa trán
-            ctx.fillRect(screenX + 7, guard.y - 4, 16, 9); // Chóp mũ
+            const hatTilt = isStunned ? 3 : 0;
+            ctx.fillRect(screenX + 2, guard.y + 4 + hatTilt, 26, 4); // Vành mũ rộng che nửa trán
+            ctx.fillRect(screenX + 7, guard.y - 4 + hatTilt, 16, 9); // Chóp mũ
             // Dải ruy băng xám trên mũ
             ctx.fillStyle = "#475569";
-            ctx.fillRect(screenX + 7, guard.y + 2, 16, 2);
+            ctx.fillRect(screenX + 7, guard.y + 2 + hatTilt, 16, 2);
 
             // Đôi chân bước đi tuần
             ctx.fillStyle = "#0f172a";
-            const legWalk = Math.sin(this.time * 6) * 4;
+            const legWalk = isStunned ? 0 : Math.sin(this.time * 6) * 4;
             ctx.fillRect(screenX + 6, guard.y + 44, 6, 8 + (guard.dir * legWalk));
             ctx.fillRect(screenX + 17, guard.y + 44, 6, 8 - (guard.dir * legWalk));
 
-            // Đèn bão bọc đồng cầm tay (Hurricane Lantern)
+            // Đèn bão bọc đồng cầm tay (Hurricane Lantern) - nếu choáng thì đèn tắt tối
             ctx.fillStyle = "#ca8a04";
             ctx.fillRect(eyeX - 3, eyeY - 6, 7, 10);
-            ctx.fillStyle = "#fde047";
+            ctx.fillStyle = isStunned ? "#475569" : "#fde047";
             ctx.fillRect(eyeX - 1, eyeY - 4, 3, 6);
 
-            // SÚNG NGẮN CỦA MẬT THÁM KHI NGẮM / BẮN
-            if (guard.isAiming || guard.shootCooldown > 0) {
+            // SÚNG NGẮN CỦA MẬT THÁM KHI NGẮM / BẮN (chỉ vẽ khi không bị choáng)
+            if (!isStunned && (guard.isAiming || guard.shootCooldown > 0)) {
                 const gunHandX = eyeX + (guard.dir === 1 ? 5 : -5);
                 const gunHandY = eyeY - 2;
                 const barrelTipX = gunHandX + (guard.dir === 1 ? 13 : -13);
@@ -1064,8 +1097,37 @@ class GameRenderer {
                 }
             }
 
-            // C. BIỂU TƯỢNG CẢNH BÁO TRÊN ĐẦU MẬT THÁM (? NGHI VẤN / ! PHÁT HIỆN)
-            if (guard.isAlerted || (guard.crouchSuspicionTimer && guard.crouchSuspicionTimer > 35)) {
+            // C. HIỆU ỨNG CHOÁNG BẤT TỈNH SAU LƯNG (STUNNED BY TAKEDOWN)
+            if (isStunned) {
+                const stunAngle = this.time * 7;
+                for (let s = 0; s < 3; s++) {
+                    const a = stunAngle + (s * (Math.PI * 2 / 3));
+                    const sx = screenX + 15 + Math.cos(a) * 16;
+                    const sy = guard.y - 8 + Math.sin(a) * 6;
+                    ctx.fillStyle = "#facc15";
+                    ctx.beginPath();
+                    ctx.arc(sx, sy, 2.5, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.fillStyle = "#94a3b8";
+                ctx.font = "bold 10px sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText("BẤT TỈNH", screenX + 15, guard.y - 18);
+            }
+            // D. HIỆU ỨNG ĐI ĐIỀU TRA ÂM THANH NÉM SỎI (DISTRACTED / INVESTIGATING)
+            else if (guard.investigateTimer && guard.investigateTimer > 0) {
+                const iconY = guard.y - 12;
+                ctx.fillStyle = "#38bdf8";
+                ctx.font = "bold 16px sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText("?", screenX + 15, iconY);
+
+                ctx.fillStyle = "#7dd3fc";
+                ctx.font = "bold 9px sans-serif";
+                ctx.fillText("NGHI BINH", screenX + 15, iconY - 14);
+            }
+            // E. BIỂU TƯỢNG CẢNH BÁO TRÊN ĐẦU MẬT THÁM (? NGHI VẤN / ! PHÁT HIỆN)
+            else if (guard.isAlerted || (guard.crouchSuspicionTimer && guard.crouchSuspicionTimer > 35)) {
                 const iconY = guard.y - 12;
                 if (guard.crouchSuspicionTimer >= 80 || guard.isAiming) {
                     // Dấu chấm than đỏ rực khi sắp phát hiện / đang ngắm bắn!
@@ -1132,7 +1194,7 @@ class GameRenderer {
     // =========================================================================
     // 10. NGƯỜI CHƠI (SPRITE VECTOR SẮC NÉT & HIỆU ỨNG NHẬP VAI CHUYÊN NGHIỆP)
     // =========================================================================
-    drawPlayer(player, cameraX) {
+    drawPlayer(player, cameraX, nearGuardForTakedown = false, nearNpc = null) {
         const ctx = this.ctx;
         const screenX = player.x - cameraX;
 
@@ -1159,16 +1221,55 @@ class GameRenderer {
             }
         }
 
-        // B. Độ mờ khi đang nấp an toàn trong vùng ẩn nấp
+        // B. Hào quang Khiên Áo Trấn Thủ (Cách mạng kháng chiến)
+        if (player.hasShield && !player.isDying) {
+            const shieldR = 27 + Math.sin(this.time * 6) * 2.5;
+            ctx.save();
+            ctx.strokeStyle = "rgba(16, 185, 129, 0.85)";
+            ctx.lineWidth = 2.2;
+            ctx.setLineDash([5, 3]);
+            ctx.beginPath();
+            ctx.arc(screenX + player.width / 2, player.y + player.height / 2, shieldR, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Vòng hào quang sáng ngọc
+            const sGrad = ctx.createRadialGradient(
+                screenX + player.width / 2, player.y + player.height / 2, 8,
+                screenX + player.width / 2, player.y + player.height / 2, shieldR
+            );
+            sGrad.addColorStop(0, "rgba(52, 211, 153, 0.1)");
+            sGrad.addColorStop(1, "rgba(16, 185, 129, 0.25)");
+            ctx.fillStyle = sGrad;
+            ctx.beginPath();
+            ctx.arc(screenX + player.width / 2, player.y + player.height / 2, shieldR, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+
+        // C. Vệt bóng mờ thần tốc khi mang Dép Cao Su Vạn Dặm
+        if (player.speedBoostTimer > 0 && Math.abs(player.vx) > 0.5) {
+            ctx.save();
+            ctx.fillStyle = "rgba(250, 204, 21, 0.25)";
+            const trailOffset = -player.facing * 12;
+            ctx.fillRect(screenX + trailOffset + 4, player.y + 12, player.width, player.height - 12);
+            ctx.restore();
+        }
+
+        // D. Độ mờ khi đang nấp an toàn trong vùng ẩn nấp hoặc đang cải trang
         if (player.isHidden) {
             ctx.globalAlpha = 0.55;
             ctx.fillStyle = "#4ade80";
             ctx.font = "bold 10px sans-serif";
             ctx.textAlign = "center";
             ctx.fillText("✓ ĐANG NẤP", screenX + player.width / 2, player.y - 8);
+        } else if (player.disguiseTimer > 0) {
+            ctx.fillStyle = "#c084fc";
+            ctx.font = "bold 10px sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText("🎩 CẢI TRANG", screenX + player.width / 2, player.y - 8);
         }
 
-        // C. Hiệu ứng va chạm trúng bẫy (Hit Reaction Glow)
+        // E. Hiệu ứng va chạm trúng bẫy (Hit Reaction Glow)
         if (player.isDying) {
             ctx.filter = "brightness(1.5) drop-shadow(0 0 10px #ef4444)";
         }
@@ -1202,19 +1303,309 @@ class GameRenderer {
                 drawH
             );
             ctx.restore();
-            ctx.restore();
-            return;
+        } else {
+            // DỰ PHÒNG: Đồ họa Canvas nếu thiếu ảnh
+            const pCenterX = screenX + player.width / 2;
+            ctx.fillStyle = "#78350f";
+            ctx.fillRect(screenX + 3, player.y + 15, player.width - 6, 22);
+            ctx.fillStyle = "#fed7aa";
+            ctx.beginPath();
+            ctx.arc(pCenterX, player.y + 8, 8, 0, Math.PI * 2);
+            ctx.fill();
         }
 
-        // DỰ PHÒNG: Đồ họa Canvas nếu thiếu ảnh
-        const pCenterX = screenX + player.width / 2;
-        ctx.fillStyle = "#78350f";
-        ctx.fillRect(screenX + 3, player.y + 15, player.width - 6, 22);
-        ctx.fillStyle = "#fed7aa";
-        ctx.beginPath();
-        ctx.arc(pCenterX, player.y + 8, 8, 0, Math.PI * 2);
-        ctx.fill();
+        // F. Huy hiệu gợi ý [Q] KHỐNG CHẾ khi áp sát sau lưng mật thám
+        if (nearGuardForTakedown && !player.isDying) {
+            ctx.save();
+            const badgeY = player.y - 20 + Math.sin(this.time * 8) * 2;
+            ctx.fillStyle = "#facc15";
+            ctx.strokeStyle = "#000000";
+            ctx.lineWidth = 2.5;
+            ctx.font = "bold 12px sans-serif";
+            ctx.textAlign = "center";
+            ctx.strokeText("[Q] KHỐNG CHẾ", screenX + player.width / 2, badgeY);
+            ctx.fillText("[Q] KHỐNG CHẾ", screenX + player.width / 2, badgeY);
+            ctx.restore();
+        }
+
         ctx.restore();
+    }
+
+    // =========================================================================
+    // 10.5. VẼ SỎI NGHI BINH ĐÁNH LẠC HƯỚNG
+    // =========================================================================
+    drawPebbles(pebbles, cameraX, viewWidth = 1000) {
+        if (!pebbles || pebbles.length === 0) return;
+        const ctx = this.ctx;
+        for (const p of pebbles) {
+            const sx = p.x - cameraX;
+            if (sx < -30 || sx > viewWidth + 30) continue;
+
+            ctx.save();
+            // Vệt đuôi quán tính
+            ctx.strokeStyle = "rgba(148, 163, 184, 0.45)";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(sx - p.vx * 2, p.y - p.vy * 2);
+            ctx.lineTo(sx, p.y);
+            ctx.stroke();
+
+            // Viên sỏi xoay tròn
+            ctx.fillStyle = "#94a3b8";
+            ctx.beginPath();
+            ctx.arc(sx, p.y, p.radius || 4, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = "#f8fafc";
+            ctx.lineWidth = 1.2;
+            ctx.stroke();
+            ctx.restore();
+        }
+    }
+
+    // =========================================================================
+    // 10.8. VẼ VẬT PHẨM TIẾP TẾ CÁCH MẠNG (ÁO TRẤN THỦ, DÉP CAO SU, HÒM CẢI TRANG, LƯƠNG KHÔ)
+    // =========================================================================
+    drawSupplies(supplies, cameraX, viewWidth = 1000) {
+        if (!supplies || supplies.length === 0) return;
+        const ctx = this.ctx;
+        for (const item of supplies) {
+            if (item.collected) continue;
+            const sx = item.x - cameraX;
+            if (sx < -50 || sx > viewWidth + 50) continue;
+
+            ctx.save();
+            const floatY = item.y + Math.sin(this.time * 5 + item.x) * 4;
+
+            if (item.type === "shield") {
+                // Áo Trấn Thủ (Khiên bảo vệ)
+                const grad = ctx.createRadialGradient(sx + 12, floatY + 12, 2, sx + 12, floatY + 12, 20);
+                grad.addColorStop(0, "rgba(16, 185, 129, 0.5)");
+                grad.addColorStop(1, "rgba(16, 185, 129, 0)");
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(sx + 12, floatY + 12, 20, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Chiếc khiên / Áo trấn thủ
+                ctx.fillStyle = "#059669";
+                ctx.beginPath();
+                ctx.moveTo(sx + 4, floatY + 2);
+                ctx.lineTo(sx + 20, floatY + 2);
+                ctx.lineTo(sx + 20, floatY + 14);
+                ctx.quadraticCurveTo(sx + 12, floatY + 24, sx + 12, floatY + 24);
+                ctx.quadraticCurveTo(sx + 4, floatY + 14, sx + 4, floatY + 2);
+                ctx.closePath();
+                ctx.fill();
+                ctx.strokeStyle = "#6ee7b7";
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                // Ngôi sao vàng nhỏ giữa khiên
+                ctx.fillStyle = "#fde047";
+                ctx.beginPath();
+                ctx.arc(sx + 12, floatY + 10, 3, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = "#6ee7b7";
+                ctx.font = "bold 9px sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText("ÁO TRẤN THỦ", sx + 12, floatY - 6);
+
+            } else if (item.type === "speed") {
+                // Dép Cao Su Vạn Dặm
+                const grad = ctx.createRadialGradient(sx + 12, floatY + 12, 2, sx + 12, floatY + 12, 20);
+                grad.addColorStop(0, "rgba(250, 204, 21, 0.5)");
+                grad.addColorStop(1, "rgba(250, 204, 21, 0)");
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(sx + 12, floatY + 12, 20, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Đế dép cao su đen
+                ctx.fillStyle = "#1e293b";
+                ctx.fillRect(sx + 4, floatY + 10, 16, 6);
+                // Quai chéo vàng
+                ctx.strokeStyle = "#facc15";
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(sx + 6, floatY + 10);
+                ctx.lineTo(sx + 12, floatY + 4);
+                ctx.lineTo(sx + 18, floatY + 10);
+                ctx.stroke();
+
+                ctx.fillStyle = "#fde047";
+                ctx.font = "bold 9px sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText("DÉP CAO SU", sx + 12, floatY - 6);
+
+            } else if (item.type === "disguise") {
+                // Hòm Cải Trang
+                const grad = ctx.createRadialGradient(sx + 12, floatY + 12, 2, sx + 12, floatY + 12, 20);
+                grad.addColorStop(0, "rgba(192, 132, 252, 0.5)");
+                grad.addColorStop(1, "rgba(192, 132, 252, 0)");
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(sx + 12, floatY + 12, 20, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Vali nâu tím
+                ctx.fillStyle = "#7e22ce";
+                ctx.fillRect(sx + 4, floatY + 6, 16, 12);
+                ctx.strokeStyle = "#d8b4fe";
+                ctx.lineWidth = 1.2;
+                ctx.strokeRect(sx + 4, floatY + 6, 16, 12);
+                // Quai xách
+                ctx.beginPath();
+                ctx.arc(sx + 12, floatY + 5, 4, Math.PI, 0);
+                ctx.stroke();
+
+                ctx.fillStyle = "#d8b4fe";
+                ctx.font = "bold 9px sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText("CẢI TRANG", sx + 12, floatY - 6);
+
+            } else {
+                // Lương Khô Cách Mạng (Heal)
+                const grad = ctx.createRadialGradient(sx + 12, floatY + 12, 2, sx + 12, floatY + 12, 20);
+                grad.addColorStop(0, "rgba(74, 222, 128, 0.5)");
+                grad.addColorStop(1, "rgba(74, 222, 128, 0)");
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(sx + 12, floatY + 12, 20, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Gói lương khô xanh
+                ctx.fillStyle = "#15803d";
+                ctx.fillRect(sx + 4, floatY + 6, 16, 12);
+                // Lạt buộc
+                ctx.strokeStyle = "#fef08a";
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(sx + 12, floatY + 6); ctx.lineTo(sx + 12, floatY + 18);
+                ctx.moveTo(sx + 4, floatY + 12); ctx.lineTo(sx + 20, floatY + 12);
+                ctx.stroke();
+
+                ctx.fillStyle = "#86efac";
+                ctx.font = "bold 9px sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText("LƯƠNG KHÔ", sx + 12, floatY - 6);
+            }
+
+            ctx.restore();
+        }
+    }
+
+    // =========================================================================
+    // 10.9. VẼ ĐỒNG CHÍ LIÊN LẠC VIÊN BÍ MẬT (NPC)
+    // =========================================================================
+    drawNpcs(npcs, cameraX, viewWidth = 1000) {
+        if (!npcs || npcs.length === 0) return;
+        const ctx = this.ctx;
+        for (const npc of npcs) {
+            const sx = npc.x - cameraX;
+            if (sx < -80 || sx > viewWidth + 80) continue;
+
+            ctx.save();
+            const pCenterX = sx + npc.width / 2;
+
+            // Thân người đồng chí cách mạng
+            ctx.fillStyle = "#1e3a8a";
+            ctx.fillRect(sx + 4, npc.y + 16, npc.width - 8, 24);
+
+            // Đầu và khuôn mặt
+            ctx.fillStyle = "#fed7aa";
+            ctx.beginPath();
+            ctx.arc(pCenterX, npc.y + 10, 8, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Mũ beret / mũ ca-lô
+            ctx.fillStyle = "#0f172a";
+            ctx.beginPath();
+            ctx.arc(pCenterX, npc.y + 6, 9, Math.PI, 0);
+            ctx.fill();
+
+            // Đôi chân
+            ctx.fillStyle = "#0f172a";
+            ctx.fillRect(sx + 6, npc.y + 40, 5, 10);
+            ctx.fillRect(sx + npc.width - 11, npc.y + 40, 5, 10);
+
+            // Biểu tượng trên đầu NPC
+            const iconY = npc.y - 12 + Math.sin(this.time * 5) * 3;
+            if (!npc.talked) {
+                ctx.fillStyle = "#10b981";
+                ctx.font = "bold 13px sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText("🤝", pCenterX, iconY);
+
+                ctx.fillStyle = "#34d399";
+                ctx.font = "bold 10px sans-serif";
+                ctx.fillText(npc.isNear ? "[E] TRÒ CHUYỆN" : "LIÊN LẠC", pCenterX, iconY - 14);
+            } else {
+                ctx.fillStyle = "#94a3b8";
+                ctx.font = "bold 9px sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText("✓ ĐỒNG CHÍ", pCenterX, iconY);
+            }
+
+            ctx.restore();
+        }
+    }
+
+    // =========================================================================
+    // 10.10. VẼ LỐI TẮT BÍ MẬT (SECRET SHORTCUTS / BRIDGES)
+    // =========================================================================
+    drawShortcuts(shortcuts, cameraX, viewWidth = 1000) {
+        if (!shortcuts || shortcuts.length === 0) return;
+        const ctx = this.ctx;
+        for (const sc of shortcuts) {
+            const sx = sc.x - cameraX;
+            if (sx < -sc.w || sx > viewWidth + sc.w) continue;
+
+            ctx.save();
+            if (sc.isOpen) {
+                // Cầu gỗ bí mật đã được mở
+                if (this.patterns.wood) {
+                    ctx.fillStyle = this.patterns.wood;
+                } else {
+                    ctx.fillStyle = "#78350f";
+                }
+                ctx.fillRect(sx, sc.y, sc.w, sc.h);
+
+                // Dây chằng neo cầu hai đầu
+                ctx.strokeStyle = "#d97706";
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(sx, sc.y); ctx.lineTo(sx + 10, sc.y - 10);
+                ctx.moveTo(sx + sc.w, sc.y); ctx.lineTo(sx + sc.w - 10, sc.y - 10);
+                ctx.stroke();
+
+                // Đinh tán vàng
+                ctx.fillStyle = "#f59e0b";
+                for (let x = sx + 8; x < sx + sc.w; x += 24) {
+                    ctx.beginPath();
+                    ctx.arc(x, sc.y + 4, 1.8, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                ctx.fillStyle = "#34d399";
+                ctx.font = "bold 9px sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText("LỐI TẮT MỞ", sx + sc.w / 2, sc.y - 6);
+            } else {
+                // Cầu chưa mở: đường nét đứt mờ
+                ctx.strokeStyle = "rgba(148, 163, 184, 0.4)";
+                ctx.lineWidth = 2;
+                ctx.setLineDash([6, 6]);
+                ctx.strokeRect(sx, sc.y, sc.w, sc.h);
+
+                ctx.fillStyle = "rgba(148, 163, 184, 0.6)";
+                ctx.font = "italic 9px sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText("Cần liên lạc mở đường", sx + sc.w / 2, sc.y + sc.h / 2 + 3);
+            }
+            ctx.restore();
+        }
     }
 
     // =========================================================================

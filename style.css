@@ -721,6 +721,41 @@ body.touch-device .mobile-controls-panel {
     animation: interactPulse 1.2s infinite alternate;
 }
 
+.touch-btn-distract {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, rgba(3, 105, 161, 0.9), rgba(2, 132, 199, 0.9));
+    border: 2px solid #7dd3fc;
+    color: #f0f9ff;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.5);
+}
+
+.touch-btn-distract:active,
+.touch-btn-distract.touch-active {
+    transform: scale(0.92);
+    background: #0284c7;
+    border-color: #ffffff;
+    box-shadow: 0 0 18px rgba(56, 189, 248, 0.9);
+}
+
+.touch-btn-takedown {
+    width: 66px;
+    height: 66px;
+    background: linear-gradient(135deg, rgba(217, 119, 6, 0.95), rgba(180, 83, 9, 0.95)) !important;
+    border: 2px solid #fde047 !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 18px rgba(217, 119, 6, 0.7);
+    animation: interactPulse 0.9s infinite alternate;
+}
+
+.touch-btn-takedown:active,
+.touch-btn-takedown.touch-active {
+    transform: scale(0.92);
+    background: #b45309 !important;
+    border-color: #ffffff !important;
+    box-shadow: 0 0 22px rgba(250, 204, 21, 0.95);
+}
+
 /* Landscape Hint Overlay */
 .landscape-hint {
     position: fixed;
@@ -1497,6 +1532,14 @@ body.touch-device .mobile-controls-panel {
         height: 64px;
     }
     .touch-btn-interact {
+        width: 58px;
+        height: 58px;
+    }
+    .touch-btn-distract {
+        width: 52px;
+        height: 52px;
+    }
+    .touch-btn-takedown {
         width: 58px;
         height: 58px;
     }

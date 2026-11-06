@@ -216,7 +216,15 @@
                     </button>
                 </div>
                 <div class="touch-actions">
-                    <button id="btn-touch-interact" class="touch-btn touch-btn-interact" style="display: none;" aria-label="Đọc văn kiện">
+                    <button id="btn-touch-distract" class="touch-btn touch-btn-distract" aria-label="Nghi binh ném sỏi">
+                        <span><i class="fa-solid fa-bullseye"></i></span>
+                        <span class="btn-subtext">SỎI (F)</span>
+                    </button>
+                    <button id="btn-touch-takedown" class="touch-btn touch-btn-takedown" style="display: none;" aria-label="Khống chế sau lưng">
+                        <span><i class="fa-solid fa-hand-fist"></i></span>
+                        <span class="btn-subtext">HẠ (Q)</span>
+                    </button>
+                    <button id="btn-touch-interact" class="touch-btn touch-btn-interact" style="display: none;" aria-label="Tương tác">
                         <span><i class="fa-solid fa-book-open"></i></span>
                         <span class="btn-subtext">ĐỌC</span>
                     </button>
@@ -381,12 +389,21 @@
             <h3 style="font-family: var(--font-heading); color: var(--accent-gold); margin-bottom: 15px;"><i class="fa-solid fa-circle-question text-gold"></i> Hướng Dẫn Chơi</h3>
             <ul style="color: #e2e8f0; line-height: 1.8; margin-left: 20px; font-size: 0.95rem;">
                 <li><strong>Di chuyển:</strong> Phím <code>A</code> / <code>D</code> hoặc Mũi tên <code>Trái</code> / <code>Phải</code>.</li>
-                <li><strong>Nhảy:</strong> Phím <code>W</code>, <code>Space</code> hoặc Mũi tên <code>Lên</code> (bấm 2 lần để nhảy đúp).</li>
-                <li><strong>Ngồi / Nấp:</strong> Phím <code>S</code> hoặc Mũi tên <code>Xuống</code>. Tránh ngồi trước mặt địch quá lâu.</li>
-                <li><strong>Điểm nấp:</strong> Đứng cạnh thùng hàng, bụi cây, hốc đá để nấp (địch sẽ không nhìn thấy).</li>
-                <li><strong>Văn kiện:</strong> Nhặt văn kiện và trả lời đúng câu hỏi trắc nghiệm để nhận +200 điểm và +25 HP. Trả lời sai được 0 điểm.</li>
-                <li><strong>Máu & Bị bắn:</strong> Máu tối đa 100 HP. Khi bị phát hiện, địch sẽ rút súng bắn. Trúng đạn (-25 HP), trúng bẫy (-20 HP), rơi vực (-30 HP). Hết máu sẽ phải chơi lại từ đầu màn.</li>
-                <li><strong>Checkpoint:</strong> Chạm cờ để lưu điểm hồi sinh.</li>
+                <li><strong>Nhảy & Nhảy đúp:</strong> Phím <code>W</code>, <code>Space</code> hoặc Mũi tên <code>Lên</code> (bấm 2 lần để nhảy đúp trên không).</li>
+                <li><strong>Ngồi / Ẩn nấp:</strong> Phím <code>S</code> hoặc Mũi tên <code>Xuống</code>. Đứng cạnh thùng hàng, bụi rậm, hốc đá để ẩn thân.</li>
+                <li><strong>🎯 Nghi Binh (Ném sỏi):</strong> Bấm <code>F</code> hoặc nút cảm ứng <code>SỎI</code> để ném sỏi theo hình parabol thu hút lính gác quay lại điều tra.</li>
+                <li><strong>🥋 Tự Vệ Khống Chế Sau Lưng:</strong> Khi áp sát sau lưng lính gác (&lt; 48px), bấm <code>Q</code> hoặc nút <code>HẠ</code> để khống chế mật thám bất tỉnh 12 giây (+150 điểm mưu lược).</li>
+                <li><strong>🤝 Đồng Chí Liên Lạc Bí Mật:</strong> Bấm <code>E</code> khi gặp đồng chí để tiếp nhận lời dặn lịch sử, nhận quà tiếp tế và mở lối tắt bí mật vượt cạm bẫy.</li>
+                <li><strong>🎒 Vật Phẩm Tiếp Tế Cách Mạng:</strong>
+                    <ul style="margin-top: 4px; margin-left: 15px; font-size: 0.9rem; color: #cbd5e1;">
+                        <li>🛡️ <em>Áo Trấn Thủ:</em> Khiên đỡ trọn 1 đòn sát thương súng hoặc bẫy mà không mất máu.</li>
+                        <li>⚡ <em>Dép Cao Su Vạn Dặm:</em> Tăng 1.45x tốc độ di chuyển và bật nhảy trong 8 giây.</li>
+                        <li>🎩 <em>Hòm Cải Trang:</em> Hóa trang trong 12 giây, mật thám không thể phát hiện từ xa.</li>
+                        <li>🥖 <em>Lương Khô Cách Mạng:</em> Hồi phục ngay +25 HP và tăng điểm số.</li>
+                    </ul>
+                </li>
+                <li><strong>Cuộn Văn Kiện & Trắc Nghiệm:</strong> Bấm <code>E</code> đọc văn kiện và trả lời đúng trắc nghiệm môn học để nhận +200 điểm và +25 HP.</li>
+                <li><strong>Sinh lực & Bị bắn:</strong> Máu tối đa 100 HP. Khi hết máu, bạn sẽ phải chơi lại màn từ đầu.</li>
             </ul>
             <div style="margin-top: 20px; text-align: right;">
                 <button class="btn btn-primary modal-close-btn" style="position: static; font-size: 1rem;"><i class="fa-solid fa-xmark"></i> Đóng</button>

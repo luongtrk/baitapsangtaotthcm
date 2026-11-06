@@ -36,6 +36,14 @@ class Player {
         this.coyoteTimer = 0;       // Thời gian ân hạn nhảy khi vừa rời mép vực (6 frames)
         this.jumpBufferTimer = 0;   // Lưu phím bấm nhảy trước khi chạm đất (6 frames)
 
+        // Tính năng gameplay mới: Nghi Binh, Khống Chế, Hóa Trang, Khiên Áo Trấn Thủ, Dép Cao Su
+        this.pebbleCooldown = 0;    // Hồi chiêu ném sỏi nghi binh (frames)
+        this.hasShield = false;     // Áo trấn thủ: đỡ trọn 1 đòn đạn/bẫy
+        this.speedBoostTimer = 0;   // Dép cao su vạn dặm: tăng tốc chạy & nhảy
+        this.disguiseTimer = 0;     // Hòm đồ cải trang: lính không nhận diện
+        this.nearGuardForTakedown = null; // Mật thám đang có thể khống chế từ phía sau
+        this.nearNpc = null;        // Đồng chí liên lạc viên đang đứng gần
+
         // Trạng thái trúng đòn / rơi bẫy (Death sequence với hit-knockback & nảy lên)
         this.isDying = false;
         this.deathTimer = 0;
@@ -142,6 +150,11 @@ class Player {
             this.invulnerableTimer--;
         }
 
+        // Cập nhật bộ đếm hồi chiêu và hiệu ứng hỗ trợ
+        if (this.pebbleCooldown > 0) this.pebbleCooldown--;
+        if (this.speedBoostTimer > 0) this.speedBoostTimer--;
+        if (this.disguiseTimer > 0) this.disguiseTimer--;
+
         // Kiểm tra xem người chơi có đang đứng trên bề mặt tuyết/băng trơn trượt (Màn 2 Moskva) hay không
         let onIce = false;
         for (const plat of platforms) {
@@ -178,7 +191,8 @@ class Player {
 
         if (moveDir !== 0) {
             this.facing = moveDir;
-            const currentSpeed = this.isCrouching ? this.speed * 0.55 : this.speed;
+            const boostMult = this.speedBoostTimer > 0 ? 1.45 : 1.0;
+            const currentSpeed = (this.isCrouching ? this.speed * 0.55 : this.speed) * boostMult;
 
             if (onIce) {
                 // Trên băng tuyết: nếu đang có đà ngược hướng phím -> trượt lết phanh trước khi đổi chiều
@@ -191,7 +205,7 @@ class Player {
                 }
 
                 // Cho phép trượt băng đạt tốc độ lướt sảng khoái (1.15x)
-                const maxIceSpeed = this.isCrouching ? this.speed * 0.6 : this.speed * 1.15;
+                const maxIceSpeed = (this.isCrouching ? this.speed * 0.6 : this.speed * 1.15) * boostMult;
                 if (Math.abs(this.vx) > maxIceSpeed) {
                     this.vx = Math.sign(this.vx) * maxIceSpeed;
                 }
@@ -315,6 +329,32 @@ class Player {
             rect1.y + h1 > rect2.y
         );
     }
+
+    // Kỹ năng Nghi Binh: Ném một viên sỏi gây tiếng động giả dụ mật thám
+    throwPebble() {
+        if (this.pebbleCooldown > 0 || this.isDying) return null;
+        this.pebbleCooldown = 180; // 3 giây hồi chiêu
+        return new DistractionPebble(
+            this.x + this.width / 2 + this.facing * 12,
+            this.y + 14,
+            this.facing
+        );
+    }
+
+    // Kiểm tra xem người chơi có đang ở vị trí khống chế sau lưng mật thám hay không
+    canTakedown(guard) {
+        if (!guard || guard.stunTimer > 0 || this.isDying) return false;
+        const pCenterX = this.x + this.width / 2;
+        const gCenterX = guard.x + guard.width / 2;
+        const dist = Math.abs(pCenterX - gCenterX);
+        const dy = Math.abs((this.y + this.height / 2) - (guard.y + guard.height / 2));
+
+        if (dist > 48 || dy > 32) return false;
+
+        // Phải ở phía sau lưng mật thám (mật thám nhìn phải -> người chơi ở trái, mật thám nhìn trái -> người chơi ở phải)
+        const isBehind = (guard.dir === 1 && pCenterX < gCenterX) || (guard.dir === -1 && pCenterX > gCenterX);
+        return isBehind && !guard.isAiming;
+    }
 }
 
 class Bullet {
@@ -388,9 +428,39 @@ class Guard {
         this.shootCooldown = 0; // Giãn cách giữa các loạt đạn
         this.muzzleFlashTimer = 0;
         this.lostPlayerTimer = 0;
+
+        // Cơ chế Choáng (Stun do bị khống chế) & Điều tra tiếng động Nghi binh
+        this.stunTimer = 0;             // Thời gian bị điểm huyệt / đánh ngất
+        this.investigateTimer = 0;      // Thời gian tò mò đi kiểm tra tiếng sỏi
+        this.investigateX = null;       // Tọa độ tiếng sỏi rơi
+    }
+
+    // Làm choáng mật thám
+    stun(duration = 720) {
+        this.stunTimer = duration;
+        this.isAiming = false;
+        this.isAlerted = false;
+        this.aimTimer = 0;
+    }
+
+    // Nghe thấy tiếng động nghi binh (ném sỏi / gõ vật)
+    hearDistraction(targetX) {
+        if (this.stunTimer > 0 || this.isAiming) return;
+        this.investigateTimer = 210; // ~3.5 giây đi kiểm tra
+        this.investigateX = Math.max(this.minX, Math.min(this.maxX, targetX));
+        this.dir = this.investigateX >= this.x + this.width / 2 ? 1 : -1;
+        this.isAlerted = true;
     }
 
     update(player, platforms) {
+        // Đang bị khống chế choáng ngất: không di chuyển, không bắn súng
+        if (this.stunTimer > 0) {
+            this.stunTimer--;
+            this.isAiming = false;
+            this.isAlerted = false;
+            return null;
+        }
+
         if (this.shootCooldown > 0) this.shootCooldown--;
         if (this.muzzleFlashTimer > 0) this.muzzleFlashTimer--;
 
@@ -398,6 +468,10 @@ class Guard {
         const seesPlayer = player && this.detectsPlayer(player);
 
         if (seesPlayer) {
+            // Khi phát hiện người chơi: hủy bỏ ngay trạng thái tò mò điều tra
+            this.investigateTimer = 0;
+            this.investigateX = null;
+
             // Khi vừa phát hiện lần đầu
             if (!this.isAiming && typeof audio !== "undefined" && audio.playAlert) {
                 audio.playAlert();
@@ -438,6 +512,21 @@ class Guard {
                     this.isAlerted = false;
                     this.aimTimer = 0;
                 }
+            } else if (this.investigateTimer > 0) {
+                // Đang tò mò kiểm tra tiếng sỏi nghi binh
+                this.investigateTimer--;
+                if (this.investigateX !== null) {
+                    const dx = this.investigateX - (this.x + this.width / 2);
+                    if (Math.abs(dx) > 8) {
+                        this.dir = dx > 0 ? 1 : -1;
+                        this.x += this.dir * (this.speed * 0.7);
+                    }
+                }
+                this.animTimer++;
+                if (this.animTimer > 10) {
+                    this.animFrame = (this.animFrame + 1) % 4;
+                    this.animTimer = 0;
+                }
             } else {
                 // Tuần tra bình thường
                 this.x += this.speed * this.dir;
@@ -462,7 +551,7 @@ class Guard {
 
     // Kiểm tra xem người chơi có bị nón đèn quét trúng hay không
     detectsPlayer(player) {
-        if (!player || player.isHidden || player.invulnerableTimer > 0) {
+        if (!player || player.isHidden || player.invulnerableTimer > 0 || this.stunTimer > 0) {
             this.crouchSuspicionTimer = Math.max(0, this.crouchSuspicionTimer - 2);
             if (!this.isAiming) this.isAlerted = false;
             return false;
@@ -477,6 +566,13 @@ class Guard {
         const dx = playerCenterX - eyeX;
         const dy = playerCenterY - eyeY;
         const dist = Math.hypot(dx, dy);
+
+        // Nếu người chơi đang trong trang phục cải trang: lính chỉ phát hiện khi va chạm quá gần (< 36px)
+        if (player.disguiseTimer > 0 && dist > 36) {
+            this.crouchSuspicionTimer = Math.max(0, this.crouchSuspicionTimer - 2);
+            if (!this.isAiming) this.isAlerted = false;
+            return false;
+        }
 
         // Nằm ngoài tầm quét đèn đã thu hẹp
         if (dist > this.visionRange) {
@@ -753,6 +849,88 @@ class ParticleSystem {
         this.addBurst(x, y, color, 30);
     }
 
+    // Hiệu ứng sóng âm thanh khi sỏi nghi binh chạm đất
+    addDistractionWave(x, y) {
+        this.particles.push({
+            x,
+            y,
+            vx: 0,
+            vy: 0,
+            radius: 8,
+            maxRadius: 65,
+            isRing: true,
+            color: "#38bdf8",
+            lineWidth: 2.5,
+            alpha: 1,
+            decay: 0.04
+        });
+        this.particles.push({
+            x,
+            y,
+            vx: 0,
+            vy: 0,
+            radius: 4,
+            maxRadius: 40,
+            isRing: true,
+            color: "#fde047",
+            lineWidth: 2,
+            alpha: 0.9,
+            decay: 0.05
+        });
+    }
+
+    // Hiệu ứng khiên Áo Trấn Thủ vỡ khi đỡ trọn phát đạn
+    addShieldBreak(x, y) {
+        this.particles.push({
+            x,
+            y,
+            vx: 0,
+            vy: 0,
+            radius: 12,
+            maxRadius: 55,
+            isRing: true,
+            color: "#10b981",
+            lineWidth: 4,
+            alpha: 1,
+            decay: 0.05
+        });
+        const colors = ["#10b981", "#34d399", "#6ee7b7", "#ffffff"];
+        for (let i = 0; i < 16; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = 2.0 + Math.random() * 4.0;
+            this.particles.push({
+                x,
+                y,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                size: 2.5 + Math.random() * 3,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                alpha: 1,
+                decay: 0.04
+            });
+        }
+    }
+
+    // Hiệu ứng khi khống chế mật thám từ sau lưng thành công
+    addTakedownBurst(x, y) {
+        this.addFloatingText(x, y - 28, "+150 MƯU LƯỢC", "#facc15", 15, 170);
+        const colors = ["#facc15", "#f59e0b", "#ffffff"];
+        for (let i = 0; i < 18; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = 2.5 + Math.random() * 4.5;
+            this.particles.push({
+                x,
+                y,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                size: 2.5 + Math.random() * 3,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                alpha: 1,
+                decay: 0.035
+            });
+        }
+    }
+
     update() {
         for (let i = this.particles.length - 1; i >= 0; i--) {
             const p = this.particles[i];
@@ -864,6 +1042,162 @@ class ParticleSystem {
             ctx.fillText(ft.text, screenX, screenY + 1);
             ctx.restore();
         }
+    }
+}
+
+// =========================================================================
+// 1. VIÊN SỎI NGHI BINH (DISTRACTION PEBBLE)
+// Bay theo hình parabol, nảy trên mặt đất và phát ra sóng âm thanh dụ mật thám
+// =========================================================================
+class DistractionPebble {
+    constructor(x, y, dir) {
+        this.x = x;
+        this.y = y;
+        this.vx = dir * 6.5;
+        this.vy = -4.8;
+        this.radius = 4;
+        this.gravity = 0.38;
+        this.bounces = 0;
+        this.maxBounces = 2;
+        this.hasLanded = false;
+        this.life = 140; // Tồn tại ~2.3 giây
+        this.alertTriggered = false;
+        this.waveRadius = 0;
+        this.maxWaveRadius = 80;
+    }
+
+    update(platforms, guards, particles) {
+        if (!this.hasLanded) {
+            this.vy += this.gravity;
+            this.x += this.vx;
+            this.y += this.vy;
+
+            // Kiểm tra va chạm với các nền tảng
+            for (const plat of platforms) {
+                const pw = plat.w ?? plat.width ?? 0;
+                const ph = plat.h ?? plat.height ?? 0;
+                if (this.x >= plat.x && this.x <= plat.x + pw &&
+                    this.y >= plat.y && this.y <= plat.y + ph) {
+                    this.y = plat.y - this.radius;
+                    this.bounces++;
+                    if (this.bounces >= this.maxBounces) {
+                        this.hasLanded = true;
+                        this.vx = 0;
+                        this.vy = 0;
+                    } else {
+                        this.vy = -this.vy * 0.45;
+                        this.vx *= 0.6;
+                    }
+
+                    // Phát tiếng động và kích hoạt sóng âm thanh
+                    if (!this.alertTriggered) {
+                        this.alertTriggered = true;
+                        if (typeof audio !== "undefined" && audio.playTone) {
+                            audio.playTone(840, "sine", 0.08, 0.12);
+                            setTimeout(() => { if (audio.playTone) audio.playTone(620, "sine", 0.06, 0.08); }, 50);
+                        }
+                        if (particles && particles.addDistractionWave) {
+                            particles.addDistractionWave(this.x, this.y);
+                        }
+                        // Thu hút mật thám trong bán kính 200px
+                        for (const guard of guards) {
+                            const gx = guard.x + guard.width / 2;
+                            const gy = guard.y + guard.height / 2;
+                            const dist = Math.hypot(gx - this.x, gy - this.y);
+                            if (dist < 200) {
+                                guard.hearDistraction(this.x);
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        } else {
+            this.life--;
+            if (this.waveRadius < this.maxWaveRadius) {
+                this.waveRadius += 3.8;
+            }
+        }
+
+        return this.life <= 0;
+    }
+}
+
+// =========================================================================
+// 2. VẬT PHẨM TIẾP TẾ CÁCH MẠNG (SUPPLY ITEMS)
+// Áo Trấn Thủ (Khiên), Dép Cao Su (Tốc độ), Hòm Cải Trang, Lương Khô (Máu)
+// =========================================================================
+class SupplyItem {
+    constructor(config) {
+        this.x = config.x;
+        this.y = config.y;
+        this.baseY = config.y;
+        this.type = config.type; // 'shield', 'speed', 'disguise', 'heal'
+        this.title = config.title || "Vật Phẩm Tiếp Tế";
+        this.desc = config.desc || "";
+        this.width = 28;
+        this.height = 28;
+        this.w = 28;
+        this.h = 28;
+        this.collected = false;
+        this.bobTime = Math.random() * Math.PI * 2;
+    }
+
+    update() {
+        if (this.collected) return;
+        this.bobTime += 0.055;
+        this.y = this.baseY + Math.sin(this.bobTime) * 5;
+    }
+
+    checkCollect(player) {
+        if (this.collected || !player || player.isDying) return false;
+        const pCenterX = player.x + player.width / 2;
+        const pCenterY = player.y + player.height / 2;
+        const iCenterX = this.x + this.width / 2;
+        const iCenterY = this.y + this.height / 2;
+        const dist = Math.hypot(pCenterX - iCenterX, pCenterY - iCenterY);
+
+        if (dist < 34) {
+            this.collected = true;
+            return true;
+        }
+        return false;
+    }
+}
+
+// =========================================================================
+// 3. ĐỒNG CHÍ LIÊN LẠC BÍ MẬT / QUẦN CHÚNG NH N D N (COMRADE NPC)
+// Nhân vật lịch sử hỗ trợ người chơi, chỉ đường bí mật và tiếp tế
+// =========================================================================
+class ComradeNPC {
+    constructor(config) {
+        this.x = config.x;
+        this.y = config.y;
+        this.name = config.name || "Đồng Chí Liên Lạc";
+        this.role = config.role || "Cơ sở bí mật";
+        this.quote = config.quote || "Đường cứu nước gian nan, chúc đồng chí bình an!";
+        this.giftType = config.giftType || "shield"; // 'shield', 'speed', 'heal'
+        this.shortcutId = config.shortcutId || null;
+        this.width = 28;
+        this.height = 48;
+        this.w = 28;
+        this.h = 48;
+        this.talked = false;
+        this.isNear = false;
+        this.animTimer = 0;
+    }
+
+    update(player) {
+        this.animTimer += 0.06;
+        if (!player) {
+            this.isNear = false;
+            return;
+        }
+        const pCenterX = player.x + player.width / 2;
+        const pCenterY = player.y + player.height / 2;
+        const nCenterX = this.x + this.width / 2;
+        const nCenterY = this.y + this.height / 2;
+        this.isNear = Math.abs(pCenterX - nCenterX) < 56 && Math.abs(pCenterY - nCenterY) < 52;
     }
 }
 

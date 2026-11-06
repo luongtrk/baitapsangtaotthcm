@@ -86,6 +86,30 @@ const LEVELS = [
             { x: 160, y: 470 }, { x: 300, y: 380 }, { x: 500, y: 310 },
             { x: 720, y: 370 }, { x: 1150, y: 470 }, { x: 1300, y: 380 },
             { x: 1520, y: 300 }, { x: 1950, y: 470 }, { x: 2100, y: 380 }
+        ],
+
+        // Vật phẩm tiếp tế cách mạng mới
+        supplies: [
+            { x: 380, y: 485, type: "shield" },   // Áo Trấn Thủ ở bến cảng
+            { x: 1250, y: 485, type: "heal" },    // Lương khô ở ngõ Paris
+            { x: 1600, y: 315, type: "speed" },   // Dép Cao Su trên ban công Paris
+            { x: 2180, y: 485, type: "disguise" } // Hòm cải trang trước Versailles
+        ],
+
+        // Đồng chí liên lạc bí mật
+        npcs: [
+            {
+                x: 750, y: 468,
+                name: "Đồng chí Thợ Thuyền Ba Son",
+                quote: "Anh Ba! Tàu sắp nhổ neo, tôi đã hạ sẵn chiếc cầu bí mật giúp anh vượt qua lạch nước an toàn!",
+                giftType: "shield",
+                shortcutId: "shortcut_harbor"
+            }
+        ],
+
+        // Lối tắt bí mật
+        shortcuts: [
+            { id: "shortcut_harbor", x: 850, y: 470, w: 160, h: 20 }
         ]
     },
 
@@ -171,6 +195,30 @@ const LEVELS = [
             { x: 150, y: 470 }, { x: 260, y: 360 }, { x: 490, y: 270 },
             { x: 870, y: 370 }, { x: 1200, y: 360 }, { x: 1430, y: 270 },
             { x: 1910, y: 360 }, { x: 2210, y: 350 }, { x: 2440, y: 260 }
+        ],
+
+        // Vật phẩm tiếp tế cách mạng mới
+        supplies: [
+            { x: 380, y: 485, type: "speed" },    // Dép Cao Su chạy băng tuyết
+            { x: 1320, y: 485, type: "shield" },  // Áo Trấn Thủ chống lạnh & đỡ đòn
+            { x: 1750, y: 215, type: "heal" },    // Lương khô tầng cao
+            { x: 2450, y: 285, type: "disguise" } // Hòm cải trang tại Quảng Châu
+        ],
+
+        // Đồng chí liên lạc bí mật
+        npcs: [
+            {
+                x: 720, y: 468,
+                name: "Đồng chí Quốc Tế Cộng Sản",
+                quote: "Đồng chí Nguyễn! Luận cương của Lênin là ngọn đuốc soi đường. Cây cầu bí mật vượt vực tuyết đã mở!",
+                giftType: "speed",
+                shortcutId: "shortcut_moscow"
+            }
+        ],
+
+        // Lối tắt bí mật
+        shortcuts: [
+            { id: "shortcut_moscow", x: 800, y: 480, w: 150, h: 20 }
         ]
     },
 
@@ -268,6 +316,30 @@ const LEVELS = [
             { x: 120, y: 470 }, { x: 300, y: 370 }, { x: 490, y: 280 },
             { x: 1100, y: 210 }, { x: 1250, y: 300 }, { x: 1700, y: 360 },
             { x: 2090, y: 180 }, { x: 2540, y: 200 }, { x: 2690, y: 290 }
+        ],
+
+        // Vật phẩm tiếp tế cách mạng mới
+        supplies: [
+            { x: 350, y: 485, type: "shield" },   // Áo Trấn Thủ du kích
+            { x: 950, y: 155, type: "heal" },     // Lương khô đỉnh núi 1
+            { x: 1600, y: 485, type: "speed" },   // Dép Cao Su vượt suối Lê-nin
+            { x: 2360, y: 135, type: "disguise" } // Hòm cải trang đỉnh núi 2
+        ],
+
+        // Đồng chí liên lạc bí mật
+        npcs: [
+            {
+                x: 550, y: 468,
+                name: "Đồng chí Dân Tộc Pác Bó",
+                quote: "Bác đã về với núi rừng quê hương! Đồng bào đã dựng cầu tre bí mật đưa Bác qua dòng thác ghềnh!",
+                giftType: "shield",
+                shortcutId: "shortcut_pacbo"
+            }
+        ],
+
+        // Lối tắt bí mật
+        shortcuts: [
+            { id: "shortcut_pacbo", x: 650, y: 490, w: 200, h: 20 }
         ]
     },
 
@@ -362,6 +434,30 @@ const LEVELS = [
             { x: 160, y: 470 }, { x: 300, y: 380 }, { x: 500, y: 290 },
             { x: 950, y: 300 }, { x: 1300, y: 350 }, { x: 1580, y: 250 },
             { x: 2020, y: 270 }, { x: 2500, y: 360 }, { x: 2740, y: 270 }
+        ],
+
+        // Vật phẩm tiếp tế cách mạng mới
+        supplies: [
+            { x: 350, y: 395, type: "disguise" }, // Cải trang đi trên mái phố cổ
+            { x: 1350, y: 365, type: "heal" },    // Lương khô
+            { x: 1800, y: 195, type: "shield" },  // Áo Trấn Thủ tự vệ đỏ
+            { x: 2350, y: 485, type: "speed" }    // Dép Cao Su chạy vào lễ đài
+        ],
+
+        // Đồng chí liên lạc bí mật
+        npcs: [
+            {
+                x: 360, y: 468,
+                name: "Nữ Tự Vệ Cứu Quốc Ba Đình",
+                quote: "Thưa Bác! Toàn thể đồng bào đang reo hò đón Bác. Chúng cháu đã mở lối cầu ván vượt qua rào thép gai!",
+                giftType: "disguise",
+                shortcutId: "shortcut_badinh"
+            }
+        ],
+
+        // Lối tắt bí mật
+        shortcuts: [
+            { id: "shortcut_badinh", x: 450, y: 490, w: 200, h: 20 }
         ]
     }
 ];
