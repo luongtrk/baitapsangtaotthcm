@@ -55,23 +55,42 @@ body {
 .brand-logo {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-family: var(--font-heading);
-    font-size: 1.15rem;
-    font-weight: 700;
+    gap: 12px;
+}
+
+.brand-text-block {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    line-height: 1.25;
+}
+
+.brand-subject-tag {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 1.2px;
     color: var(--accent-gold);
+    text-transform: uppercase;
+}
+
+.brand-main-title {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
     letter-spacing: 0.5px;
 }
 
 .brand-star {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     color: #ef4444;
-    filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.6));
+    filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.7));
 }
 
 .header-actions {
     display: flex;
     gap: 10px;
+    align-items: center;
 }
 
 /* Main Container */
@@ -102,42 +121,159 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Minimalist Menu Screen */
+/* Menu Screen (Đậm chất môn học & Trọng thể) */
 .menu-minimal-card {
     width: 100%;
-    max-width: 620px;
-    margin: 40px auto;
+    max-width: 660px;
+    margin: 25px auto 40px;
     text-align: center;
-    padding: 45px 35px;
-    background: rgba(15, 23, 42, 0.85);
-    border: 1px solid rgba(251, 191, 36, 0.25);
+    padding: 36px 32px;
+    background: rgba(15, 23, 42, 0.88);
+    border: 2px solid rgba(251, 191, 36, 0.45);
     border-radius: 20px;
-    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(12px);
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
 }
 
-.hero-emblem {
-    font-size: 3.4rem;
-    color: var(--accent-gold);
-    text-shadow: 0 0 25px rgba(251, 191, 36, 0.6);
-    margin-bottom: 8px;
-    animation: pulse 3s infinite ease-in-out;
+/* Chân dung Bác Hồ */
+.hero-portrait-frame {
+    width: 136px;
+    height: 136px;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    border: 3.5px solid var(--accent-gold);
+    box-shadow: 0 0 28px rgba(251, 191, 36, 0.5), 0 10px 25px rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+    position: relative;
+    background: #0f172a;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero-portrait-frame:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 38px rgba(251, 191, 36, 0.7), 0 12px 30px rgba(0, 0, 0, 0.9);
+}
+
+.hero-portrait-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+}
+
+.academic-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(185, 28, 28, 0.9), rgba(127, 29, 29, 0.9));
+    border: 1px solid rgba(251, 191, 36, 0.55);
+    color: #fef08a;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    padding: 4px 16px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    text-transform: uppercase;
 }
 
 .game-title {
     font-family: var(--font-heading);
-    font-size: 2.3rem;
+    font-size: 2.2rem;
     font-weight: 900;
     color: #fff;
     letter-spacing: 2px;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
 }
 
 .game-tagline {
-    font-size: 1rem;
+    font-size: 0.98rem;
     color: var(--accent-gold);
-    font-weight: 500;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.game-quote {
+    font-family: var(--font-heading);
+    font-style: italic;
+    color: #fef08a;
+    font-size: 1.05rem;
+    margin: 0 auto 20px;
+    max-width: 480px;
+    padding: 8px 18px;
+    border-left: 3px solid var(--primary-red);
+    border-right: 3px solid var(--primary-red);
+    background: rgba(15, 23, 42, 0.6);
+    border-radius: 6px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+}
+
+/* Khung nhập tên sinh viên */
+.player-name-card {
+    background: rgba(15, 23, 42, 0.75);
+    border: 1.5px solid rgba(251, 191, 36, 0.4);
+    border-radius: 12px;
+    padding: 12px 16px;
+    max-width: 440px;
+    margin: 0 auto 22px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    text-align: left;
+}
+
+.player-name-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent-gold);
+    font-size: 0.88rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.player-name-input-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.player-name-input {
+    width: 100%;
+    padding: 10px 14px;
+    background: rgba(30, 41, 59, 0.85);
+    border: 1.5px solid rgba(251, 191, 36, 0.45);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.player-name-input:focus {
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 12px rgba(251, 191, 36, 0.45);
+    background: rgba(15, 23, 42, 0.95);
+}
+
+.player-name-input::placeholder {
+    color: #64748b;
+    font-weight: 400;
+    font-size: 0.92rem;
+}
+
+.player-name-hint {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-style: italic;
+}
+
+.hud-player-pill {
+    background: rgba(185, 28, 28, 0.82) !important;
+    border-color: rgba(251, 191, 36, 0.6) !important;
+}
     margin-bottom: 30px;
 }
 

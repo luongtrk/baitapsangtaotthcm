@@ -13,6 +13,7 @@ class GameManager {
         this.unlockedDocIds = new Set();
         this.currentChapterIndex = 0;
         this.totalQuizPoints = 0;
+        this.playerName = localStorage.getItem("tthcm_player_name") || "";
 
         this.loadSavedData();
         this.initUI();
@@ -65,7 +66,19 @@ class GameManager {
             };
         }
 
-        // Nút Hướng dẫn & Bảng Xếp Hạng trên Header & Menu
+        // Nhập và ghi nhớ họ tên sinh viên / người chơi
+        const inputPlayerName = document.getElementById("input-player-name");
+        if (inputPlayerName) {
+            inputPlayerName.value = this.playerName;
+            inputPlayerName.addEventListener("input", (e) => {
+                this.playerName = e.target.value.trim();
+                localStorage.setItem("tthcm_player_name", this.playerName);
+                this.updateHUDPlayerName();
+            });
+        }
+        this.updateHUDPlayerName();
+
+        // Nút Hướng dẫn & Bảng Vàng trên Header & Menu
         const btnGuideTop = document.getElementById("btn-guide-top");
         if (btnGuideTop) btnGuideTop.onclick = () => this.openGuideModal();
 
@@ -74,6 +87,9 @@ class GameManager {
 
         const btnOpenLeaderboard = document.getElementById("btn-open-leaderboard");
         if (btnOpenLeaderboard) btnOpenLeaderboard.onclick = () => this.openLeaderboardModal();
+
+        const btnClearLeaderboard = document.getElementById("btn-clear-leaderboard");
+        if (btnClearLeaderboard) btnClearLeaderboard.onclick = () => this.clearLeaderboard();
 
         // Nút quay lại Menu từ các màn hình khác và trong các Popup/Modal
         document.querySelectorAll(".btn-back-menu").forEach(btn => {
@@ -186,7 +202,24 @@ class GameManager {
         this.checkOrientationHint();
     }
 
+    updateHUDPlayerName() {
+        const hudPlayer = document.getElementById("hud-player-name");
+        if (hudPlayer) {
+            hudPlayer.innerText = this.playerName || "Khách";
+        }
+    }
+
     startChapter(chapterIndex) {
+        // Đảm bảo tên người chơi được cập nhật
+        if (!this.playerName) {
+            const inputPlayerName = document.getElementById("input-player-name");
+            if (inputPlayerName && inputPlayerName.value.trim()) {
+                this.playerName = inputPlayerName.value.trim();
+                localStorage.setItem("tthcm_player_name", this.playerName);
+            }
+        }
+        this.updateHUDPlayerName();
+
         this.currentChapterIndex = chapterIndex;
         this.showScreen("screen-game");
 
@@ -409,23 +442,29 @@ class GameManager {
         if (docsCountEl) docsCountEl.innerText = `${this.unlockedDocIds.size}/12`;
         if (starsEl) starsEl.innerText = `${this.engine.starsCollectedCount} ★`;
 
-        // Xử lý gửi tên lưu vào Bảng xếp hạng
+        // Xử lý gửi tên lưu vào Bảng Vàng
         const inputName = document.getElementById("grand-player-name");
         const btnSaveScore = document.getElementById("btn-submit-score");
         const saveNotice = document.getElementById("grand-save-notice");
 
+        if (inputName) {
+            inputName.value = this.playerName || "Sinh Viên";
+        }
+
         if (btnSaveScore && inputName) {
             btnSaveScore.disabled = false;
-            btnSaveScore.innerText = "Lưu Kỷ Lục";
+            btnSaveScore.innerText = "Lưu Thành Tích";
             if (saveNotice) saveNotice.innerText = "";
 
             btnSaveScore.onclick = () => {
-                const name = inputName.value.trim() || "Người Chơi";
+                const name = inputName.value.trim() || this.playerName || "Sinh Viên";
+                this.playerName = name;
+                localStorage.setItem("tthcm_player_name", name);
                 this.addLeaderboardEntry(name, finalScore, finalTime);
                 btnSaveScore.disabled = true;
-                btnSaveScore.innerText = "✓ Đã Lưu";
+                btnSaveScore.innerText = "✓ Đã Ghi Danh";
                 if (saveNotice) {
-                    saveNotice.innerText = "Đã ghi danh vào Bảng Xếp Hạng!";
+                    saveNotice.innerText = "Đã vinh danh thành tích lên Bảng Vàng!";
                     saveNotice.style.color = "#4ade80";
                 }
             };
@@ -494,29 +533,33 @@ class GameManager {
     }
 
     // =========================================================================
-    // HỆ THỐNG BẢNG XẾP HẠNG & KỶ LỤC (LEADERBOARD)
+    // HỆ THỐNG BẢNG VÀNG THÀNH TÍCH (LEADERBOARD)
     // =========================================================================
     getDefaultLeaderboard() {
-        return [
-            { rank: 1, name: "Chiến Sĩ Quyết Tử", score: 2650, time: "04:18", date: "Kỷ lục" },
-            { rank: 2, name: "Nguyễn Tất Thành",  score: 2400, time: "05:05", date: "Kỷ lục" },
-            { rank: 3, name: "Việt Minh 1945",     score: 2150, time: "06:12", date: "Kỷ lục" },
-            { rank: 4, name: "Sao Vàng Pác Bó",    score: 1900, time: "07:30", date: "Kỷ lục" },
-            { rank: 5, name: "Tân Binh Cứu Quốc",  score: 1550, time: "08:45", date: "Kỷ lục" }
-        ];
+        return [];
     }
 
     loadLeaderboard() {
         try {
             const raw = localStorage.getItem("tthcm_leaderboard");
             if (raw) {
-                const list = JSON.parse(raw);
-                if (Array.isArray(list) && list.length > 0) return list;
+                let list = JSON.parse(raw);
+                if (Array.isArray(list)) {
+                    // Xóa bỏ triệt để toàn bộ các bản ghi giả định cũ
+                    list = list.filter(item => 
+                        item.date !== "Kỷ lục" && 
+                        item.name !== "Chiến Sĩ Quyết Tử" && 
+                        item.name !== "Nguyễn Tất Thành" &&
+                        item.name !== "Việt Minh 1945" &&
+                        item.name !== "Sao Vàng Pác Bó" &&
+                        item.name !== "Tân Binh Cứu Quốc"
+                    );
+                    this.saveLeaderboard(list);
+                    return list;
+                }
             }
         } catch (e) {}
-        const def = this.getDefaultLeaderboard();
-        this.saveLeaderboard(def);
-        return def;
+        return [];
     }
 
     saveLeaderboard(list) {
@@ -525,9 +568,17 @@ class GameManager {
         } catch (e) {}
     }
 
+    clearLeaderboard() {
+        if (confirm("Bạn có chắc chắn muốn đặt lại (xóa toàn bộ) Bảng Vàng kỷ lục trên thiết bị này không?")) {
+            localStorage.removeItem("tthcm_leaderboard");
+            this.renderLeaderboardTable([]);
+            this.updateHighScorePreview();
+        }
+    }
+
     addLeaderboardEntry(name, score, timeStr) {
         const list = this.loadLeaderboard();
-        const trimmed = (name || "Người Chơi").trim() || "Người Chơi";
+        const trimmed = (name || this.playerName || "Sinh Viên").trim() || "Sinh Viên";
         list.push({
             name: trimmed,
             score: score,
@@ -551,9 +602,11 @@ class GameManager {
         const preview = document.getElementById("menu-high-score-preview");
         if (!preview) return;
         const list = this.loadLeaderboard();
-        if (list.length > 0) {
+        if (list && list.length > 0) {
             const top = list[0];
-            preview.innerText = `🏆 Kỷ lục: ${top.score} Điểm (⏱️ ${top.time}) - ${top.name}`;
+            preview.innerText = `🏆 Kỷ lục dẫn đầu: ${top.score} Điểm (⏱️ ${top.time}) — ${top.name}`;
+        } else {
+            preview.innerText = `🏆 Bảng Vàng: Chưa có kỷ lục. Hãy là người đầu tiên ghi danh!`;
         }
     }
 
@@ -564,10 +617,26 @@ class GameManager {
         modal.classList.add("active");
     }
 
-    renderLeaderboardTable() {
+    renderLeaderboardTable(customList) {
         const tbody = document.getElementById("leaderboard-tbody");
         if (!tbody) return;
-        const list = this.loadLeaderboard();
+        const list = customList !== undefined ? customList : this.loadLeaderboard();
+
+        if (!list || list.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="5" style="text-align: center; padding: 35px 16px; color: #94a3b8; font-style: italic;">
+                        <span style="font-size: 1.6rem; display: block; margin-bottom: 8px;">🏅</span>
+                        Chưa có sinh viên nào ghi danh trên Bảng Vàng.<br>
+                        <span style="color: var(--accent-gold); font-size: 0.9rem; font-style: normal; font-weight: 600;">
+                            Hãy nhập tên của bạn và hoàn thành 4 chương lịch sử để trở thành Thủ khoa đầu tiên!
+                        </span>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
         tbody.innerHTML = list.map((item, idx) => `
             <tr>
                 <td class="leaderboard-rank leaderboard-rank-${idx + 1}">${idx === 0 ? "🥇 1" : idx === 1 ? "🥈 2" : idx === 2 ? "🥉 3" : "#" + (idx + 1)}</td>

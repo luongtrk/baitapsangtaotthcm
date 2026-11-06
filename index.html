@@ -16,13 +16,16 @@
     <header class="app-header">
         <div class="brand-logo">
             <span class="brand-star">★</span>
-            <span>THEO DẤU CHÂN NGƯỜI</span>
+            <div class="brand-text-block">
+                <span class="brand-subject-tag">MÔN HỌC: TƯ TƯỞNG HỒ CHÍ MINH</span>
+                <span class="brand-main-title">THEO DẤU CHÂN NGƯỜI</span>
+            </div>
         </div>
         <div class="header-actions">
             <button id="btn-toggle-sound" class="btn btn-sm btn-icon" title="Bật/Tắt Âm thanh">🔊</button>
             <button id="btn-toggle-fullscreen" class="btn btn-sm btn-icon" title="Toàn màn hình">⛶</button>
-            <button id="btn-guide-top" class="btn btn-sm btn-outline-subtle" title="Hướng dẫn chơi">📖 Hướng Dẫn</button>
-            <button id="btn-leaderboard-top" class="btn btn-sm btn-outline-subtle" title="Bảng xếp hạng">🏆 Bảng Xếp Hạng</button>
+            <button id="btn-guide-top" class="btn btn-sm btn-outline-subtle" title="Hướng dẫn học tập & chơi">📖 Hướng Dẫn</button>
+            <button id="btn-leaderboard-top" class="btn btn-sm btn-outline-subtle" title="Bảng vàng thành tích">🏆 Bảng Vàng</button>
         </div>
     </header>
 
@@ -30,25 +33,43 @@
     <main class="main-wrapper">
 
         <!-- ==============================================
-             MÀN HÌNH 1: MENU CHÍNH (ĐƠN GIẢN, TINH TẾ)
+             MÀN HÌNH 1: MENU CHÍNH (TRANG TRỌNG & ĐẬM CHẤT HỌC PHẦN)
              ============================================== -->
         <section id="screen-menu" class="screen-panel active">
             <div class="menu-minimal-card">
-                <div class="hero-emblem">★</div>
+                <!-- Chân dung Chủ tịch Hồ Chí Minh -->
+                <div class="hero-portrait-frame">
+                    <img src="assets/images/bac_ho.jpg" alt="Chủ tịch Hồ Chí Minh (1890 – 1969)" class="hero-portrait-img" />
+                </div>
+                
+                <div class="academic-badge">BÀI TẬP SÁNG TẠO SỐ HÓA • TƯ TƯỞNG HỒ CHÍ MINH</div>
                 <h1 class="game-title">THEO DẤU CHÂN NGƯỜI</h1>
-                <div class="game-tagline">Hành Trình 30 Năm Tìm Đường Cứu Nước (1911 – 1945)</div>
+                <div class="game-tagline">Hành Trình 30 Năm Bôn Ba Cứu Nước & Giải Phóng Dân Tộc (1911 – 1945)</div>
+                <blockquote class="game-quote">"Không có gì quý hơn độc lập, tự do!"</blockquote>
+
+                <!-- Nhập họ tên sinh viên / người chơi -->
+                <div class="player-name-card">
+                    <label for="input-player-name" class="player-name-label">
+                        <span class="player-icon">👤</span>
+                        <span>Họ và Tên Sinh Viên / Người Chơi:</span>
+                    </label>
+                    <div class="player-name-input-wrap">
+                        <input type="text" id="input-player-name" class="player-name-input" placeholder="Nhập họ tên của bạn trước khi chơi..." maxlength="30" autocomplete="off" />
+                        <span class="player-name-hint">Điểm số và thời gian của bạn sẽ được vinh danh trên Bảng Vàng</span>
+                    </div>
+                </div>
 
                 <div class="menu-action-buttons">
-                    <button id="btn-start-game" class="btn btn-primary btn-hero">▶ BẮT ĐẦU CHƠI</button>
+                    <button id="btn-start-game" class="btn btn-primary btn-hero">▶ BẮT ĐẦU HÀNH TRÌNH</button>
                     <div class="menu-sub-row">
-                        <button id="btn-select-chapter" class="btn btn-secondary">🗺️ Chọn Màn</button>
+                        <button id="btn-select-chapter" class="btn btn-secondary">🗺️ 4 Chương Lịch Sử</button>
                         <button id="btn-open-museum" class="btn btn-secondary">🏛️ Bảo Tàng (12 Văn Kiện)</button>
-                        <button id="btn-open-leaderboard" class="btn btn-secondary">🏆 Bảng Xếp Hạng</button>
+                        <button id="btn-open-leaderboard" class="btn btn-secondary">🏆 Bảng Vàng Kỷ Lục</button>
                     </div>
                 </div>
 
                 <div class="menu-footer-info">
-                    <span id="menu-high-score-preview" style="color: var(--accent-gold); font-weight: 700;">🏆 Kỷ lục: Đang tải...</span>
+                    <span id="menu-high-score-preview" style="color: var(--accent-gold); font-weight: 700;">🏆 Bảng Vàng: Đang tải...</span>
                 </div>
             </div>
         </section>
@@ -58,7 +79,10 @@
              ============================================== -->
         <section id="screen-chapter-select" class="screen-panel">
             <div class="section-header">
-                <h2 class="section-title">Chọn Màn Chơi</h2>
+                <div>
+                    <h2 class="section-title">4 Chương Lịch Sử Tư Tưởng Hồ Chí Minh</h2>
+                    <span style="color: #94a3b8; font-size: 0.9rem;">Hành trình khảo sát thực tiễn, bước ngoặt lý luận và thắng lợi vĩ đại 1911 – 1945</span>
+                </div>
                 <button class="btn btn-secondary btn-back-menu">◀ Về Menu</button>
             </div>
             <div id="chapter-cards-list" class="chapters-grid">
@@ -72,7 +96,7 @@
         <section id="screen-museum" class="screen-panel">
             <div class="section-header">
                 <div>
-                    <h2 class="section-title">Bảo Tàng Văn Kiện</h2>
+                    <h2 class="section-title">Bảo Tàng Di Sản & Văn Kiện Lịch Sử</h2>
                     <span id="museum-count-display" style="color: var(--accent-gold); font-size: 0.9rem;">0/12 Văn kiện</span>
                 </div>
                 <button class="btn btn-secondary btn-back-menu">◀ Về Menu</button>
@@ -91,6 +115,10 @@
                 <div class="hud-left">
                     <div id="hud-chapter-name" class="hud-chapter-title">Chương 1</div>
                     <div class="hud-stats">
+                        <div class="hud-stat-pill hud-player-pill" title="Người chơi">
+                            <span>👤</span>
+                            <strong id="hud-player-name">Khách</strong>
+                        </div>
                         <div class="hud-stat-pill hud-health-pill" title="Thanh máu sinh lực (100 HP)">
                             <span class="hud-hp-icon">❤️</span>
                             <div class="hud-hp-track">
@@ -242,41 +270,44 @@
                 </div>
             </div>
 
-            <!-- Khung ghi danh vào bảng xếp hạng -->
+            <!-- Khung ghi danh vào Bảng Vàng -->
             <div class="leaderboard-submit-box">
-                <h4 style="color: var(--accent-gold); margin-bottom: 8px;">Ghi Danh Vào Bảng Xếp Hạng</h4>
-                <div style="display: flex; justify-content: center; gap: 10px; max-width: 420px; margin: 0 auto;">
-                    <input id="grand-player-name" class="form-control" placeholder="Nhập tên người chơi..." maxlength="25" style="text-align: center; font-weight: bold;">
-                    <button id="btn-submit-score" class="btn btn-primary" style="white-space: nowrap;">Lưu Kỷ Lục</button>
+                <h4 style="color: var(--accent-gold); margin-bottom: 8px;">Vinh Danh Lên Bảng Vàng Thành Tích</h4>
+                <div style="display: flex; justify-content: center; gap: 10px; max-width: 440px; margin: 0 auto;">
+                    <input id="grand-player-name" class="form-control" placeholder="Họ và tên sinh viên..." maxlength="30" style="text-align: center; font-weight: bold;">
+                    <button id="btn-submit-score" class="btn btn-primary" style="white-space: nowrap;">Lưu Thành Tích</button>
                 </div>
                 <div id="grand-save-notice" style="margin-top: 8px; font-size: 0.9rem; font-weight: bold;"></div>
             </div>
 
             <div style="margin-top: 25px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
-                <button id="btn-grand-view-leaderboard" class="btn btn-secondary">🏆 Xem Bảng Xếp Hạng</button>
+                <button id="btn-grand-view-leaderboard" class="btn btn-secondary">🏆 Xem Bảng Vàng</button>
                 <button id="btn-restart-game" class="btn btn-primary">◀ Về Trang Chủ</button>
             </div>
         </div>
     </div>
 
     <!-- ==============================================
-         MODAL 4: BẢNG XẾP HẠNG KỶ LỤC (LEADERBOARD)
+         MODAL 4: BẢNG VÀNG THÀNH TÍCH (LEADERBOARD)
          ============================================== -->
     <div id="modal-leaderboard" class="modal-overlay">
-        <div class="modal-content" style="max-width: 640px;">
+        <div class="modal-content" style="max-width: 680px;">
             <button class="modal-close-btn">&times;</button>
-            <h3 style="font-family: var(--font-heading); color: var(--accent-gold); margin-bottom: 5px;">🏆 BẢNG XẾP HẠNG KỶ LỤC</h3>
-            <p style="color: #94a3b8; font-size: 0.88rem; margin-bottom: 15px;">Thành tích cao nhất dựa trên Điểm số và Thời gian vượt qua 4 màn chơi.</p>
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 6px;">
+                <h3 style="font-family: var(--font-heading); color: var(--accent-gold); margin: 0;">🏆 BẢNG VÀNG THÀNH TÍCH TƯ TƯỞNG HỒ CHÍ MINH</h3>
+                <button id="btn-clear-leaderboard" class="btn btn-sm btn-danger-subtle" title="Đặt lại Bảng Vàng">🗑️ Đặt Lại Bảng Vàng</button>
+            </div>
+            <p style="color: #94a3b8; font-size: 0.88rem; margin-bottom: 15px;">Vinh danh điểm số và thời gian hoàn thành 4 chương của các sinh viên và người chơi.</p>
             
             <div style="overflow-x: auto;">
                 <table class="leaderboard-table">
                     <thead>
                         <tr>
                             <th>Hạng</th>
-                            <th>Người Chơi</th>
+                            <th>Sinh Viên / Người Chơi</th>
                             <th>Điểm</th>
                             <th>Thời Gian</th>
-                            <th>Ngày</th>
+                            <th>Ngày Hoàn Thành</th>
                         </tr>
                     </thead>
                     <tbody id="leaderboard-tbody">
@@ -289,7 +320,6 @@
                 <button class="btn btn-primary modal-close-btn" style="position: static;">Đóng</button>
             </div>
         </div>
-    </div>
     </div>
 
     <!-- ==============================================
