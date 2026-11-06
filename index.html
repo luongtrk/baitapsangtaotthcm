@@ -123,19 +123,39 @@
                 </div>
             </div>
 
+            <!-- Gợi ý xoay ngang màn hình trên thiết bị di động -->
+            <div id="landscape-hint" class="landscape-hint" style="display: none;">
+                <span class="hint-icon">📱</span>
+                <span>Xoay ngang màn hình để chơi góc nhìn rộng và dễ dàng hơn!</span>
+                <button id="btn-close-hint" class="hint-close-btn" aria-label="Đóng">&times;</button>
+            </div>
+
             <!-- Canvas toàn màn hình -->
             <canvas id="gameCanvas"></canvas>
 
             <!-- Bàn phím ảo cảm ứng trên Mobile / Tablet -->
             <div class="mobile-controls-panel">
                 <div class="touch-dpad">
-                    <button id="btn-touch-left" class="touch-btn">◀</button>
-                    <button id="btn-touch-down" class="touch-btn">▼ Nấp</button>
-                    <button id="btn-touch-right" class="touch-btn">▶</button>
+                    <button id="btn-touch-left" class="touch-btn touch-btn-dpad" aria-label="Sang trái">
+                        <span>◀</span>
+                    </button>
+                    <button id="btn-touch-down" class="touch-btn touch-btn-dpad" aria-label="Cúi người">
+                        <span>▼</span>
+                        <span class="btn-subtext">NẤP</span>
+                    </button>
+                    <button id="btn-touch-right" class="touch-btn touch-btn-dpad" aria-label="Sang phải">
+                        <span>▶</span>
+                    </button>
                 </div>
                 <div class="touch-actions">
-                    <button id="btn-touch-interact" class="touch-btn touch-btn-interact" style="display: none;">📖 Đọc [E]</button>
-                    <button id="btn-touch-jump" class="touch-btn touch-btn-jump">▲ Nhảy</button>
+                    <button id="btn-touch-interact" class="touch-btn touch-btn-interact" style="display: none;" aria-label="Đọc văn kiện">
+                        <span>📖</span>
+                        <span class="btn-subtext">ĐỌC</span>
+                    </button>
+                    <button id="btn-touch-jump" class="touch-btn touch-btn-jump" aria-label="Nhảy">
+                        <span>▲</span>
+                        <span class="btn-subtext">NHẢY</span>
+                    </button>
                 </div>
             </div>
         </section>

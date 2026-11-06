@@ -80,16 +80,19 @@ class GameEngine {
             if (!btn) return;
 
             const handleStart = (e) => {
-                e.preventDefault();
+                if (e.cancelable) e.preventDefault();
+                btn.classList.add("touch-active");
                 actionDown();
             };
             const handleEnd = (e) => {
-                e.preventDefault();
+                if (e.cancelable) e.preventDefault();
+                btn.classList.remove("touch-active");
                 actionUp();
             };
 
             btn.addEventListener("touchstart", handleStart, { passive: false });
             btn.addEventListener("touchend", handleEnd, { passive: false });
+            btn.addEventListener("touchcancel", handleEnd, { passive: false });
             btn.addEventListener("mousedown", handleStart);
             btn.addEventListener("mouseup", handleEnd);
             btn.addEventListener("mouseleave", handleEnd);
@@ -107,6 +110,22 @@ class GameEngine {
             }
         }, () => {});
         bindTouchBtn("btn-touch-interact", () => this.readNearDocument(), () => {});
+
+        // Đảm bảo không bị kẹt phím khi người chơi nhấc toàn bộ ngón tay hoặc chuyển ứng dụng
+        window.addEventListener("touchend", (e) => {
+            if (e.touches && e.touches.length === 0) {
+                this.controls.left = false;
+                this.controls.right = false;
+                this.controls.down = false;
+                document.querySelectorAll(".touch-btn").forEach(b => b.classList.remove("touch-active"));
+            }
+        });
+        window.addEventListener("touchcancel", () => {
+            this.controls.left = false;
+            this.controls.right = false;
+            this.controls.down = false;
+            document.querySelectorAll(".touch-btn").forEach(b => b.classList.remove("touch-active"));
+        });
     }
 
     getFormattedTime() {

@@ -121,9 +121,46 @@ class GameManager {
         const btnFs2 = document.getElementById("btn-game-fullscreen");
         if (btnFs2) btnFs2.onclick = toggleFullscreen;
 
-        // Resize canvas toàn màn hình chuẩn xác
+        // Tự động nhận diện thiết bị cảm ứng để tối ưu điều khiển
+        const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.matchMedia("(pointer: coarse)").matches;
+        if (isTouch) {
+            document.body.classList.add("touch-device");
+        }
+
+        const btnCloseHint = document.getElementById("btn-close-hint");
+        if (btnCloseHint) {
+            btnCloseHint.onclick = () => {
+                const hint = document.getElementById("landscape-hint");
+                if (hint) hint.style.display = "none";
+            };
+        }
+
+        // Resize canvas toàn màn hình chuẩn xác & lắng nghe sự kiện xoay màn hình
         this.setupCanvasDPI();
-        window.addEventListener("resize", () => this.setupCanvasDPI());
+        window.addEventListener("resize", () => {
+            this.setupCanvasDPI();
+            this.checkOrientationHint();
+        });
+        window.addEventListener("orientationchange", () => {
+            setTimeout(() => {
+                this.setupCanvasDPI();
+                this.checkOrientationHint();
+            }, 250);
+        });
+    }
+
+    checkOrientationHint() {
+        const hint = document.getElementById("landscape-hint");
+        if (!hint) return;
+        const isPortrait = window.innerHeight > window.innerWidth && window.innerWidth <= 768;
+        const isTouch = document.body.classList.contains("touch-device") || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+        const gameScreen = document.getElementById("screen-game");
+        const isGameActive = gameScreen && gameScreen.classList.contains("active");
+        if (isTouch && isPortrait && isGameActive) {
+            hint.style.display = "flex";
+        } else {
+            hint.style.display = "none";
+        }
     }
 
     setupCanvasDPI() {
@@ -146,6 +183,7 @@ class GameManager {
         });
         const target = document.getElementById(screenId);
         if (target) target.classList.add("active");
+        this.checkOrientationHint();
     }
 
     startChapter(chapterIndex) {
