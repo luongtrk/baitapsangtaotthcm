@@ -418,6 +418,7 @@ class GameRenderer {
     drawPlatforms(platforms, defaultColor, cameraX, viewWidth = 1000) {
         const ctx = this.ctx;
         for (const p of platforms) {
+            if (p.isShortcut) continue; // Cầu bí mật được vẽ riêng trong drawShortcuts
             const screenX = p.x - cameraX;
             if (screenX + p.w < -60 || screenX > viewWidth + 60) continue;
 
@@ -1375,7 +1376,7 @@ class GameRenderer {
             if (sx < -50 || sx > viewWidth + 50) continue;
 
             ctx.save();
-            const floatY = item.y + Math.sin(this.time * 5 + item.x) * 4;
+            const floatY = item.y;
 
             if (item.type === "shield") {
                 // Áo Trấn Thủ (Khiên bảo vệ)

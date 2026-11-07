@@ -52,7 +52,14 @@ class GameEngine {
 
     initInputListeners() {
         // Bàn phím máy tính
+        // Bỏ qua phím khi người chơi đang gõ chữ (ô nhập tên) để không chặn dấu cách / kích hoạt nhầm kỹ năng
+        const isTypingTarget = (e) => {
+            const t = e.target;
+            return t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable);
+        };
+
         window.addEventListener("keydown", (e) => {
+            if (isTypingTarget(e)) return;
             if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(e.key)) {
                 e.preventDefault(); // Ngăn cuộn trang web
             }
@@ -68,6 +75,9 @@ class GameEngine {
                 }
                 this.controls.up = true;
             }
+
+            // Các phím kỹ năng chỉ kích hoạt một lần mỗi lần bấm (bỏ qua auto-repeat khi giữ phím)
+            if (e.repeat) return;
 
             // Phím E: Tương tác mở đọc văn kiện HOẶC trò chuyện với đồng chí liên lạc
             if (e.key.toLowerCase() === "e") {
@@ -177,11 +187,10 @@ class GameEngine {
         const pebble = this.player.throwPebble();
         if (pebble) {
             this.pebbles.push(pebble);
-            this.triggerScreenNotice("🎯 Nghi Binh: Đã ném sỏi đánh lạc hướng!", "info");
             this.particles.addFloatingText(this.player.x + 14, this.player.y - 25, "NGHI BINH", "#38bdf8", 14, 140);
         } else if (this.player.pebbleCooldown > 0) {
             const sec = (this.player.pebbleCooldown / 60).toFixed(1);
-            this.triggerScreenNotice(`Sỏi đang hồi: ${sec}s`, "info");
+            this.triggerScreenNotice(`🎯 Sỏi đang hồi: ${sec}s`, "info", 1200);
         }
     }
 
@@ -191,42 +200,69 @@ class GameEngine {
         for (const guard of this.guards) {
             if (this.player.canTakedown(guard)) {
                 guard.stun(720); // Choáng 12 giây
-                this.score += 150;
-                this.updateHUD();
-                this.particles.addTakedownBurst(guard.x + guard.width / 2, guard.y + 10);
-                this.triggerScreenNotice("🥋 Khống chế thành công! Mật thám bị bất tỉnh.", "info");
+                guard.timesTakenDown++;
+
+                // Chỉ thưởng điểm mưu lược ở lần khống chế đầu tiên (chống farm điểm khi lính tỉnh lại)
+                const isFirstTime = guard.timesTakenDown === 1;
+                if (isFirstTime) {
+                    this.score += 150;
+                    this.updateHUD();
+                }
+                this.particles.addTakedownBurst(
+                    guard.x + guard.width / 2,
+                    guard.y + 10,
+                    isFirstTime ? "+150 MƯU LƯỢC" : "KHỐNG CHẾ LẠI"
+                );
+                this.triggerScreenNotice("🥋 Khống chế thành công! Mật thám bất tỉnh 12 giây.", "info");
                 if (typeof audio !== "undefined" && audio.playTone) {
                     audio.playTone(320, "triangle", 0.15, 0.25);
                     setTimeout(() => { if (audio.playTone) audio.playTone(480, "triangle", 0.2, 0.25); }, 80);
                 }
                 this.screenShake = 6;
-                this.player.invulnerableTimer = 35;
-                this.updateActionButtons();
+                this.player.invulnerableTimer = Math.max(this.player.invulnerableTimer, 35);
                 return;
             }
         }
     }
 
+    // Áp dụng hiệu ứng vật phẩm tiếp tế (dùng chung cho nhặt vật phẩm và quà của đồng chí liên lạc)
+    applySupplyEffect(type, x, y) {
+        const p = this.player;
+        if (!p) return "";
+        if (type === "shield") {
+            p.hasShield = true;
+            this.particles.addFloatingText(x, y, "+ÁO TRẤN THỦ", "#10b981", 14, 160);
+            this.particles.addBurst(x, y + 30, "#10b981", 20);
+            return "Áo Trấn Thủ: đỡ trọn 1 đòn sát thương";
+        }
+        if (type === "speed") {
+            p.speedBoostTimer = 480; // 8 giây
+            this.particles.addFloatingText(x, y, "+DÉP CAO SU", "#facc15", 14, 160);
+            this.particles.addBurst(x, y + 30, "#facc15", 20);
+            return "Dép Cao Su: chạy nhanh & nhảy xa hơn trong 8 giây";
+        }
+        if (type === "disguise") {
+            p.disguiseTimer = 720; // 12 giây
+            this.particles.addFloatingText(x, y, "+CẢI TRANG", "#c084fc", 14, 160);
+            this.particles.addBurst(x, y + 30, "#c084fc", 20);
+            return "Cải trang nông dân: mật thám không nhận ra từ xa trong 12 giây";
+        }
+        // Mặc định: Lương khô hồi máu
+        this.hp = Math.min(this.maxHp, this.hp + 25);
+        this.updateHUD();
+        this.particles.addFloatingText(x, y, "+25 HP", "#4ade80", 14, 160);
+        this.particles.addBurst(x, y + 30, "#4ade80", 20);
+        return "Lương Khô: hồi phục 25 HP";
+    }
+
     // Trò chuyện & Nhận tiếp tế từ Đồng chí liên lạc bí mật
     interactWithNpc() {
-        if (!this.nearNpc || this.isPaused || !this.isRunning) return;
+        if (!this.nearNpc || this.isPaused || !this.isRunning || !this.player || this.player.isDying) return;
         const npc = this.nearNpc;
         if (!npc.talked) {
             npc.talked = true;
-            if (npc.giftType === "shield") {
-                this.player.hasShield = true;
-                this.particles.addFloatingText(npc.x + 14, npc.y - 30, "+ÁO TRẤN THỦ", "#10b981", 15, 170);
-                this.triggerScreenNotice(`🤝 ${npc.name}: "${npc.quote}" (Nhận Áo Trấn Thủ!)`, "info");
-            } else if (npc.giftType === "speed") {
-                this.player.speedBoostTimer = 480;
-                this.particles.addFloatingText(npc.x + 14, npc.y - 30, "+DÉP CAO SU", "#facc15", 15, 170);
-                this.triggerScreenNotice(`🤝 ${npc.name}: "${npc.quote}" (Tăng tốc độ di chuyển!)`, "info");
-            } else {
-                this.hp = Math.min(this.maxHp, this.hp + 35);
-                this.updateHUD();
-                this.particles.addFloatingText(npc.x + 14, npc.y - 30, "+35 HP HỒI PHỤC", "#4ade80", 15, 170);
-                this.triggerScreenNotice(`🤝 ${npc.name}: "${npc.quote}" (+35 HP Tiếp Tế)`, "info");
-            }
+            const giftDesc = this.applySupplyEffect(npc.giftType, npc.x + 14, npc.y - 30);
+            this.triggerScreenNotice(`🤝 ${npc.name}: "${npc.quote}" (Nhận ${giftDesc})`, "info", 6500);
 
             // Mở lối tắt bí mật nếu có
             if (npc.shortcutId) {
@@ -241,7 +277,7 @@ class GameEngine {
 
             if (typeof audio !== "undefined" && audio.playCollect) audio.playCollect();
         } else {
-            this.triggerScreenNotice(`🤝 ${npc.name}: "${npc.quote}"`, "info");
+            this.triggerScreenNotice(`🤝 ${npc.name}: "${npc.quote}"`, "info", 5000);
         }
     }
 
@@ -267,23 +303,42 @@ class GameEngine {
     }
 
     // Cập nhật trạng thái hiển thị của các nút hành động trên màn hình cảm ứng
+    // Chỉ chạm vào DOM khi trạng thái thực sự thay đổi (gọi mỗi frame nên tránh ghi innerHTML liên tục,
+    // vì thay phần tử con đang được chạm sẽ làm mất sự kiện touchend trên điện thoại)
     updateActionButtons() {
-        const btnInteract = document.getElementById("btn-touch-interact");
-        if (btnInteract) {
-            if (this.nearDocument) {
-                btnInteract.style.display = "flex";
-                btnInteract.innerHTML = '<i class="fa-solid fa-book-open"></i><span class="btn-subtext">ĐỌC</span>';
-            } else if (this.nearNpc) {
-                btnInteract.style.display = "flex";
-                btnInteract.innerHTML = '<i class="fa-solid fa-comments"></i><span class="btn-subtext">GẶP</span>';
-            } else {
-                btnInteract.style.display = "none";
+        if (!this._btnState) this._btnState = {};
+        const st = this._btnState;
+
+        const interactMode = this.nearDocument ? "doc" : (this.nearNpc ? "npc" : "none");
+        if (st.interact !== interactMode) {
+            st.interact = interactMode;
+            const btnInteract = document.getElementById("btn-touch-interact");
+            if (btnInteract) {
+                if (interactMode === "doc") {
+                    btnInteract.style.display = "flex";
+                    btnInteract.innerHTML = '<i class="fa-solid fa-book-open"></i><span class="btn-subtext">ĐỌC</span>';
+                } else if (interactMode === "npc") {
+                    btnInteract.style.display = "flex";
+                    btnInteract.innerHTML = '<i class="fa-solid fa-comments"></i><span class="btn-subtext">GẶP</span>';
+                } else {
+                    btnInteract.style.display = "none";
+                }
             }
         }
 
-        const btnTakedown = document.getElementById("btn-touch-takedown");
-        if (btnTakedown) {
-            btnTakedown.style.display = this.nearGuardForTakedown ? "flex" : "none";
+        const takedownVisible = !!this.nearGuardForTakedown;
+        if (st.takedown !== takedownVisible) {
+            st.takedown = takedownVisible;
+            const btnTakedown = document.getElementById("btn-touch-takedown");
+            if (btnTakedown) btnTakedown.style.display = takedownVisible ? "flex" : "none";
+        }
+
+        // Làm mờ nút ném sỏi khi đang hồi chiêu
+        const cooling = !!(this.player && this.player.pebbleCooldown > 0);
+        if (st.cooling !== cooling) {
+            st.cooling = cooling;
+            const btnDistract = document.getElementById("btn-touch-distract");
+            if (btnDistract) btnDistract.classList.toggle("cooling", cooling);
         }
     }
 
@@ -347,7 +402,7 @@ class GameEngine {
         // Nếu người chơi đang có Áo Trấn Thủ (Khiên bảo vệ), đỡ trọn đòn sát thương này (ngoại trừ rơi vực sâu)
         if (this.player && this.player.hasShield && type !== "pit") {
             this.player.hasShield = false;
-            this.player.invulnerableTimer = 45;
+            this.player.invulnerableTimer = Math.max(this.player.invulnerableTimer, 45);
             this.particles.addShieldBreak(this.player.x + this.player.width / 2, this.player.y + this.player.height / 2);
             this.particles.addFloatingText(this.player.x + this.player.width / 2, this.player.y - 25, "KHIÊN ĐỠ TRỌN!", "#38bdf8", 15, 150);
             this.triggerScreenNotice("🛡️ Áo Trấn Thủ đã đỡ trọn một đòn sát thương!", "info");
@@ -556,8 +611,8 @@ class GameEngine {
                 this.particles.addMuzzleFlash(shot.x, shot.y, shot.dir);
             }
 
-            // Va chạm cơ thể trực tiếp với mật thám (nếu không ẩn nấp và không bất tử)
-            if (!this.player.isDying && this.player.invulnerableTimer === 0 && !this.player.isHidden) {
+            // Va chạm cơ thể trực tiếp với mật thám (nếu không ẩn nấp, không bất tử và mật thám còn tỉnh táo)
+            if (!this.player.isDying && this.player.invulnerableTimer === 0 && !this.player.isHidden && guard.stunTimer <= 0) {
                 if (this.player.checkCollision(this.player, guard)) {
                     audio.playHit();
                     audio.playAlert();
@@ -570,8 +625,9 @@ class GameEngine {
         }
 
         // 6. Cập nhật Điểm lưu (Checkpoints)
+        // Cho phép kích hoạt khi đi qua hoặc nhảy phía trên cột cờ, nhưng không kích hoạt nhầm cột cờ trên mái cao khi đang đi dưới đất
         for (const cp of this.currentLevel.checkpoints) {
-            if (!cp.reached && Math.abs(this.player.x - cp.x) < 40 && Math.abs(this.player.y - cp.y) < 70) {
+            if (!cp.reached && !this.player.isDying && Math.abs(this.player.x - cp.x) < 42 && this.player.y <= cp.y + 70 && this.player.y >= cp.y - 140) {
                 cp.reached = true;
                 this.player.setCheckpoint(cp.x, cp.y - 10);
                 this.particles.addBurst(cp.x, cp.y, "#fbbf24", 20);
@@ -601,27 +657,15 @@ class GameEngine {
                 item.collected = true;
                 if (typeof audio !== "undefined" && audio.playCollect) audio.playCollect();
 
+                const desc = this.applySupplyEffect(item.type, item.x + 12, item.y - 25);
                 if (item.type === "shield") {
-                    this.player.hasShield = true;
-                    this.particles.addFloatingText(item.x + 12, item.y - 25, "+ÁO TRẤN THỦ", "#10b981", 14, 160);
-                    this.particles.addBurst(item.x + 12, item.y + 12, "#10b981", 20);
-                    this.triggerScreenNotice("🛡️ Nhặt được Áo Trấn Thủ! Đỡ được 1 đòn sát thương.", "info");
+                    this.triggerScreenNotice(`🛡️ ${desc}`, "info");
                 } else if (item.type === "speed") {
-                    this.player.speedBoostTimer = 480; // 8 giây chạy vạn dặm
-                    this.particles.addFloatingText(item.x + 12, item.y - 25, "+DÉP CAO SU", "#facc15", 14, 160);
-                    this.particles.addBurst(item.x + 12, item.y + 12, "#facc15", 20);
-                    this.triggerScreenNotice("⚡ Dép Cao Su Vạn Dặm: Tăng tốc độ chạy & nhảy trong 8 giây!", "info");
+                    this.triggerScreenNotice(`⚡ ${desc}`, "info");
                 } else if (item.type === "disguise") {
-                    this.player.disguiseTimer = 720; // 12 giây cải trang
-                    this.particles.addFloatingText(item.x + 12, item.y - 25, "+CẢI TRANG", "#c084fc", 14, 160);
-                    this.particles.addBurst(item.x + 12, item.y + 12, "#c084fc", 20);
-                    this.triggerScreenNotice("🎩 Cải Trang Thành Công: Mật thám không thể phát hiện từ xa trong 12s!", "info");
-                } else if (item.type === "heal") {
-                    this.hp = Math.min(this.maxHp, this.hp + 25);
-                    this.updateHUD();
-                    this.particles.addFloatingText(item.x + 12, item.y - 25, "+25 HP LƯƠNG KHÔ", "#4ade80", 14, 160);
-                    this.particles.addBurst(item.x + 12, item.y + 12, "#4ade80", 20);
-                    this.triggerScreenNotice("🥖 Nhặt được Lương Khô Cách Mạng! Hồi phục 25 HP.", "info");
+                    this.triggerScreenNotice(`🎩 ${desc}`, "info");
+                } else {
+                    this.triggerScreenNotice(`🥖 ${desc}`, "info");
                 }
                 this.score += 75;
                 this.updateHUD();
@@ -700,14 +744,16 @@ class GameEngine {
         }
     }
 
-    triggerScreenNotice(text, type = "info") {
+    triggerScreenNotice(text, type = "info", duration = 2500) {
         const noticeEl = document.getElementById("game-notice");
         if (!noticeEl) return;
+        if (this._noticeTimer) clearTimeout(this._noticeTimer);
         noticeEl.innerText = text;
         noticeEl.className = `notice-badge show ${type}`;
-        setTimeout(() => {
+        this._noticeTimer = setTimeout(() => {
             noticeEl.className = "notice-badge";
-        }, 2500);
+            this._noticeTimer = null;
+        }, duration);
     }
 
     updateHUD() {

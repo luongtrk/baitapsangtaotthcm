@@ -738,6 +738,11 @@ body.touch-device .mobile-controls-panel {
     box-shadow: 0 0 18px rgba(56, 189, 248, 0.9);
 }
 
+.touch-btn-distract.cooling {
+    opacity: 0.5;
+    filter: grayscale(0.4);
+}
+
 .touch-btn-takedown {
     width: 66px;
     height: 66px;

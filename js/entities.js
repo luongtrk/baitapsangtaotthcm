@@ -38,6 +38,7 @@ class Player {
 
         // Tính năng gameplay mới: Nghi Binh, Khống Chế, Hóa Trang, Khiên Áo Trấn Thủ, Dép Cao Su
         this.pebbleCooldown = 0;    // Hồi chiêu ném sỏi nghi binh (frames)
+        this.maxPebbleCooldown = 180; // 3 giây hồi chiêu
         this.hasShield = false;     // Áo trấn thủ: đỡ trọn 1 đòn đạn/bẫy
         this.speedBoostTimer = 0;   // Dép cao su vạn dặm: tăng tốc chạy & nhảy
         this.disguiseTimer = 0;     // Hòm đồ cải trang: lính không nhận diện
@@ -90,10 +91,11 @@ class Player {
 
     executeJump() {
         if (this.isDying) return false;
+        const jumpBoost = this.speedBoostTimer > 0 ? 1.12 : 1.0;
 
         // 1. Nhảy từ mặt đất HOẶC Coyote Time (vừa bước hụt mép vực trong vòng 6 frames)
         if (this.onGround || this.coyoteTimer > 0) {
-            this.vy = this.jumpForce;
+            this.vy = this.jumpForce * jumpBoost;
             if (typeof audio !== "undefined" && audio.playJump) audio.playJump();
             this.jumpsLeft = 1; // Còn 1 lần nhảy đúp trên không
             this.onGround = false;
@@ -103,7 +105,7 @@ class Player {
         }
         // 2. Nhảy đúp trên không (Double Jump)
         else if (this.jumpsLeft > 0) {
-            this.vy = this.jumpForce * 0.96;
+            this.vy = this.jumpForce * 0.96 * jumpBoost;
             if (typeof audio !== "undefined" && audio.playDoubleJump) audio.playDoubleJump();
             this.jumpsLeft--;
             this.jumpBufferTimer = 0;
@@ -333,9 +335,10 @@ class Player {
     // Kỹ năng Nghi Binh: Ném một viên sỏi gây tiếng động giả dụ mật thám
     throwPebble() {
         if (this.pebbleCooldown > 0 || this.isDying) return null;
-        this.pebbleCooldown = 180; // 3 giây hồi chiêu
+        this.pebbleCooldown = this.maxPebbleCooldown;
+        // Sinh viên sỏi tại tâm người chơi (không bao giờ nằm trong tường) để tránh kẹt sỏi khi đứng sát vách
         return new DistractionPebble(
-            this.x + this.width / 2 + this.facing * 12,
+            this.x + this.width / 2,
             this.y + 14,
             this.facing
         );
@@ -433,6 +436,7 @@ class Guard {
         this.stunTimer = 0;             // Thời gian bị điểm huyệt / đánh ngất
         this.investigateTimer = 0;      // Thời gian tò mò đi kiểm tra tiếng sỏi
         this.investigateX = null;       // Tọa độ tiếng sỏi rơi
+        this.timesTakenDown = 0;        // Số lần bị khống chế (chỉ thưởng điểm lần đầu, chống farm điểm)
     }
 
     // Làm choáng mật thám
@@ -447,9 +451,11 @@ class Guard {
     hearDistraction(targetX) {
         if (this.stunTimer > 0 || this.isAiming) return;
         this.investigateTimer = 210; // ~3.5 giây đi kiểm tra
-        this.investigateX = Math.max(this.minX, Math.min(this.maxX, targetX));
+        // Giới hạn trong vùng tuần tra (quy đổi về tọa độ tâm) để lính không bước hụt khỏi bục
+        this.investigateX = Math.max(this.minX + this.width / 2, Math.min(this.maxX + this.width / 2, targetX));
         this.dir = this.investigateX >= this.x + this.width / 2 ? 1 : -1;
-        this.isAlerted = true;
+        // Không bật isAlerted ở đây: trạng thái "nghi binh" được hiển thị riêng bằng investigateTimer,
+        // tránh lỗi lính giữ mãi dấu "?" vàng sau khi đã điều tra xong
     }
 
     update(player, platforms) {
@@ -912,8 +918,8 @@ class ParticleSystem {
     }
 
     // Hiệu ứng khi khống chế mật thám từ sau lưng thành công
-    addTakedownBurst(x, y) {
-        this.addFloatingText(x, y - 28, "+150 MƯU LƯỢC", "#facc15", 15, 170);
+    addTakedownBurst(x, y, label = "+150 MƯU LƯỢC") {
+        if (label) this.addFloatingText(x, y - 28, label, "#facc15", 15, 170);
         const colors = ["#facc15", "#f59e0b", "#ffffff"];
         for (let i = 0; i < 18; i++) {
             const angle = Math.random() * Math.PI * 2;
@@ -1060,66 +1066,81 @@ class DistractionPebble {
         this.bounces = 0;
         this.maxBounces = 2;
         this.hasLanded = false;
-        this.life = 140; // Tồn tại ~2.3 giây
+        this.life = 140;        // Tồn tại ~2.3 giây sau khi nằm yên
+        this.flightTime = 0;    // Thời gian bay (giới hạn để không tồn tại vô hạn)
         this.alertTriggered = false;
-        this.waveRadius = 0;
-        this.maxWaveRadius = 80;
     }
 
-    update(platforms, guards, particles) {
-        if (!this.hasLanded) {
-            this.vy += this.gravity;
-            this.x += this.vx;
-            this.y += this.vy;
-
-            // Kiểm tra va chạm với các nền tảng
-            for (const plat of platforms) {
-                const pw = plat.w ?? plat.width ?? 0;
-                const ph = plat.h ?? plat.height ?? 0;
-                if (this.x >= plat.x && this.x <= plat.x + pw &&
-                    this.y >= plat.y && this.y <= plat.y + ph) {
-                    this.y = plat.y - this.radius;
-                    this.bounces++;
-                    if (this.bounces >= this.maxBounces) {
-                        this.hasLanded = true;
-                        this.vx = 0;
-                        this.vy = 0;
-                    } else {
-                        this.vy = -this.vy * 0.45;
-                        this.vx *= 0.6;
-                    }
-
-                    // Phát tiếng động và kích hoạt sóng âm thanh
-                    if (!this.alertTriggered) {
-                        this.alertTriggered = true;
-                        if (typeof audio !== "undefined" && audio.playTone) {
-                            audio.playTone(840, "sine", 0.08, 0.12);
-                            setTimeout(() => { if (audio.playTone) audio.playTone(620, "sine", 0.06, 0.08); }, 50);
-                        }
-                        if (particles && particles.addDistractionWave) {
-                            particles.addDistractionWave(this.x, this.y);
-                        }
-                        // Thu hút mật thám trong bán kính 200px
-                        for (const guard of guards) {
-                            const gx = guard.x + guard.width / 2;
-                            const gy = guard.y + guard.height / 2;
-                            const dist = Math.hypot(gx - this.x, gy - this.y);
-                            if (dist < 200) {
-                                guard.hearDistraction(this.x);
-                            }
-                        }
-                    }
-                    break;
-                }
-            }
-        } else {
-            this.life--;
-            if (this.waveRadius < this.maxWaveRadius) {
-                this.waveRadius += 3.8;
+    // Phát tiếng động một lần duy nhất: sóng âm + thu hút mật thám trong bán kính 200px
+    makeNoise(guards, particles) {
+        if (this.alertTriggered) return;
+        this.alertTriggered = true;
+        if (typeof audio !== "undefined" && audio.playTone) {
+            audio.playTone(840, "sine", 0.08, 0.12);
+            setTimeout(() => { if (audio.playTone) audio.playTone(620, "sine", 0.06, 0.08); }, 50);
+        }
+        if (particles && particles.addDistractionWave) {
+            particles.addDistractionWave(this.x, this.y);
+        }
+        for (const guard of guards) {
+            const gx = guard.x + guard.width / 2;
+            const gy = guard.y + guard.height / 2;
+            if (Math.hypot(gx - this.x, gy - this.y) < 200) {
+                guard.hearDistraction(this.x);
             }
         }
+    }
 
-        return this.life <= 0;
+    // Trả về true khi viên sỏi cần được xóa khỏi màn chơi
+    update(platforms, guards, particles) {
+        if (this.hasLanded) {
+            this.life--;
+            return this.life <= 0;
+        }
+
+        this.flightTime++;
+        const prevX = this.x;
+        const prevY = this.y;
+        const r = this.radius;
+
+        this.vy = Math.min(this.vy + this.gravity, 12);
+        this.x += this.vx;
+        this.y += this.vy;
+
+        for (const plat of platforms) {
+            const pw = plat.w ?? plat.width ?? 0;
+            const ph = plat.h ?? plat.height ?? 0;
+            const overlap = this.x + r > plat.x && this.x - r < plat.x + pw &&
+                            this.y + r > plat.y && this.y - r < plat.y + ph;
+            if (!overlap) continue;
+
+            if (this.vy > 0 && prevY + r <= plat.y + 1) {
+                // Rơi xuống mặt bục: nảy hoặc nằm yên
+                this.y = plat.y - r;
+                this.bounces++;
+                if (this.bounces >= this.maxBounces) {
+                    this.hasLanded = true;
+                    this.vx = 0;
+                    this.vy = 0;
+                } else {
+                    this.vy = -this.vy * 0.45;
+                    this.vx *= 0.6;
+                }
+            } else if (this.vy < 0 && prevY - r >= plat.y + ph - 1) {
+                // Đập vào trần (mặt dưới bục) -> rơi xuống
+                this.y = plat.y + ph + r;
+                this.vy = 0;
+            } else {
+                // Đập vào vách bên -> bật ngược lại, không xuyên tường
+                this.x = prevX;
+                this.vx = -this.vx * 0.4;
+            }
+            this.makeNoise(guards, particles);
+            break;
+        }
+
+        // Rơi xuống vực / nước hoặc bay quá lâu -> xóa để tránh rò rỉ bộ nhớ
+        return this.y > 700 || this.flightTime > 300;
     }
 }
 

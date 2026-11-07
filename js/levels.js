@@ -22,13 +22,11 @@ const LEVELS = [
 
         // Địa hình: Bằng phẳng, dễ đi, khoảng nhảy ngắn
         platforms: [
-            // Mặt đất bến cảng chính
+            // Mặt đất bến cảng chính (x: 0..850, cách lạch nước 850..1010)
             { x: 0,    y: 520, w: 850,  h: 80, type: "dock" },
-            // Cầu gỗ chắc chắn bắc qua lạch nước
-            { x: 850,  y: 510, w: 160,  h: 20, type: "wood" },
-            // Phố Paris bằng phẳng
-            { x: 1010, y: 520, w: 800,  h: 80, type: "stone" },
-            { x: 1810, y: 520, w: 790,  h: 80, type: "stone" },
+            // Phố Paris bằng phẳng (x: 1010..1720, cách hố nước Paris 1720..1820)
+            { x: 1010, y: 520, w: 710,  h: 80, type: "stone" },
+            { x: 1820, y: 520, w: 780,  h: 80, type: "stone" },
 
             // Các bục gỗ thấp dễ nhảy
             { x: 250,  y: 430, w: 140, h: 20, type: "wood" },
@@ -51,7 +49,7 @@ const LEVELS = [
             { x: 580,  y: 470, w: 50, h: 50, type: "crate", label: "Thùng gỗ" },
             { x: 1100, y: 470, w: 55, h: 50, type: "arch",  label: "Ngõ tối Paris" },
             { x: 1400, y: 470, w: 50, h: 50, type: "crate", label: "Kiện sách báo" },
-            { x: 1750, y: 470, w: 55, h: 50, type: "arch",  label: "Vòm cửa cổ" },
+            { x: 1645, y: 470, w: 55, h: 50, type: "arch",  label: "Vòm cửa cổ" },
             { x: 2150, y: 470, w: 50, h: 50, type: "crate", label: "Thùng gỗ" }
         ],
 
@@ -99,7 +97,7 @@ const LEVELS = [
         // Đồng chí liên lạc bí mật
         npcs: [
             {
-                x: 750, y: 468,
+                x: 750, y: 472,
                 name: "Đồng chí Thợ Thuyền Ba Son",
                 quote: "Anh Ba! Tàu sắp nhổ neo, tôi đã hạ sẵn chiếc cầu bí mật giúp anh vượt qua lạch nước an toàn!",
                 giftType: "shield",
@@ -107,9 +105,9 @@ const LEVELS = [
             }
         ],
 
-        // Lối tắt bí mật
+        // Lối tắt bí mật (ngang mặt bến cảng y=520 để đi thẳng qua lạch nước 850..1010)
         shortcuts: [
-            { id: "shortcut_harbor", x: 850, y: 470, w: 160, h: 20 }
+            { id: "shortcut_harbor", x: 850, y: 520, w: 160, h: 18 }
         ]
     },
 
@@ -170,7 +168,7 @@ const LEVELS = [
         guards: [
             { x: 420,  y: 472, minX: 320,  maxX: 580,  speed: 0.82, dir: 1,  range: 102 },
             { x: 1280, y: 472, minX: 1150, maxX: 1450, speed: 0.85, dir: -1, range: 105 },
-            { x: 1450, y: 282, minX: 1390, maxX: 1530, speed: 0.84, dir: 1,  range: 100 }, // Canh gác tầng cao
+            { x: 1450, y: 282, minX: 1390, maxX: 1520, speed: 0.84, dir: 1,  range: 100 }, // Canh gác tầng cao
             { x: 2300, y: 472, minX: 2180, maxX: 2480, speed: 0.86, dir: 1,  range: 105 }
         ],
 
@@ -208,7 +206,7 @@ const LEVELS = [
         // Đồng chí liên lạc bí mật
         npcs: [
             {
-                x: 720, y: 468,
+                x: 720, y: 472,
                 name: "Đồng chí Quốc Tế Cộng Sản",
                 quote: "Đồng chí Nguyễn! Luận cương của Lênin là ngọn đuốc soi đường. Cây cầu bí mật vượt vực tuyết đã mở!",
                 giftType: "speed",
@@ -216,9 +214,9 @@ const LEVELS = [
             }
         ],
 
-        // Lối tắt bí mật
+        // Lối tắt bí mật (bắc ngang vực băng 800..950 ở cao độ y=520)
         shortcuts: [
-            { id: "shortcut_moscow", x: 800, y: 480, w: 150, h: 20 }
+            { id: "shortcut_moscow", x: 800, y: 520, w: 150, h: 18 }
         ]
     },
 
@@ -262,7 +260,7 @@ const LEVELS = [
 
             // Leo vách núi đợt 2 dẫn về Cột mốc 108 & Khu rừng Trần Hưng Đạo
             { x: 1650, y: 420, w: 140, h: 20, type: "rock" },
-            { x: 1840, y: 330, w: 150, h: 20, type: "rock" },
+            { x: 1840, y: 330, w: 195, h: 20, type: "rock" },
             { x: 2040, y: 240, w: 160, h: 20, type: "rock" },
             { x: 2240, y: 170, w: 220, h: 25, type: "moss_rock" }, // Đỉnh núi cao 2
 
@@ -280,7 +278,7 @@ const LEVELS = [
             { x: 180,  y: 470, w: 55, h: 50, type: "bush", label: "Bụi trúc Cao Bằng" },
             { x: 920,  y: 140, w: 55, h: 50, type: "rock_hide", label: "Hốc đá đỉnh núi" },
             { x: 1580, y: 470, w: 55, h: 50, type: "bush", label: "Bụi cây rừng" },
-            { x: 1990, y: 280, w: 45, h: 50, type: "bush", label: "Lùm cây vách đá" },
+            { x: 1980, y: 280, w: 45, h: 50, type: "bush", label: "Lùm cây vách đá" },
             { x: 2320, y: 120, w: 55, h: 50, type: "rock_hide", label: "Mỏm đá che chắn" },
             { x: 2980, y: 470, w: 55, h: 50, type: "bush", label: "Lùm cây cửa hang" }
         ],
@@ -329,7 +327,7 @@ const LEVELS = [
         // Đồng chí liên lạc bí mật
         npcs: [
             {
-                x: 550, y: 468,
+                x: 550, y: 472,
                 name: "Đồng chí Dân Tộc Pác Bó",
                 quote: "Bác đã về với núi rừng quê hương! Đồng bào đã dựng cầu tre bí mật đưa Bác qua dòng thác ghềnh!",
                 giftType: "shield",
@@ -337,9 +335,9 @@ const LEVELS = [
             }
         ],
 
-        // Lối tắt bí mật
+        // Lối tắt bí mật (cầu tre bắc trọn qua thác ghềnh 650..1500 nối liền tới đảo suối Lê-nin)
         shortcuts: [
-            { id: "shortcut_pacbo", x: 650, y: 490, w: 200, h: 20 }
+            { id: "shortcut_pacbo", x: 650, y: 520, w: 850, h: 18 }
         ]
     },
 
@@ -403,19 +401,19 @@ const LEVELS = [
 
         // 6 lính tuần tra tàn quân bảo vệ nghiêm ngặt
         guards: [
-            { x: 500,  y: 292, minX: 430,  maxX: 590,  speed: 0.92, dir: 1,  range: 105 },
-            { x: 920,  y: 302, minX: 890,  maxX: 1040, speed: 0.94, dir: -1, range: 110 },
-            { x: 1500, y: 262, minX: 1460, maxX: 1630, speed: 0.94, dir: 1,  range: 110 },
-            { x: 1980, y: 282, minX: 1950, maxX: 2100, speed: 0.95, dir: -1, range: 110 },
+            { x: 500,  y: 292, minX: 430,  maxX: 570,  speed: 0.92, dir: 1,  range: 105 },
+            { x: 920,  y: 302, minX: 890,  maxX: 1020, speed: 0.94, dir: -1, range: 110 },
+            { x: 1500, y: 262, minX: 1460, maxX: 1610, speed: 0.94, dir: 1,  range: 110 },
+            { x: 1980, y: 282, minX: 1950, maxX: 2080, speed: 0.95, dir: -1, range: 110 },
             { x: 2420, y: 472, minX: 2300, maxX: 2540, speed: 0.94, dir: 1,  range: 110 }, // Canh gác đại lộ Ba Đình
-            { x: 2700, y: 282, minX: 2650, maxX: 2810, speed: 0.92, dir: 1,  range: 110 }
+            { x: 2700, y: 282, minX: 2650, maxX: 2790, speed: 0.92, dir: 1,  range: 110 }
         ],
 
         // Rào thép gai dày đặc của tàn quân dưới đất (Bắt buộc phải chạy trên mái)
         hazards: [
-            { x: 450,  y: 530, w: 750, h: 70, type: "spikes", label: "Rào thép gai công sự" },
-            { x: 1200, y: 530, w: 950, h: 70, type: "spikes", label: "Hàng rào chướng ngại" },
-            { x: 2630, y: 530, w: 450, h: 70, type: "spikes", label: "Cọc thép phòng thủ" }
+            { x: 450,  y: 530, w: 750,  h: 70, type: "spikes", label: "Rào thép gai công sự" },
+            { x: 1200, y: 530, w: 1080, h: 70, type: "spikes", label: "Hàng rào chướng ngại" },
+            { x: 2630, y: 530, w: 490,  h: 70, type: "spikes", label: "Cọc thép phòng thủ" }
         ],
 
         checkpoints: [
@@ -447,7 +445,7 @@ const LEVELS = [
         // Đồng chí liên lạc bí mật
         npcs: [
             {
-                x: 360, y: 468,
+                x: 360, y: 472,
                 name: "Nữ Tự Vệ Cứu Quốc Ba Đình",
                 quote: "Thưa Bác! Toàn thể đồng bào đang reo hò đón Bác. Chúng cháu đã mở lối cầu ván vượt qua rào thép gai!",
                 giftType: "disguise",
@@ -455,9 +453,9 @@ const LEVELS = [
             }
         ],
 
-        // Lối tắt bí mật
+        // Lối tắt bí mật (cầu ván vượt bãi rào thép gai thứ nhất 450..1220, nơi có thể bật nhảy lên nhịp cầu x=1090, y=420)
         shortcuts: [
-            { id: "shortcut_badinh", x: 450, y: 490, w: 200, h: 20 }
+            { id: "shortcut_badinh", x: 450, y: 520, w: 770, h: 18 }
         ]
     }
 ];
