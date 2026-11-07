@@ -480,6 +480,7 @@ class GameEngine {
 
     resume() {
         this.isPaused = false;
+        this.lastTime = performance.now();
     }
 
     stop() {
@@ -523,8 +524,23 @@ class GameEngine {
     update() {
         if (!this.player || !this.currentLevel) return;
 
-        // Tính tổng thời gian chơi (tăng theo từng frame 60fps)
-        this.playTime += 1 / 60;
+        // Tính tổng thời gian chơi theo thời gian thực (Real-time clock) và cập nhật HUD mỗi giây
+        const now = performance.now();
+        if (this.lastTime) {
+            const dt = (now - this.lastTime) / 1000;
+            // Giới hạn dt hợp lý để tránh nhảy số khi chuyển tab trình duyệt
+            if (dt > 0 && dt < 0.5) {
+                this.playTime += dt;
+            }
+        }
+        this.lastTime = now;
+
+        const currentSec = Math.floor(this.playTime);
+        if (this._lastHudSec !== currentSec) {
+            this._lastHudSec = currentSec;
+            const timerEl = document.getElementById("hud-timer");
+            if (timerEl) timerEl.innerText = this.getFormattedTime();
+        }
 
         // Giảm dần chấn động màn hình (Screen Shake decay)
         if (this.screenShake > 0) {

@@ -1169,10 +1169,11 @@ class GameRenderer {
                 ctx.fill();
             }
 
-            // B. THÂN HÌNH MẬT THÁM PHÁP (Áo Măng-tô Xám Than & Mũ Phớt Fedora với nhịp bước tuần tra)
-            const gWalkPhase = this.time * 7.5 + guard.x * 0.08;
-            const gBobY = isStunned ? 2 : Math.abs(Math.sin(gWalkPhase)) * -2;
-            const gSwing = isStunned ? 0 : Math.sin(gWalkPhase);
+            // B. THÂN HÌNH MẬT THÁM PHÁP (Áo Măng-tô Xám Than & Mũ Phớt Fedora với nhịp bước tuần tra đều nhau cả 2 hướng)
+            const gWalkPhase = guard.walkPhase || 0;
+            const isGuardWalking = !isStunned && !guard.isAiming;
+            const gBobY = isStunned ? 2 : (isGuardWalking ? Math.abs(Math.sin(gWalkPhase)) * -2 : 0);
+            const gSwing = isGuardWalking ? Math.sin(gWalkPhase) : 0;
 
             // Chân sau bước tuần
             ctx.save();
@@ -1539,10 +1540,11 @@ class GameRenderer {
     drawAnimatedPlayerCharacter(player, screenX) {
         const ctx = this.ctx;
         const speedAbs = Math.abs(player.vx);
-        const isMoving = speedAbs > 0.08;
+        const isRunning = !!player.isInputMoving && speedAbs > 0.08;
+        const isIceSliding = !!player.isSlidingOnIce && speedAbs > 0.08;
         const isAir = !player.onGround;
         const isCrouch = player.isCrouching;
-        const runCycle = this.time * (player.speedBoostTimer > 0 ? 15 : 11);
+        const runCycle = player.walkCycle || 0;
         const idleCycle = this.time * 3.2;
 
         // Điểm neo dưới bàn chân nhân vật để co giãn Squash & Stretch tự nhiên
@@ -1574,9 +1576,13 @@ class GameRenderer {
         } else if (isAir) {
             torsoLean = Math.max(-0.22, Math.min(0.26, player.vy * 0.024));
         } else if (isCrouch) {
-            bodyBobY = isMoving ? Math.sin(runCycle * 1.1) * 1.2 : Math.sin(idleCycle) * 0.7;
+            bodyBobY = isRunning ? Math.sin(runCycle * 1.1) * 1.2 : Math.sin(idleCycle) * 0.7;
             torsoLean = 0.22;
-        } else if (isMoving) {
+        } else if (isIceSliding) {
+            // Đang trôi trên băng tuyết: giữ dáng trượt thăng bằng mượt mà, không đạp chân liên tục
+            bodyBobY = -1.2;
+            torsoLean = -0.08;
+        } else if (isRunning) {
             bodyBobY = -Math.abs(Math.sin(runCycle)) * 3.2;
             torsoLean = 0.15 + Math.min(0.1, speedAbs * 0.03);
         } else {
@@ -1619,14 +1625,22 @@ class GameRenderer {
                 rightArmAngle = 0.75;
             }
         } else if (isCrouch) {
-            const sneakWave = isMoving ? Math.sin(runCycle * 0.9) * 0.38 : 0;
+            const sneakWave = isRunning ? Math.sin(runCycle * 0.9) * 0.38 : 0;
             leftLegAngle = -0.45 + sneakWave;
             rightLegAngle = 0.35 - sneakWave;
             leftKneeBend = 0.65;
             rightKneeBend = 0.65;
             leftArmAngle = 0.3 - sneakWave * 0.6;
             rightArmAngle = -0.2 + sneakWave * 0.6;
-        } else if (isMoving) {
+        } else if (isIceSliding) {
+            // Tư thế lướt băng giữ thăng bằng (2 chân chùng gối giữ đà trượt, không guồng chân)
+            leftLegAngle = -0.28;
+            rightLegAngle = 0.32;
+            leftKneeBend = 0.28;
+            rightKneeBend = 0.22;
+            leftArmAngle = 0.42;
+            rightArmAngle = -0.45;
+        } else if (isRunning) {
             // Sải bước chạy khỏe khoắn với khớp gối gập tự nhiên
             const s = Math.sin(runCycle);
             const c = Math.cos(runCycle);
@@ -1736,9 +1750,10 @@ class GameRenderer {
         drawArm(-2, -torsoH + 2, leftArmAngle, true);
 
         // 2.2. Dải khăn quàng đỏ bay phấp phới phía sau theo vận tốc và sóng sin
-        const scarfWave1 = Math.sin(this.time * 10) * (isMoving ? 4.5 : 2.2);
-        const scarfWave2 = Math.cos(this.time * 12) * (isMoving ? 5.5 : 2.5);
-        const scarfLen = isMoving ? 16 : 10;
+        const hasMomentum = isRunning || isIceSliding || isAir;
+        const scarfWave1 = Math.sin(this.time * 10) * (hasMomentum ? 4.5 : 2.2);
+        const scarfWave2 = Math.cos(this.time * 12) * (hasMomentum ? 5.5 : 2.5);
+        const scarfLen = hasMomentum ? 16 : 10;
         ctx.fillStyle = "#dc2626";
         ctx.beginPath();
         ctx.moveTo(-2, -torsoH + 1);
@@ -1778,76 +1793,95 @@ class GameRenderer {
         ctx.arc(2.5, -torsoH + 0.5, 1.3, 0, Math.PI * 2);
         ctx.fill();
 
-        // 2.4. Đầu & Khuôn mặt (nhịp gật nhẹ theo bước chân)
-        const headBob = isMoving ? Math.sin(runCycle * 2) * 0.8 : Math.sin(idleCycle) * 0.5;
+        // 2.4. Đầu & Khuôn mặt (rõ nét mắt, lông mày và biểu cảm, không bị tóc che)
+        const headBob = isRunning ? Math.sin(runCycle * 2) * 0.8 : Math.sin(idleCycle) * 0.5;
         ctx.save();
-        ctx.translate(0.5, -torsoH - 8 + headBob);
+        ctx.translate(0.5, -torsoH - 8.5 + headBob);
 
         // Cổ
         ctx.fillStyle = "#fed7aa";
-        ctx.fillRect(-2, 4, 4, 4);
+        ctx.fillRect(-2, 4, 4, 4.5);
 
-        // Khuôn mặt thanh tú
+        // Khuôn mặt sáng rõ
         ctx.fillStyle = "#ffedd5";
         ctx.beginPath();
-        ctx.ellipse(0, 0, 6.8, 7.6, 0, 0, Math.PI * 2);
+        ctx.ellipse(0, 0, 7.2, 8.0, 0, 0, Math.PI * 2);
         ctx.fill();
-        ctx.strokeStyle = "#d97706";
-        ctx.lineWidth = 0.7;
+        ctx.strokeStyle = "#c2410c";
+        ctx.lineWidth = 0.8;
         ctx.stroke();
 
-        // Mái tóc đen rẽ ngôi (nhấp nhô nhẹ theo gió khi chạy/nhảy)
-        const hairLift = isAir ? -1.2 : (isMoving ? Math.sin(runCycle) * 0.7 : 0);
+        // Má hồng nhẹ tạo sức sống
+        ctx.fillStyle = "rgba(249, 115, 22, 0.22)";
+        ctx.beginPath();
+        ctx.ellipse(1.6, 2.2, 1.8, 1.1, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Mái tóc đen gọn gàng trên đỉnh đầu và gáy (cao ở y <= -3.8 nên không bao giờ che mắt)
+        const hairLift = isAir ? -1.0 : (isRunning ? Math.sin(runCycle) * 0.6 : 0);
         ctx.fillStyle = "#1c1917";
         ctx.beginPath();
-        ctx.arc(0, -1.5 + hairLift * 0.3, 7.2, Math.PI * 0.92, Math.PI * 2.08);
-        ctx.fill();
-        // Phần tóc mái bồng bềnh
-        ctx.beginPath();
-        ctx.moveTo(-6, -2);
-        ctx.quadraticCurveTo(0, -5 + hairLift, 7, -2.5);
-        ctx.quadraticCurveTo(3, -8.5 + hairLift, -5, -6);
+        ctx.moveTo(-7.2, 1.5);
+        ctx.quadraticCurveTo(-8.2, -5.5, -3.5, -8.2 + hairLift);
+        ctx.quadraticCurveTo(2.5, -9.5 + hairLift, 6.8, -5.2 + hairLift);
+        ctx.quadraticCurveTo(3.5, -3.8, -2.5, -4.2);
+        ctx.quadraticCurveTo(-5.2, -2.8, -5.5, 1.5);
         ctx.closePath();
         ctx.fill();
 
-        // Đôi mắt cương nghị (có chớp mắt tự nhiên mỗi vài giây)
-        const isBlinking = (Math.floor(this.time * 18) % 55) === 0;
-        ctx.fillStyle = "#1c1917";
+        // Đôi mắt to rõ nét (tròng trắng + con ngươi đen + đốm sáng trắng)
+        const isBlinking = (Math.floor(this.time * 16) % 70) === 0;
         if (isBlinking) {
-            ctx.fillRect(2, -1, 2.8, 0.9);
-        } else {
+            ctx.strokeStyle = "#1c1917";
+            ctx.lineWidth = 1.4;
             ctx.beginPath();
-            ctx.ellipse(3.2, -0.8, 1.2, 1.5, 0, 0, Math.PI * 2);
-            ctx.fill();
-            // Ánh sáng mắt
+            ctx.moveTo(1.2, -0.3);
+            ctx.lineTo(5.0, -0.3);
+            ctx.stroke();
+        } else {
+            // Tròng trắng giúp mắt nổi bật rõ ràng
             ctx.fillStyle = "#ffffff";
             ctx.beginPath();
-            ctx.arc(3.6, -1.3, 0.5, 0, Math.PI * 2);
+            ctx.ellipse(3.1, -0.4, 2.1, 2.2, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Con ngươi đen cương nghị
+            ctx.fillStyle = "#0f172a";
+            ctx.beginPath();
+            ctx.ellipse(3.5, -0.4, 1.35, 1.65, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Đốm sáng long lanh trong mắt
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(3.9, -1.0, 0.65, 0, Math.PI * 2);
             ctx.fill();
         }
 
-        // Lông mày & Nụ cười kiên định
+        // Lông mày đậm nét phía trên mắt
         ctx.strokeStyle = "#1c1917";
-        ctx.lineWidth = 1.1;
+        ctx.lineWidth = 1.3;
+        ctx.lineCap = "round";
         ctx.beginPath();
-        ctx.moveTo(1.5, -3.2);
-        ctx.quadraticCurveTo(3.4, -4, 5, -3);
+        ctx.moveTo(1.2, -2.9);
+        ctx.quadraticCurveTo(3.3, -3.7, 5.2, -2.7);
         ctx.stroke();
 
+        // Nụ cười kiên định
         ctx.strokeStyle = "#9a3412";
-        ctx.lineWidth = 0.9;
+        ctx.lineWidth = 1.1;
         ctx.beginPath();
-        ctx.arc(2.8, 2.2, 1.8, 0.15, Math.PI * 0.75);
+        ctx.arc(2.8, 2.6, 1.8, 0.15, Math.PI * 0.78);
         ctx.stroke();
 
         // Nếu đang cải trang (Disguise): vẽ thêm mũ phớt & kính cải trang trên đầu nhân vật
         if (player.disguiseTimer > 0) {
             ctx.fillStyle = "#3b0764";
-            ctx.fillRect(-8.5, -5.5, 17, 2.2);
-            ctx.fillRect(-5.5, -10.5, 11, 5.5);
+            ctx.fillRect(-8.5, -6.2, 17, 2.2);
+            ctx.fillRect(-5.5, -11.2, 11, 5.5);
             ctx.strokeStyle = "#e9d5ff";
-            ctx.lineWidth = 1.1;
-            ctx.strokeRect(1.5, -2.4, 3.6, 2.6);
+            ctx.lineWidth = 1.2;
+            ctx.strokeRect(1.2, -2.2, 4.2, 3.2);
         }
 
         ctx.restore(); // Kết thúc vẽ Đầu

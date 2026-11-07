@@ -37,6 +37,9 @@ class Player {
         this.scaleY = 1.0;
         this.actionAnimTimer = 0;
         this.actionAnimType = null; // "throw" | "takedown" | "interact"
+        this.walkCycle = 0;         // Bộ đếm pha bước chân mượt mà
+        this.isInputMoving = false; // Đang chủ động bấm phím di chuyển (không tính lúc trôi tự do trên băng)
+        this.isSlidingOnIce = false; // Đang trôi quán tính trên mặt băng tuyết
 
         // Chuẩn game thiết kế chuyên nghiệp: Coyote Time & Jump Buffering
         this.coyoteTimer = 0;       // Thời gian ân hạn nhảy khi vừa rời mép vực (6 frames)
@@ -214,6 +217,8 @@ class Player {
 
         if (moveDir !== 0) {
             this.facing = moveDir;
+            this.isInputMoving = true;
+            this.isSlidingOnIce = false;
             const boostMult = this.speedBoostTimer > 0 ? 1.45 : 1.0;
             const currentSpeed = (this.isCrouching ? this.speed * 0.55 : this.speed) * boostMult;
 
@@ -221,6 +226,8 @@ class Player {
                 // Trên băng tuyết: nếu đang có đà ngược hướng phím -> trượt lết phanh trước khi đổi chiều
                 if (Math.sign(this.vx) !== 0 && Math.sign(this.vx) !== moveDir) {
                     this.vx += moveDir * 0.22;
+                    this.isSlidingOnIce = true;
+                    this.isInputMoving = false;
                     events.iceSkid = { x: this.x + this.width / 2, y: this.y + this.height, dir: -moveDir };
                 } else {
                     // Tăng tốc dần tạo cảm giác trơn trượt tự nhiên
@@ -237,18 +244,28 @@ class Player {
                 this.vx = moveDir * currentSpeed;
             }
 
+            if (this.isInputMoving) {
+                this.walkCycle += (this.speedBoostTimer > 0 ? 0.34 : 0.25);
+            }
             this.animTimer++;
             if (this.animTimer > 6) {
                 this.animFrame = (this.animFrame + 1) % 4;
                 this.animTimer = 0;
             }
         } else {
+            this.isInputMoving = false;
             if (onIce) {
                 // Trượt lướt đà dài trên băng tuyết (~1s) trước khi dừng hẳn
                 this.vx *= 0.978;
-                if (Math.abs(this.vx) < 0.08) this.vx = 0;
+                if (Math.abs(this.vx) < 0.08) {
+                    this.vx = 0;
+                    this.isSlidingOnIce = false;
+                } else {
+                    this.isSlidingOnIce = true;
+                }
             } else {
                 this.vx = 0;
+                this.isSlidingOnIce = false;
             }
             this.animFrame = 0;
         }
@@ -466,6 +483,7 @@ class Guard {
         this.investigateTimer = 0;      // Thời gian tò mò đi kiểm tra tiếng sỏi
         this.investigateX = null;       // Tọa độ tiếng sỏi rơi
         this.timesTakenDown = 0;        // Số lần bị khống chế (chỉ thưởng điểm lần đầu, chống farm điểm)
+        this.walkPhase = (config.x || 0) * 0.03; // Pha bước chân độc lập không phụ thuộc hướng trái/phải
     }
 
     // Làm choáng mật thám
@@ -554,7 +572,9 @@ class Guard {
                     const dx = this.investigateX - (this.x + this.width / 2);
                     if (Math.abs(dx) > 8) {
                         this.dir = dx > 0 ? 1 : -1;
-                        this.x += this.dir * (this.speed * 0.7);
+                        const step = this.speed * 0.7;
+                        this.x += this.dir * step;
+                        this.walkPhase += step * 0.22;
                     }
                 }
                 this.animTimer++;
@@ -565,6 +585,7 @@ class Guard {
             } else {
                 // Tuần tra bình thường
                 this.x += this.speed * this.dir;
+                this.walkPhase += this.speed * 0.22;
                 if (this.x >= this.maxX) {
                     this.x = this.maxX;
                     this.dir = -1;
