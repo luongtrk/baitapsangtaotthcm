@@ -405,6 +405,7 @@ class GameManager {
         if (!container) return;
         container.innerHTML = "";
 
+        const roman = ["I", "II", "III", "IV"];
         TTHCM_KNOWLEDGE.chapters.forEach((chap, idx) => {
             const card = document.createElement("div");
             card.className = "chapter-card";
@@ -414,17 +415,17 @@ class GameManager {
             const unlockedCount = chapterDocs.filter(d => this.unlockedDocIds.has(d.id)).length;
 
             card.innerHTML = `
-                <div class="chap-badge">${chap.yearRange}</div>
+                <div class="chap-badge">HỒ SƠ ${roman[idx] || idx + 1} // ${chap.yearRange}</div>
                 <h3>${chap.title}</h3>
                 <div class="chap-subtitle">${chap.subtitle}</div>
                 <p>${chap.desc}</p>
                 <div class="chap-progress">
-                    <span>Văn kiện: <strong>${unlockedCount}/${chapterDocs.length}</strong></span>
+                    <span>Tài liệu thu thập: <strong>${unlockedCount}/${chapterDocs.length}</strong></span>
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: ${(unlockedCount / chapterDocs.length) * 100}%"></div>
                     </div>
                 </div>
-                <button class="btn btn-primary btn-play-chapter"><i class="fa-solid fa-play"></i> Chơi màn này</button>
+                <button class="btn btn-primary btn-play-chapter"><i class="fa-solid fa-play"></i> Triển Khai Nhiệm Vụ</button>
             `;
 
             card.querySelector(".btn-play-chapter").onclick = () => {
@@ -685,7 +686,7 @@ class GameManager {
         const allDocs = Object.values(TTHCM_KNOWLEDGE.documents);
         const unlockedTotal = allDocs.filter(d => this.unlockedDocIds.has(d.id)).length;
 
-        document.getElementById("museum-count-display").innerText = `${unlockedTotal}/${allDocs.length} Văn kiện`;
+        document.getElementById("museum-count-display").innerText = `Đã giải mật: ${unlockedTotal}/${allDocs.length} Văn kiện`;
 
         allDocs.forEach(doc => {
             const isUnlocked = this.unlockedDocIds.has(doc.id);
@@ -693,12 +694,12 @@ class GameManager {
             card.className = `museum-card ${isUnlocked ? "unlocked" : "locked"}`;
 
             card.innerHTML = `
-                <div class="card-status-badge">${isUnlocked ? '<i class="fa-solid fa-lock-open"></i> Đã mở khóa' : '<i class="fa-solid fa-lock"></i> Chưa mở khóa'}</div>
-                <div class="card-icon">${isUnlocked ? '<i class="fa-solid fa-scroll text-gold"></i>' : '<i class="fa-solid fa-lock text-muted"></i>'}</div>
-                <h4>${isUnlocked ? doc.name : "Chưa mở khóa"}</h4>
-                <div class="card-year">${isUnlocked ? doc.year : "Chương " + doc.chapterId}</div>
-                <p>${isUnlocked ? doc.famousQuote : "Tìm và nhặt văn kiện này trong màn chơi."}</p>
-                ${isUnlocked ? `<button class="btn btn-sm btn-outline"><i class="fa-solid fa-eye"></i> Xem</button>` : ""}
+                <div class="card-status-badge">${isUnlocked ? 'ĐÃ GIẢI MẬT' : 'HỒ SƠ MẬT'}</div>
+                <div class="card-icon">${isUnlocked ? '<i class="fa-solid fa-scroll"></i>' : '<i class="fa-solid fa-file-shield text-muted"></i>'}</div>
+                <h4>${isUnlocked ? doc.name : "Hồ Sơ Chưa Giải Mật"}</h4>
+                <div class="card-year">${isUnlocked ? doc.year + " • " + doc.location : "Thuộc Chương " + doc.chapterId}</div>
+                <p>${isUnlocked ? "“" + doc.famousQuote + "”" : "Thu thập văn kiện này trong quá trình thực hiện nhiệm vụ để mở khóa."}</p>
+                ${isUnlocked ? `<button class="btn btn-sm btn-outline"><i class="fa-solid fa-book-open"></i> Đọc Hồ Sơ</button>` : ""}
             `;
 
             if (isUnlocked) {
@@ -807,11 +808,11 @@ class GameManager {
         if (!list || list.length === 0) {
             html = `
                 <tr>
-                    <td colspan="5" style="text-align: center; padding: 36px 16px; color: #94a3b8; font-style: italic;">
-                        <span style="font-size: 2rem; display: block; margin-bottom: 8px; color: var(--accent-gold);"><i class="fa-solid fa-award"></i></span>
-                        Chưa có sinh viên nào ghi danh trên Bảng Vàng.<br>
-                        <span style="color: var(--accent-gold); font-size: 0.92rem; font-style: normal; font-weight: 600; display: inline-block; margin-top: 4px;">
-                            Hãy nhập tên của bạn ở trên và hoàn thành 4 chương lịch sử để trở thành Thủ Khoa đầu tiên!
+                    <td colspan="5" style="text-align: center; padding: 32px 14px; color: var(--text-muted); font-family: var(--font-mono);">
+                        <span style="font-size: 1.7rem; display: block; margin-bottom: 8px; color: var(--accent-gold);"><i class="fa-solid fa-stamp"></i></span>
+                        [SỔ VÀNG ĐANG TRỐNG]<br>
+                        <span style="color: var(--text-light); font-size: 0.84rem; display: inline-block; margin-top: 6px;">
+                            Điền họ tên vào phiếu đăng ký và hoàn thành 4 chương để ghi danh đầu tiên.
                         </span>
                     </td>
                 </tr>
@@ -819,13 +820,13 @@ class GameManager {
         } else {
             html = list.map((item, idx) => `
                 <tr class="leaderboard-row ${idx === 0 ? 'rank-gold' : idx === 1 ? 'rank-silver' : idx === 2 ? 'rank-bronze' : ''}">
-                    <td class="leaderboard-rank leaderboard-rank-${idx + 1}">
-                        ${idx === 0 ? '<i class="fa-solid fa-medal text-gold"></i> 1' : idx === 1 ? '<i class="fa-solid fa-medal text-silver"></i> 2' : idx === 2 ? '<i class="fa-solid fa-medal text-bronze"></i> 3' : '#' + (idx + 1)}
+                    <td style="font-family: var(--font-mono); font-weight: 700;">
+                        ${idx === 0 ? '<i class="fa-solid fa-medal text-gold"></i> 01' : idx === 1 ? '<i class="fa-solid fa-medal text-silver"></i> 02' : idx === 2 ? '<i class="fa-solid fa-medal text-bronze"></i> 03' : '#' + String(idx + 1).padStart(2, '0')}
                     </td>
-                    <td style="font-weight: 700; color: #f8fafc;">${item.name}</td>
-                    <td style="color: var(--accent-gold); font-weight: 800; font-family: monospace;"><i class="fa-solid fa-star text-gold"></i> ${item.score}</td>
-                    <td style="color: #38bdf8; font-family: monospace;"><i class="fa-solid fa-stopwatch text-cyan"></i> ${item.time}</td>
-                    <td style="color: #94a3b8; font-size: 0.85rem;"><i class="fa-solid fa-calendar-day" style="font-size: 0.75rem; opacity: 0.7; margin-right: 4px;"></i>${item.date}</td>
+                    <td style="font-weight: 700; color: var(--text-light);">${item.name}</td>
+                    <td style="color: var(--accent-gold); font-weight: 700; font-family: var(--font-mono);">${item.score}</td>
+                    <td style="color: var(--text-light); font-family: var(--font-mono);">${item.time}</td>
+                    <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 0.8rem;">${item.date}</td>
                 </tr>
             `).join("");
         }

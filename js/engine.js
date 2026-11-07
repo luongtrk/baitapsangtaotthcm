@@ -773,7 +773,7 @@ class GameEngine {
         if (hpFillEl && hpTextEl) {
             const percent = Math.max(0, Math.min(100, (this.hp / this.maxHp) * 100));
             hpFillEl.style.width = `${percent}%`;
-            hpTextEl.innerText = `${this.hp}/${this.maxHp} HP`;
+            hpTextEl.innerText = `${this.hp}`;
 
             if (percent > 50) {
                 hpFillEl.className = "hud-hp-bar-fill high";
