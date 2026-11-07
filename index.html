@@ -24,7 +24,9 @@
             </div>
         </div>
         <div class="header-actions">
-            <button id="btn-toggle-sound" class="btn btn-sm btn-icon" title="Bật/Tắt Âm thanh"><i class="fa-solid fa-volume-high"></i></button>
+            <button id="btn-toggle-bgm" class="btn btn-sm btn-icon" title="Tắt / Bật Nhạc nền"><i class="fa-solid fa-music"></i></button>
+            <button id="btn-open-sound-settings" class="btn btn-sm btn-icon" title="Cài đặt âm lượng"><i class="fa-solid fa-sliders"></i></button>
+            <button id="btn-toggle-sound" class="btn btn-sm btn-icon" title="Tắt / Bật Toàn bộ âm thanh"><i class="fa-solid fa-volume-high"></i></button>
             <button id="btn-next-track" class="btn btn-sm btn-icon" title="Đổi nhạc nền"><i class="fa-solid fa-forward-step"></i></button>
             <button id="btn-toggle-fullscreen" class="btn btn-sm btn-icon" title="Toàn màn hình"><i class="fa-solid fa-expand"></i></button>
             <button id="btn-guide-top" class="btn btn-sm btn-outline-subtle" title="Hướng dẫn học tập & chơi"><i class="fa-solid fa-book-open"></i> Hướng Dẫn</button>
@@ -176,7 +178,9 @@
                 <div id="game-notice" class="notice-badge">Thông báo game</div>
 
                 <div class="hud-right">
-                    <button id="btn-game-sound" class="btn btn-sm btn-icon-hud" title="Bật/Tắt Âm thanh"><i class="fa-solid fa-volume-high"></i></button>
+                    <button id="btn-game-toggle-bgm" class="btn btn-sm btn-icon-hud" title="Tắt / Bật Nhạc nền"><i class="fa-solid fa-music"></i></button>
+                    <button id="btn-game-sound-settings" class="btn btn-sm btn-icon-hud" title="Cài đặt âm lượng"><i class="fa-solid fa-sliders"></i></button>
+                    <button id="btn-game-sound" class="btn btn-sm btn-icon-hud" title="Tắt / Bật Toàn bộ âm thanh"><i class="fa-solid fa-volume-high"></i></button>
                     <button id="btn-game-next-track" class="btn btn-sm btn-icon-hud" title="Đổi nhạc nền"><i class="fa-solid fa-forward-step"></i></button>
                     <button id="btn-game-fullscreen" class="btn btn-sm btn-icon-hud" title="Toàn màn hình"><i class="fa-solid fa-expand"></i></button>
                     <button class="btn btn-sm btn-danger-subtle btn-back-menu" title="Về Menu chính"><i class="fa-solid fa-xmark"></i> Thoát</button>
@@ -418,6 +422,60 @@
                 </button>
                 <button class="btn btn-secondary btn-back-menu" style="padding: 12px 24px;">
                     <i class="fa-solid fa-arrow-left"></i> Về Menu
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==============================================
+         MODAL 7: CÀI ĐẶT ÂM LƯỢNG & NHẠC NỀN
+         ============================================== -->
+    <div id="modal-sound-settings" class="modal-overlay">
+        <div class="modal-content" style="max-width: 480px;">
+            <button class="modal-close-btn">&times;</button>
+            <h3 style="font-family: var(--font-heading); color: var(--accent-gold); margin-bottom: 20px;">
+                <i class="fa-solid fa-sliders text-gold"></i> Cài Đặt Âm Thanh
+            </h3>
+            
+            <!-- Nhạc Nền (BGM) -->
+            <div class="sound-setting-group">
+                <div class="sound-setting-header">
+                    <span class="setting-title"><i class="fa-solid fa-music text-gold"></i> Nhạc Nền (BGM)</span>
+                    <button id="btn-modal-toggle-bgm" class="btn btn-xs btn-outline-subtle" title="Bật/Tắt nhạc nền">
+                        <i class="fa-solid fa-volume-high"></i> Đang Bật
+                    </button>
+                </div>
+                <div class="sound-slider-wrap">
+                    <input type="range" id="slider-bgm-volume" min="0" max="100" value="35" class="audio-range-slider" />
+                    <span id="label-bgm-volume" class="slider-val-badge">35%</span>
+                </div>
+            </div>
+
+            <!-- Hiệu Ứng Âm Thanh (SFX) -->
+            <div class="sound-setting-group" style="margin-top: 18px;">
+                <div class="sound-setting-header">
+                    <span class="setting-title"><i class="fa-solid fa-volume-high text-cyan"></i> Hiệu Ứng (SFX)</span>
+                    <button id="btn-modal-toggle-sfx" class="btn btn-xs btn-outline-subtle" title="Bật/Tắt hiệu ứng">
+                        <i class="fa-solid fa-volume-high"></i> Đang Bật
+                    </button>
+                </div>
+                <div class="sound-slider-wrap">
+                    <input type="range" id="slider-sfx-volume" min="0" max="100" value="45" class="audio-range-slider" />
+                    <span id="label-sfx-volume" class="slider-val-badge">45%</span>
+                </div>
+            </div>
+
+            <!-- Chuyển bài nhạc nền -->
+            <div class="sound-setting-group" style="margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.9rem; color: #cbd5e1;"><i class="fa-solid fa-shuffle" style="color: #facc15;"></i> Đổi bài nhạc nền:</span>
+                <button id="btn-modal-next-track" class="btn btn-sm btn-secondary">
+                    <i class="fa-solid fa-forward-step"></i> Chuyển Bài
+                </button>
+            </div>
+
+            <div style="margin-top: 24px; text-align: right;">
+                <button class="btn btn-primary modal-close-btn" style="position: static; font-size: 0.95rem; padding: 8px 22px;">
+                    <i class="fa-solid fa-check"></i> Xong
                 </button>
             </div>
         </div>

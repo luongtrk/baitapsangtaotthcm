@@ -1709,3 +1709,103 @@ body.touch-device .mobile-controls-panel {
     }
 }
 
+/* =========================================================================
+   CÀI ĐẶT ÂM LƯỢNG & NHẠC NỀN (SOUND SETTINGS MODAL & CONTROLS)
+   ========================================================================= */
+.btn-icon.is-muted,
+.btn-icon-hud.is-muted,
+.btn.is-muted {
+    opacity: 0.75;
+    color: #ef4444 !important;
+    border-color: rgba(239, 68, 68, 0.45) !important;
+    background: rgba(239, 68, 68, 0.12) !important;
+}
+
+.sound-setting-group {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 14px 16px;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.sound-setting-group:hover {
+    border-color: rgba(250, 204, 21, 0.35);
+    background: rgba(15, 23, 42, 0.88);
+}
+
+.sound-setting-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.setting-title {
+    font-weight: 700;
+    font-size: 0.96rem;
+    color: #f1f5f9;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sound-slider-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.audio-range-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #f59e0b, #ef4444);
+    outline: none;
+    cursor: pointer;
+}
+
+.audio-range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid #f59e0b;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.75);
+    cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.audio-range-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.18);
+    background: #fef08a;
+}
+
+.audio-range-slider::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid #f59e0b;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.75);
+    cursor: pointer;
+}
+
+.slider-val-badge {
+    min-width: 48px;
+    text-align: right;
+    font-family: var(--font-mono, monospace);
+    font-weight: 800;
+    font-size: 0.92rem;
+    color: var(--accent-gold, #facc15);
+    background: rgba(0, 0, 0, 0.45);
+    padding: 3px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+

@@ -1,8 +1,18 @@
-// Game Audio Manager - Bộ Sample SFX Kinh Điển & Nhạc Nền Game 2D Thuần Nhạc Cụ
-// Đơn giản, rõ ràng, âm lượng vừa phải, không gây chói tai
+// Game Audio Manager - Quản lý Nhạc Nền (BGM) & Hiệu Ứng Âm Thanh (SFX)
+// Hỗ trợ điều chỉnh âm lượng riêng biệt, bật/tắt nhạc nền riêng, lưu trạng thái vào localStorage
 
 class SoundManager {
     constructor() {
+        // Tải thiết lập đã lưu hoặc dùng mặc định
+        const savedBgmVol = localStorage.getItem("tthcm_bgm_volume");
+        const savedSfxVol = localStorage.getItem("tthcm_sfx_volume");
+        const savedBgmMuted = localStorage.getItem("tthcm_bgm_muted");
+        const savedSfxMuted = localStorage.getItem("tthcm_sfx_muted");
+
+        this.bgmVolume = savedBgmVol !== null ? parseFloat(savedBgmVol) : 0.35;
+        this.sfxVolume = savedSfxVol !== null ? parseFloat(savedSfxVol) : 0.45;
+        this.isBgmMuted = savedBgmMuted === "true";
+        this.isSfxMuted = savedSfxMuted === "true";
         this.isMuted = false;
         this.bgmPlaying = false;
 
@@ -17,10 +27,10 @@ class SoundManager {
         // Trình phát nhạc nền HTML5 Audio
         this.bgmAudio = new Audio(this.bgmFiles[this.currentTrackIndex]);
         this.bgmAudio.loop = true;
-        this.bgmAudio.volume = 0.32;
+        this.bgmAudio.volume = this.isBgmMuted ? 0 : this.bgmVolume;
         this.bgmAudio.preload = "auto";
 
-        // Kho hiệu ứng âm thanh game 2D kinh điển, đơn giản, nghe rõ ràng mà không bị to
+        // Kho hiệu ứng âm thanh game 2D kinh điển, đơn giản, rõ ràng
         this.sfxPaths = {
             jump: "assets/audio/sfx/jump.wav",
             double_jump: "assets/audio/sfx/double_jump.wav",
@@ -50,7 +60,7 @@ class SoundManager {
 
         // Tự động mở khóa BGM ở tương tác đầu tiên nếu trình duyệt chặn autoplay
         const unlockAudio = () => {
-            if (this.bgmPlaying && !this.isMuted && this.bgmAudio.paused) {
+            if (this.bgmPlaying && !this.isBgmMuted && !this.isMuted && this.bgmAudio.paused) {
                 this.bgmAudio.play().catch(() => {});
             }
         };
@@ -62,14 +72,71 @@ class SoundManager {
         // Giữ tương thích với các lệnh gọi audio.init() trong engine
     }
 
-    // Phát một sample SFX với âm lượng chuẩn mực (mặc định 0.45 - rõ ràng, sắc nét, không gắt tai)
-    playSample(name, volume = 0.45, playbackRate = 1.0) {
-        if (this.isMuted) return;
+    // =========================================================================
+    // QUẢN LÝ ÂM LƯỢNG & TẮT / BẬT NHẠC NỀN
+    // =========================================================================
+
+    // Đổi âm lượng Nhạc nền (0.0 -> 1.0)
+    setBgmVolume(val) {
+        this.bgmVolume = Math.max(0, Math.min(1, parseFloat(val) || 0));
+        localStorage.setItem("tthcm_bgm_volume", this.bgmVolume.toString());
+        if (!this.isBgmMuted && !this.isMuted) {
+            this.bgmAudio.volume = this.bgmVolume;
+        }
+    }
+
+    // Đổi âm lượng Hiệu ứng SFX (0.0 -> 1.0)
+    setSfxVolume(val) {
+        this.sfxVolume = Math.max(0, Math.min(1, parseFloat(val) || 0));
+        localStorage.setItem("tthcm_sfx_volume", this.sfxVolume.toString());
+    }
+
+    // Bật / Tắt riêng Nhạc Nền (BGM)
+    toggleBgm() {
+        this.isBgmMuted = !this.isBgmMuted;
+        localStorage.setItem("tthcm_bgm_muted", this.isBgmMuted ? "true" : "false");
+        if (this.isBgmMuted) {
+            this.bgmAudio.pause();
+        } else {
+            this.bgmAudio.volume = this.bgmVolume;
+            if (this.bgmPlaying && !this.isMuted) {
+                this.bgmAudio.play().catch(() => {});
+            }
+        }
+        return this.isBgmMuted;
+    }
+
+    // Bật / Tắt riêng Hiệu ứng SFX
+    toggleSfx() {
+        this.isSfxMuted = !this.isSfxMuted;
+        localStorage.setItem("tthcm_sfx_muted", this.isSfxMuted ? "true" : "false");
+        return this.isSfxMuted;
+    }
+
+    // Tắt / Bật toàn bộ âm thanh
+    toggleMute() {
+        this.isMuted = !this.isMuted;
+        if (this.isMuted) {
+            this.bgmAudio.pause();
+        } else {
+            if (!this.isBgmMuted && this.bgmPlaying) {
+                this.bgmAudio.volume = this.bgmVolume;
+                this.bgmAudio.play().catch(() => {});
+            }
+        }
+        return this.isMuted;
+    }
+
+    // Phát một sample SFX với âm lượng chuẩn hóa theo thanh trượt sfxVolume
+    playSample(name, baseVol = 0.45, playbackRate = 1.0) {
+        if (this.isMuted || this.isSfxMuted || this.sfxVolume <= 0) return;
         const base = this.sfxCache[name];
         if (!base) return;
         try {
             const sound = base.cloneNode();
-            sound.volume = Math.max(0, Math.min(1, volume));
+            // Tỷ lệ âm lượng thực tế = âm lượng gốc * (thanh trượt / 0.45)
+            const realVol = Math.max(0, Math.min(1, baseVol * (this.sfxVolume / 0.45)));
+            sound.volume = realVol;
             if (playbackRate !== 1.0) {
                 sound.preservesPitch = false;
                 sound.playbackRate = playbackRate;
@@ -80,7 +147,7 @@ class SoundManager {
 
     // Tương thích ngược nếu có chỗ gọi playTone
     playTone(freq = 440) {
-        if (this.isMuted) return;
+        if (this.isMuted || this.isSfxMuted) return;
         if (freq < 240) {
             this.playSample("fail", 0.42);
         } else if (freq > 600) {
@@ -88,16 +155,6 @@ class SoundManager {
         } else {
             this.playSample("collect", 0.44);
         }
-    }
-
-    toggleMute() {
-        this.isMuted = !this.isMuted;
-        if (this.isMuted) {
-            this.bgmAudio.pause();
-        } else if (this.bgmPlaying) {
-            this.bgmAudio.play().catch(() => {});
-        }
-        return this.isMuted;
     }
 
     getCurrentTrack() {
@@ -111,8 +168,8 @@ class SoundManager {
         this.currentTrackIndex = (this.currentTrackIndex + 1) % this.bgmFiles.length;
         this.bgmAudio.src = this.bgmFiles[this.currentTrackIndex];
         this.bgmAudio.loop = true;
-        this.bgmAudio.volume = 0.32;
-        if (this.bgmPlaying && !this.isMuted) {
+        this.bgmAudio.volume = this.isBgmMuted ? 0 : this.bgmVolume;
+        if (this.bgmPlaying && !this.isBgmMuted && !this.isMuted) {
             this.bgmAudio.play().catch(() => {});
         }
         return this.getCurrentTrack();
@@ -123,8 +180,8 @@ class SoundManager {
             this.currentTrackIndex = index;
             this.bgmAudio.src = this.bgmFiles[this.currentTrackIndex];
             this.bgmAudio.loop = true;
-            this.bgmAudio.volume = 0.32;
-            if (this.bgmPlaying && !this.isMuted) {
+            this.bgmAudio.volume = this.isBgmMuted ? 0 : this.bgmVolume;
+            if (this.bgmPlaying && !this.isBgmMuted && !this.isMuted) {
                 this.bgmAudio.play().catch(() => {});
             }
         }
@@ -133,8 +190,9 @@ class SoundManager {
 
     startBGM() {
         this.bgmPlaying = true;
-        if (this.isMuted) return;
+        if (this.isMuted || this.isBgmMuted) return;
         if (this.bgmAudio.paused) {
+            this.bgmAudio.volume = this.bgmVolume;
             this.bgmAudio.play().catch(() => {});
         }
     }
@@ -147,7 +205,7 @@ class SoundManager {
     }
 
     // =========================================================================
-    // CÁC HIỆU ỨNG ÂM THANH GAME 2D BASIC (RÕ RÀNG, VỪA PHẢI, KHÔNG QUÁ TO)
+    // CÁC HIỆU ỨNG ÂM THANH GAME 2D BASIC
     // =========================================================================
 
     // Nhảy đơn

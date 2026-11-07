@@ -123,36 +123,165 @@ class GameManager {
             };
         });
 
-        // Nút đổi bản nhạc nền sample
+        // =========================================================================
+        // ĐIỀU KHIỂN ÂM LƯỢNG & NHẠC NỀN (BGM & SFX INDEPENDENT CONTROLS)
+        // =========================================================================
+        const syncSoundUI = () => {
+            if (typeof audio === "undefined") return;
+
+            // 1. Đồng bộ nút Nhạc nền (BGM) ở Header và Game HUD
+            const isBgmMuted = audio.isBgmMuted || audio.isMuted;
+            const bgmIconHtml = isBgmMuted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-music"></i>';
+            const btnBgm = document.getElementById("btn-toggle-bgm");
+            const btnGameBgm = document.getElementById("btn-game-toggle-bgm");
+            if (btnBgm) {
+                btnBgm.innerHTML = bgmIconHtml;
+                btnBgm.classList.toggle("is-muted", isBgmMuted);
+                btnBgm.title = isBgmMuted ? "Bật Nhạc Nền" : "Tắt Nhạc Nền";
+            }
+            if (btnGameBgm) {
+                btnGameBgm.innerHTML = bgmIconHtml;
+                btnGameBgm.classList.toggle("is-muted", isBgmMuted);
+                btnGameBgm.title = isBgmMuted ? "Bật Nhạc Nền" : "Tắt Nhạc Nền";
+            }
+
+            // 2. Đồng bộ nút Toàn bộ âm thanh (Master Mute)
+            const masterIconHtml = audio.isMuted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+            const btnMute1 = document.getElementById("btn-toggle-sound");
+            const btnMute2 = document.getElementById("btn-game-sound");
+            if (btnMute1) {
+                btnMute1.innerHTML = masterIconHtml;
+                btnMute1.classList.toggle("is-muted", audio.isMuted);
+                btnMute1.title = audio.isMuted ? "Bật Toàn Bộ Âm Thanh" : "Tắt Toàn Bộ Âm Thanh";
+            }
+            if (btnMute2) {
+                btnMute2.innerHTML = masterIconHtml;
+                btnMute2.classList.toggle("is-muted", audio.isMuted);
+                btnMute2.title = audio.isMuted ? "Bật Toàn Bộ Âm Thanh" : "Tắt Toàn Bộ Âm Thanh";
+            }
+
+            // 3. Đồng bộ Slider & Trạng thái trong Modal Cài Đặt Âm Lượng
+            const sliderBgm = document.getElementById("slider-bgm-volume");
+            const labelBgm = document.getElementById("label-bgm-volume");
+            const btnModalBgm = document.getElementById("btn-modal-toggle-bgm");
+            const bgmPercent = Math.round((audio.bgmVolume || 0) * 100);
+            if (sliderBgm) sliderBgm.value = bgmPercent;
+            if (labelBgm) labelBgm.textContent = `${bgmPercent}%`;
+            if (btnModalBgm) {
+                if (audio.isBgmMuted) {
+                    btnModalBgm.innerHTML = '<i class="fa-solid fa-volume-xmark"></i> Đã Tắt';
+                    btnModalBgm.classList.add("is-muted");
+                } else {
+                    btnModalBgm.innerHTML = '<i class="fa-solid fa-volume-high"></i> Đang Bật';
+                    btnModalBgm.classList.remove("is-muted");
+                }
+            }
+
+            const sliderSfx = document.getElementById("slider-sfx-volume");
+            const labelSfx = document.getElementById("label-sfx-volume");
+            const btnModalSfx = document.getElementById("btn-modal-toggle-sfx");
+            const sfxPercent = Math.round((audio.sfxVolume || 0) * 100);
+            if (sliderSfx) sliderSfx.value = sfxPercent;
+            if (labelSfx) labelSfx.textContent = `${sfxPercent}%`;
+            if (btnModalSfx) {
+                if (audio.isSfxMuted) {
+                    btnModalSfx.innerHTML = '<i class="fa-solid fa-volume-xmark"></i> Đã Tắt';
+                    btnModalSfx.classList.add("is-muted");
+                } else {
+                    btnModalSfx.innerHTML = '<i class="fa-solid fa-volume-high"></i> Đang Bật';
+                    btnModalSfx.classList.remove("is-muted");
+                }
+            }
+        };
+
+        // Bật / Tắt riêng Nhạc Nền (BGM)
+        const handleToggleBgm = () => {
+            audio.toggleBgm();
+            syncSoundUI();
+        };
+        const btnToggleBgm = document.getElementById("btn-toggle-bgm");
+        if (btnToggleBgm) btnToggleBgm.onclick = handleToggleBgm;
+
+        const btnGameToggleBgm = document.getElementById("btn-game-toggle-bgm");
+        if (btnGameToggleBgm) btnGameToggleBgm.onclick = handleToggleBgm;
+
+        const btnModalToggleBgm = document.getElementById("btn-modal-toggle-bgm");
+        if (btnModalToggleBgm) btnModalToggleBgm.onclick = handleToggleBgm;
+
+        // Bật / Tắt riêng Hiệu Ứng (SFX)
+        const handleToggleSfx = () => {
+            audio.toggleSfx();
+            syncSoundUI();
+            if (!audio.isSfxMuted) {
+                audio.playCollect();
+            }
+        };
+        const btnModalToggleSfx = document.getElementById("btn-modal-toggle-sfx");
+        if (btnModalToggleSfx) btnModalToggleSfx.onclick = handleToggleSfx;
+
+        // Bật / Tắt Toàn Bộ Âm Thanh (Master Mute)
+        const handleToggleMaster = () => {
+            audio.toggleMute();
+            syncSoundUI();
+        };
+        const btnMute = document.getElementById("btn-toggle-sound");
+        if (btnMute) btnMute.onclick = handleToggleMaster;
+
+        const btnGameSound = document.getElementById("btn-game-sound");
+        if (btnGameSound) btnGameSound.onclick = handleToggleMaster;
+
+        // Đổi bản nhạc nền sample
         const handleNextTrack = () => {
             audio.nextTrack();
         };
-
         const btnNextTrack = document.getElementById("btn-next-track");
         if (btnNextTrack) btnNextTrack.onclick = handleNextTrack;
 
         const btnGameNextTrack = document.getElementById("btn-game-next-track");
         if (btnGameNextTrack) btnGameNextTrack.onclick = handleNextTrack;
 
-        // Nút bật / tắt âm thanh (đồng bộ cả Header và trong HUD Game)
-        const updateSoundIcons = (muted) => {
-            const iconHtml = muted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
-            const btn1 = document.getElementById("btn-toggle-sound");
-            const btn2 = document.getElementById("btn-game-sound");
-            if (btn1) btn1.innerHTML = iconHtml;
-            if (btn2) btn2.innerHTML = iconHtml;
+        const btnModalNextTrack = document.getElementById("btn-modal-next-track");
+        if (btnModalNextTrack) btnModalNextTrack.onclick = handleNextTrack;
+
+        // Mở Modal Cài Đặt Âm Lượng
+        const openSoundModal = () => {
+            syncSoundUI();
+            const modal = document.getElementById("modal-sound-settings");
+            if (modal) modal.classList.add("active");
         };
+        const btnOpenSound = document.getElementById("btn-open-sound-settings");
+        if (btnOpenSound) btnOpenSound.onclick = openSoundModal;
 
-        const toggleAudio = () => {
-            const isMuted = audio.toggleMute();
-            updateSoundIcons(isMuted);
-        };
+        const btnGameOpenSound = document.getElementById("btn-game-sound-settings");
+        if (btnGameOpenSound) btnGameOpenSound.onclick = openSoundModal;
 
-        const btnMute = document.getElementById("btn-toggle-sound");
-        if (btnMute) btnMute.onclick = toggleAudio;
+        // Thanh trượt âm lượng BGM
+        const sliderBgm = document.getElementById("slider-bgm-volume");
+        if (sliderBgm) {
+            sliderBgm.oninput = (e) => {
+                const val = parseInt(e.target.value, 10);
+                audio.setBgmVolume(val / 100);
+                syncSoundUI();
+            };
+        }
 
-        const btnGameSound = document.getElementById("btn-game-sound");
-        if (btnGameSound) btnGameSound.onclick = toggleAudio;
+        // Thanh trượt âm lượng SFX
+        const sliderSfx = document.getElementById("slider-sfx-volume");
+        if (sliderSfx) {
+            let sfxDebounce = null;
+            sliderSfx.oninput = (e) => {
+                const val = parseInt(e.target.value, 10);
+                audio.setSfxVolume(val / 100);
+                syncSoundUI();
+                clearTimeout(sfxDebounce);
+                sfxDebounce = setTimeout(() => {
+                    audio.playCollect();
+                }, 120);
+            };
+        }
+
+        // Khởi tạo trạng thái icon ban đầu
+        syncSoundUI();
 
         // Nút Fullscreen Toàn màn hình
         const toggleFullscreen = () => {
