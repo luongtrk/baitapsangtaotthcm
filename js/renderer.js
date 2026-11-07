@@ -218,7 +218,7 @@ class GameRenderer {
     // =========================================================================
     // HELPER: VẼ NÚT PHÍM CƠ 3D TRÊN CANVAS ([E], [Q]) & ICON ĐỒ HỌA
     // =========================================================================
-    drawKeycap(x, y, keyText, accentColor = "#d4a349") {
+    drawKeycap(x, y, keyText, accentColor = "#d4a349", cooldownRatio = 0) {
         const ctx = this.ctx;
         ctx.save();
         const w = 22;
@@ -231,14 +231,22 @@ class GameRenderer {
         ctx.fillRect(rx + 2, ry + 3, w, h);
 
         // Mặt phím vuông vức #211c17 viền đồng
-        ctx.fillStyle = "#211c17";
+        ctx.fillStyle = cooldownRatio > 0 ? "#161310" : "#211c17";
         ctx.fillRect(rx, ry, w, h);
-        ctx.strokeStyle = accentColor;
+
+        // Lớp phủ tiến trình hồi chiêu từ dưới lên (không dùng chữ rườm rà)
+        if (cooldownRatio > 0) {
+            const fillH = h * (1 - cooldownRatio);
+            ctx.fillStyle = "rgba(212, 163, 73, 0.25)";
+            ctx.fillRect(rx, ry + h - fillH, w, fillH);
+        }
+
+        ctx.strokeStyle = cooldownRatio > 0 ? "#594d3f" : accentColor;
         ctx.lineWidth = 1.6;
         ctx.strokeRect(rx, ry, w, h);
 
         // Ký tự phím
-        ctx.fillStyle = "#efe6d5";
+        ctx.fillStyle = cooldownRatio > 0 ? "#756857" : "#efe6d5";
         ctx.font = "700 11px 'Courier Prime', monospace";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
@@ -1535,10 +1543,13 @@ class GameRenderer {
             ctx.fill();
         }
 
-        // F. Nút phím cơ 3D [Q] + Tia chớp khống chế khi áp sát sau lưng mật thám
+        // F. Nút phím cơ [Q] khi áp sát sau lưng mật thám (kèm thanh nạp hồi chiêu không dùng chữ)
         if (nearGuardForTakedown && !player.isDying) {
-            const badgeY = player.y - 32 + Math.sin(this.time * 8) * 2;
-            this.drawKeycap(headCenterX, badgeY, "Q", "#ef4444");
+            const cdRatio = player.maxTakedownCooldown > 0
+                ? Math.max(0, Math.min(1, (player.takedownCooldown || 0) / player.maxTakedownCooldown))
+                : 0;
+            const badgeY = player.y - 32 + (cdRatio > 0 ? 0 : Math.sin(this.time * 8) * 2);
+            this.drawKeycap(headCenterX, badgeY, "Q", "#ef4444", cdRatio);
         }
 
         ctx.restore();

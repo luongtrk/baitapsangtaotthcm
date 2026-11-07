@@ -39,6 +39,8 @@ class Player {
         // Tính năng gameplay mới: Nghi Binh, Khống Chế, Hóa Trang, Khiên Áo Trấn Thủ, Dép Cao Su
         this.pebbleCooldown = 0;    // Hồi chiêu ném sỏi nghi binh (frames)
         this.maxPebbleCooldown = 180; // 3 giây hồi chiêu
+        this.takedownCooldown = 0;  // Hồi chiêu khống chế [Q] (frames)
+        this.maxTakedownCooldown = 480; // 8 giây hồi chiêu
         this.hasShield = false;     // Áo trấn thủ: đỡ trọn 1 đòn đạn/bẫy
         this.speedBoostTimer = 0;   // Dép cao su vạn dặm: tăng tốc chạy & nhảy
         this.disguiseTimer = 0;     // Hòm đồ cải trang: lính không nhận diện
@@ -154,6 +156,7 @@ class Player {
 
         // Cập nhật bộ đếm hồi chiêu và hiệu ứng hỗ trợ
         if (this.pebbleCooldown > 0) this.pebbleCooldown--;
+        if (this.takedownCooldown > 0) this.takedownCooldown--;
         if (this.speedBoostTimer > 0) this.speedBoostTimer--;
         if (this.disguiseTimer > 0) this.disguiseTimer--;
 

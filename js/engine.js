@@ -193,8 +193,11 @@ class GameEngine {
     // Kỹ năng Tự Vệ Khống Chế Từ Phía Sau (Phím Q hoặc nút cảm ứng)
     performTakedown() {
         if (!this.player || !this.isRunning || this.isPaused || this.player.isDying) return;
+        if (this.player.takedownCooldown > 0) return;
+
         for (const guard of this.guards) {
             if (this.player.canTakedown(guard)) {
+                this.player.takedownCooldown = this.player.maxTakedownCooldown; // Hồi chiêu 8s
                 guard.stun(720); // Choáng 12 giây
                 guard.timesTakenDown++;
 
@@ -339,10 +342,15 @@ class GameEngine {
         }
 
         const takedownVisible = !!this.nearGuardForTakedown;
+        const takedownCooling = !!(this.player && this.player.takedownCooldown > 0);
+        const btnTakedown = document.getElementById("btn-touch-takedown");
         if (st.takedown !== takedownVisible) {
             st.takedown = takedownVisible;
-            const btnTakedown = document.getElementById("btn-touch-takedown");
             if (btnTakedown) btnTakedown.style.display = takedownVisible ? "flex" : "none";
+        }
+        if (st.takedownCooling !== takedownCooling) {
+            st.takedownCooling = takedownCooling;
+            if (btnTakedown) btnTakedown.classList.toggle("cooling", takedownCooling);
         }
 
         // Làm mờ nút ném sỏi khi đang hồi chiêu

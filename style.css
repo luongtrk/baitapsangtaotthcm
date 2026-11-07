@@ -130,25 +130,44 @@ body {
     color: rgba(212, 163, 73, 0.18);
 }
 
-/* Các mốc son lịch sử đóng dấu trên nền bản đồ */
-.historical-bg-decor .bg-milestone {
+/* Trục thời gian 5 mốc son lịch sử ở phía dưới màn hình (không bị 2 khung Menu che) */
+.historical-bg-decor .bg-milestone-timeline {
     position: absolute;
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    color: rgba(212, 163, 73, 0.36);
-    border: 1px dashed rgba(212, 163, 73, 0.32);
-    background: rgba(22, 18, 14, 0.65);
-    padding: 4px 10px;
-    text-transform: uppercase;
+    bottom: 24px;
+    left: 24px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    max-width: 1180px;
+    margin: 0 auto;
 }
 
-.historical-bg-decor .m-1911 { bottom: 38px; left: 32px; }
-.historical-bg-decor .m-1920 { top: 82px; left: 36px; }
-.historical-bg-decor .m-1930 { top: 76px; right: 42px; }
-.historical-bg-decor .m-1941 { bottom: 110px; right: 36px; }
-.historical-bg-decor .m-1945 { bottom: 36px; right: 36px; color: rgba(248, 113, 113, 0.45); border-color: rgba(248, 113, 113, 0.4); }
+.historical-bg-decor .bg-milestone-line {
+    flex: 1;
+    max-width: 48px;
+    height: 0;
+    border-top: 1.5px dashed rgba(212, 163, 73, 0.32);
+}
+
+.historical-bg-decor .bg-milestone {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: rgba(212, 163, 73, 0.52);
+    border: 1px dashed rgba(212, 163, 73, 0.38);
+    background: rgba(22, 18, 14, 0.78);
+    padding: 5px 11px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.historical-bg-decor .bg-milestone.m-highlight {
+    color: rgba(252, 165, 165, 0.72);
+    border-color: rgba(239, 68, 68, 0.5);
+}
 
 header, footer {
     position: relative;
@@ -246,7 +265,7 @@ main {
 .main-wrapper {
     width: 100%;
     max-width: 1180px;
-    padding: 24px 20px 40px;
+    padding: 24px 20px 76px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1671,7 +1690,8 @@ body.touch-device .mobile-controls-panel {
     color: #efe6d5;
 }
 
-.touch-btn-distract.cooling {
+.touch-btn-distract.cooling,
+.touch-btn-takedown.cooling {
     opacity: 0.45;
     pointer-events: none;
 }
@@ -1721,12 +1741,12 @@ body.touch-device .mobile-controls-panel {
         grid-template-columns: 1fr;
         gap: 20px;
     }
+    .historical-bg-decor .bg-milestone-timeline {
+        display: none;
+    }
 }
 
 @media (max-width: 640px) {
-    .historical-bg-decor .bg-milestone {
-        display: none;
-    }
     .historical-bg-decor .bg-bronze-drum {
         width: 480px;
         height: 480px;
