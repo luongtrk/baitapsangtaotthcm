@@ -32,6 +32,12 @@ class Player {
         this.animFrame = 0;
         this.invulnerableTimer = 0;
 
+        // Hiệu ứng chuyển động linh hoạt: Squash & Stretch (co giãn khi nhảy/đáp), Đánh tay (swing/throw)
+        this.scaleX = 1.0;
+        this.scaleY = 1.0;
+        this.actionAnimTimer = 0;
+        this.actionAnimType = null; // "throw" | "takedown" | "interact"
+
         // Chuẩn game thiết kế chuyên nghiệp: Coyote Time & Jump Buffering
         this.coyoteTimer = 0;       // Thời gian ân hạn nhảy khi vừa rời mép vực (6 frames)
         this.jumpBufferTimer = 0;   // Lưu phím bấm nhảy trước khi chạm đất (6 frames)
@@ -103,6 +109,8 @@ class Player {
             this.onGround = false;
             this.coyoteTimer = 0;
             this.jumpBufferTimer = 0;
+            this.scaleX = 0.82;
+            this.scaleY = 1.22;
             return { jumped: true, isDouble: false };
         }
         // 2. Nhảy đúp trên không (Double Jump)
@@ -111,6 +119,8 @@ class Player {
             if (typeof audio !== "undefined" && audio.playDoubleJump) audio.playDoubleJump();
             this.jumpsLeft--;
             this.jumpBufferTimer = 0;
+            this.scaleX = 0.78;
+            this.scaleY = 1.26;
             return { jumped: true, isDouble: true };
         }
         return false;
@@ -159,6 +169,14 @@ class Player {
         if (this.takedownCooldown > 0) this.takedownCooldown--;
         if (this.speedBoostTimer > 0) this.speedBoostTimer--;
         if (this.disguiseTimer > 0) this.disguiseTimer--;
+        if (this.actionAnimTimer > 0) {
+            this.actionAnimTimer--;
+            if (this.actionAnimTimer === 0) this.actionAnimType = null;
+        }
+
+        // Đàn hồi mượt mà tỷ lệ co giãn Squash & Stretch về 1.0
+        this.scaleX += (1.0 - this.scaleX) * 0.22;
+        this.scaleY += (1.0 - this.scaleY) * 0.22;
 
         // Kiểm tra xem người chơi có đang đứng trên bề mặt tuyết/băng trơn trượt (Màn 2 Moskva) hay không
         let onIce = false;
@@ -274,9 +292,13 @@ class Player {
                     this.onGround = true;
                     this.jumpsLeft = 2; // Hồi lại 2 lượt nhảy
 
-                    // Bụi tiếp đất nếu vừa rơi từ độ cao xuống
-                    if (!this.wasOnGround && prevVy > 3.2) {
-                        events.landDust = { x: this.x + this.width / 2, y: this.y + this.height };
+                    // Bụi tiếp đất & hiệu ứng nhún chân nếu vừa rơi từ trên không xuống
+                    if (!this.wasOnGround) {
+                        this.scaleX = 1.2;
+                        this.scaleY = 0.82;
+                        if (prevVy > 3.2) {
+                            events.landDust = { x: this.x + this.width / 2, y: this.y + this.height };
+                        }
                     }
                 } else if (this.vy < 0) { // Va đầu vào trần dưới
                     this.y = plat.y + plat.h;
@@ -339,6 +361,10 @@ class Player {
     throwPebble() {
         if (this.pebbleCooldown > 0 || this.isDying) return null;
         this.pebbleCooldown = this.maxPebbleCooldown;
+        this.actionAnimTimer = 16;
+        this.actionAnimType = "throw";
+        this.scaleX = 1.15;
+        this.scaleY = 0.9;
         // Sinh viên sỏi tại tâm người chơi (không bao giờ nằm trong tường) để tránh kẹt sỏi khi đứng sát vách
         return new DistractionPebble(
             this.x + this.width / 2,

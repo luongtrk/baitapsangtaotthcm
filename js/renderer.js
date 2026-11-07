@@ -1169,51 +1169,66 @@ class GameRenderer {
                 ctx.fill();
             }
 
-            // B. THÂN HÌNH MẬT THÁM PHÁP (Áo Măng-tô Xám Than & Mũ Phớt Fedora)
+            // B. THÂN HÌNH MẬT THÁM PHÁP (Áo Măng-tô Xám Than & Mũ Phớt Fedora với nhịp bước tuần tra)
+            const gWalkPhase = this.time * 7.5 + guard.x * 0.08;
+            const gBobY = isStunned ? 2 : Math.abs(Math.sin(gWalkPhase)) * -2;
+            const gSwing = isStunned ? 0 : Math.sin(gWalkPhase);
+
+            // Chân sau bước tuần
+            ctx.save();
+            ctx.translate(screenX + 12, guard.y + 40 + gBobY);
+            ctx.rotate(-gSwing * 0.42);
+            ctx.fillStyle = "#0f172a";
+            ctx.fillRect(-2.5, 0, 5, 11);
+            ctx.restore();
+
+            // Chân trước bước tuần
+            ctx.save();
+            ctx.translate(screenX + 18, guard.y + 40 + gBobY);
+            ctx.rotate(gSwing * 0.42);
+            ctx.fillStyle = "#1e293b";
+            ctx.fillRect(-2.5, 0, 5, 11);
+            ctx.restore();
+
             // Áo khoác măng tô dài (Trench coat)
             ctx.fillStyle = isStunned ? "#334155" : "#1e293b";
-            ctx.fillRect(screenX + 4, guard.y + 16, 22, 28);
+            ctx.fillRect(screenX + 4, guard.y + 16 + gBobY, 22, 26);
             // Ve áo măng-tô
             ctx.fillStyle = "#334155";
             ctx.beginPath();
-            ctx.moveTo(screenX + 10, guard.y + 16);
-            ctx.lineTo(screenX + 15, guard.y + 26);
-            ctx.lineTo(screenX + 15, guard.y + 16);
+            ctx.moveTo(screenX + 10, guard.y + 16 + gBobY);
+            ctx.lineTo(screenX + 15, guard.y + 26 + gBobY);
+            ctx.lineTo(screenX + 15, guard.y + 16 + gBobY);
             ctx.fill();
 
             // Cúc áo kim loại kép
             ctx.fillStyle = "#94a3b8";
             ctx.beginPath();
-            ctx.arc(screenX + 12, guard.y + 28, 1.2, 0, Math.PI * 2);
-            ctx.arc(screenX + 12, guard.y + 36, 1.2, 0, Math.PI * 2);
+            ctx.arc(screenX + 12, guard.y + 28 + gBobY, 1.2, 0, Math.PI * 2);
+            ctx.arc(screenX + 12, guard.y + 36 + gBobY, 1.2, 0, Math.PI * 2);
             ctx.fill();
 
             // Đầu & Khuôn mặt bí ẩn dưới vành mũ
             ctx.fillStyle = isStunned ? "#cbd5e1" : "#fed7aa";
             ctx.beginPath();
-            ctx.arc(screenX + 15, guard.y + 11, 7.5, 0, Math.PI * 2);
+            ctx.arc(screenX + 15, guard.y + 11 + gBobY, 7.5, 0, Math.PI * 2);
             ctx.fill();
 
             // Mũ phớt Fedora cổ điển (nếu bị choáng thì mũ hơi lệch)
             ctx.fillStyle = "#0f172a";
             const hatTilt = isStunned ? 3 : 0;
-            ctx.fillRect(screenX + 2, guard.y + 4 + hatTilt, 26, 4); // Vành mũ rộng che nửa trán
-            ctx.fillRect(screenX + 7, guard.y - 4 + hatTilt, 16, 9); // Chóp mũ
+            ctx.fillRect(screenX + 2, guard.y + 4 + hatTilt + gBobY, 26, 4); // Vành mũ rộng che nửa trán
+            ctx.fillRect(screenX + 7, guard.y - 4 + hatTilt + gBobY, 16, 9); // Chóp mũ
             // Dải ruy băng xám trên mũ
             ctx.fillStyle = "#475569";
-            ctx.fillRect(screenX + 7, guard.y + 2 + hatTilt, 16, 2);
+            ctx.fillRect(screenX + 7, guard.y + 2 + hatTilt + gBobY, 16, 2);
 
-            // Đôi chân bước đi tuần
-            ctx.fillStyle = "#0f172a";
-            const legWalk = isStunned ? 0 : Math.sin(this.time * 6) * 4;
-            ctx.fillRect(screenX + 6, guard.y + 44, 6, 8 + (guard.dir * legWalk));
-            ctx.fillRect(screenX + 17, guard.y + 44, 6, 8 - (guard.dir * legWalk));
-
-            // Đèn bão bọc đồng cầm tay (Hurricane Lantern) - nếu choáng thì đèn tắt tối
+            // Đèn bão bọc đồng cầm tay đung đưa nhẹ theo bước chân
+            const lanternSway = isStunned ? 0 : Math.sin(gWalkPhase) * 2;
             ctx.fillStyle = "#ca8a04";
-            ctx.fillRect(eyeX - 3, eyeY - 6, 7, 10);
+            ctx.fillRect(eyeX - 3 + lanternSway, eyeY - 6 + gBobY, 7, 10);
             ctx.fillStyle = isStunned ? "#475569" : "#fde047";
-            ctx.fillRect(eyeX - 1, eyeY - 4, 3, 6);
+            ctx.fillRect(eyeX - 1 + lanternSway, eyeY - 4 + gBobY, 3, 6);
 
             // SÚNG NGẮN CỦA MẬT THÁM KHI NGẮM / BẮN (chỉ vẽ khi không bị choáng)
             if (!isStunned && (guard.isAiming || guard.shootCooldown > 0)) {
@@ -1503,45 +1518,8 @@ class GameRenderer {
             ctx.filter = "brightness(1.5) drop-shadow(0 0 10px #ef4444)";
         }
 
-        // DÙNG ẢNH SPRITE VECTOR SẮC NÉT
-        if (this.sprites.hasCustomPlayer && this.sprites.playerIdle.naturalWidth > 0) {
-            let activeImg = this.sprites.playerIdle;
-            if (!player.onGround && this.sprites.playerJump.naturalWidth > 0) {
-                activeImg = this.sprites.playerJump;
-            } else if (player.isCrouching && this.sprites.playerCrouch.naturalWidth > 0) {
-                activeImg = this.sprites.playerCrouch;
-            } else if (player.vx !== 0 && this.sprites.playerRun.naturalWidth > 0) {
-                activeImg = this.sprites.playerRun;
-            }
-
-            const drawW = 34;
-            const drawH = 50;
-            const offsetY = player.isCrouching ? 5 : 0;
-
-            ctx.save();
-            ctx.translate(screenX + player.width / 2, player.y + player.height / 2);
-            if (player.isDying) {
-                ctx.rotate(-player.facing * 0.25);
-            }
-            ctx.scale(player.facing, 1);
-            ctx.drawImage(
-                activeImg,
-                -drawW / 2,
-                -drawH / 2 + offsetY,
-                drawW,
-                drawH
-            );
-            ctx.restore();
-        } else {
-            // DỰ PHÒNG: Đồ họa Canvas nếu thiếu ảnh
-            const pCenterX = screenX + player.width / 2;
-            ctx.fillStyle = "#78350f";
-            ctx.fillRect(screenX + 3, player.y + 15, player.width - 6, 22);
-            ctx.fillStyle = "#fed7aa";
-            ctx.beginPath();
-            ctx.arc(pCenterX, player.y + 8, 8, 0, Math.PI * 2);
-            ctx.fill();
-        }
+        // ANIMATION KHỚP CHUYỂN ĐỘNG MƯỢT MÀ (PROCEDURAL ARTICULATED RIG)
+        this.drawAnimatedPlayerCharacter(player, screenX);
 
         // F. Nút phím cơ [Q] khi áp sát sau lưng mật thám (kèm thanh nạp hồi chiêu không dùng chữ)
         if (nearGuardForTakedown && !player.isDying) {
@@ -1551,6 +1529,336 @@ class GameRenderer {
             const badgeY = player.y - 32 + (cdRatio > 0 ? 0 : Math.sin(this.time * 8) * 2);
             this.drawKeycap(headCenterX, badgeY, "Q", "#ef4444", cdRatio);
         }
+
+        ctx.restore();
+    }
+
+    // =========================================================================
+    // HỆ THỐNG KHỚP XƯƠNG ĐỘNG (PROCEDURAL ARTICULATED PLAYER ANIMATION 60FPS)
+    // =========================================================================
+    drawAnimatedPlayerCharacter(player, screenX) {
+        const ctx = this.ctx;
+        const speedAbs = Math.abs(player.vx);
+        const isMoving = speedAbs > 0.08;
+        const isAir = !player.onGround;
+        const isCrouch = player.isCrouching;
+        const runCycle = this.time * (player.speedBoostTimer > 0 ? 15 : 11);
+        const idleCycle = this.time * 3.2;
+
+        // Điểm neo dưới bàn chân nhân vật để co giãn Squash & Stretch tự nhiên
+        const footX = screenX + player.width / 2;
+        const footY = player.y + player.height;
+
+        ctx.save();
+        ctx.translate(footX, footY);
+
+        // 1. Bóng đổ dưới chân co giãn theo độ cao nhảy
+        if (!player.isDying) {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
+            ctx.beginPath();
+            ctx.ellipse(0, -1, isCrouch ? 12 : 10, 3, 0, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // 2. Hướng nhìn & Co giãn đàn hồi (Squash & Stretch)
+        const sx = (player.scaleX || 1) * player.facing;
+        const sy = player.scaleY || 1;
+        ctx.scale(sx, sy);
+
+        // 3. Độ nảy cơ thể (Vertical Bob) & Độ nghiêng người theo vận tốc (Forward Lean)
+        let bodyBobY = 0;
+        let torsoLean = 0;
+        if (player.isDying) {
+            torsoLean = -0.45;
+            bodyBobY = -4;
+        } else if (isAir) {
+            torsoLean = Math.max(-0.22, Math.min(0.26, player.vy * 0.024));
+        } else if (isCrouch) {
+            bodyBobY = isMoving ? Math.sin(runCycle * 1.1) * 1.2 : Math.sin(idleCycle) * 0.7;
+            torsoLean = 0.22;
+        } else if (isMoving) {
+            bodyBobY = -Math.abs(Math.sin(runCycle)) * 3.2;
+            torsoLean = 0.15 + Math.min(0.1, speedAbs * 0.03);
+        } else {
+            // Nhịp thở nhấp nhô tự nhiên khi đứng yên
+            bodyBobY = Math.sin(idleCycle) * 1.3;
+            torsoLean = Math.sin(idleCycle * 0.5) * 0.025;
+        }
+
+        // Hiệu ứng đòn đánh [Q] hoặc ném sỏi [F]
+        let actionProgress = 0;
+        if (player.actionAnimTimer > 0) {
+            actionProgress = player.actionAnimTimer / (player.actionAnimType === "takedown" ? 20 : 16);
+            torsoLean += Math.sin(actionProgress * Math.PI) * 0.28;
+        }
+
+        // Tính góc vung chân & vung tay 60fps
+        let leftLegAngle = 0;
+        let rightLegAngle = 0;
+        let leftKneeBend = 0;
+        let rightKneeBend = 0;
+        let leftArmAngle = 0;
+        let rightArmAngle = 0;
+
+        if (isAir) {
+            if (player.vy < 0) {
+                // Đang bật nhảy lên: chân trước co cao, chân sau duỗi đạp gió, hai tay vươn lên
+                leftLegAngle = -0.45;
+                leftKneeBend = 0.55;
+                rightLegAngle = 0.55;
+                rightKneeBend = 0.25;
+                leftArmAngle = -0.85;
+                rightArmAngle = -0.55;
+            } else {
+                // Đang rơi xuống: hai chân mở chuẩn bị tiếp đất, hai tay giữ thăng bằng
+                leftLegAngle = -0.25;
+                leftKneeBend = 0.35;
+                rightLegAngle = 0.32;
+                rightKneeBend = 0.45;
+                leftArmAngle = -1.1;
+                rightArmAngle = 0.75;
+            }
+        } else if (isCrouch) {
+            const sneakWave = isMoving ? Math.sin(runCycle * 0.9) * 0.38 : 0;
+            leftLegAngle = -0.45 + sneakWave;
+            rightLegAngle = 0.35 - sneakWave;
+            leftKneeBend = 0.65;
+            rightKneeBend = 0.65;
+            leftArmAngle = 0.3 - sneakWave * 0.6;
+            rightArmAngle = -0.2 + sneakWave * 0.6;
+        } else if (isMoving) {
+            // Sải bước chạy khỏe khoắn với khớp gối gập tự nhiên
+            const s = Math.sin(runCycle);
+            const c = Math.cos(runCycle);
+            leftLegAngle = s * 0.72;
+            rightLegAngle = -s * 0.72;
+            leftKneeBend = Math.max(0, -c) * 0.65;
+            rightKneeBend = Math.max(0, c) * 0.65;
+            leftArmAngle = -s * 0.78;
+            rightArmAngle = s * 0.78;
+        } else {
+            // Đứng yên đung đưa tay nhẹ nhàng theo nhịp thở
+            const sway = Math.sin(idleCycle);
+            leftLegAngle = -0.05;
+            rightLegAngle = 0.06;
+            leftArmAngle = 0.1 + sway * 0.08;
+            rightArmAngle = -0.1 - sway * 0.08;
+        }
+
+        // Ghi đè tay phải khi đang thực hiện động tác Ném sỏi [F] hoặc Khống chế [Q]
+        if (player.actionAnimTimer > 0) {
+            const swing = Math.sin(actionProgress * Math.PI);
+            rightArmAngle = -1.35 * swing;
+            leftArmAngle = 0.65 * swing;
+        }
+
+        const hipY = isCrouch ? -14 : -20;
+
+        // Hàm vẽ 1 chân có khớp đùi - gối - giày
+        const drawLeg = (hipOffsetX, thighAngle, kneeBend, isBackLeg) => {
+            ctx.save();
+            ctx.translate(hipOffsetX, hipY + bodyBobY * 0.5);
+            ctx.rotate(thighAngle);
+
+            const thighLen = isCrouch ? 7 : 10;
+            const shinLen = isCrouch ? 7 : 9;
+
+            // Đùi quần vải sẫm
+            ctx.strokeStyle = isBackLeg ? "#1e293b" : "#334155";
+            ctx.lineWidth = 5.5;
+            ctx.lineCap = "round";
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(0, thighLen);
+            ctx.stroke();
+
+            // Khớp gối & Cẳng chân
+            ctx.translate(0, thighLen);
+            ctx.rotate(kneeBend);
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(0, shinLen);
+            ctx.stroke();
+
+            // Giày da / Dép cao su
+            ctx.translate(0, shinLen);
+            ctx.fillStyle = player.speedBoostTimer > 0 ? "#eab308" : (isBackLeg ? "#1c1917" : "#451a03");
+            ctx.beginPath();
+            ctx.roundRect(-2.5, -2, 7.5, 4.2, 1.5);
+            ctx.fill();
+            ctx.restore();
+        };
+
+        // Hàm vẽ 1 cánh tay có khớp vai - khuỷu - bàn tay
+        const drawArm = (shoulderX, shoulderY, armAngle, isBackArm) => {
+            ctx.save();
+            ctx.translate(shoulderX, shoulderY);
+            ctx.rotate(armAngle);
+
+            const upperLen = 8;
+            const foreLen = 7;
+
+            ctx.strokeStyle = isBackArm ? "#78350f" : "#9a3412";
+            ctx.lineWidth = 4.5;
+            ctx.lineCap = "round";
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(0, upperLen);
+            ctx.stroke();
+
+            // Khuỷu tay hơi gập về phía trước
+            ctx.translate(0, upperLen);
+            ctx.rotate(-0.38);
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(0, foreLen);
+            ctx.stroke();
+
+            // Bàn tay
+            ctx.fillStyle = "#fed7aa";
+            ctx.beginPath();
+            ctx.arc(0, foreLen + 1, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        };
+
+        // --- LỚP 1: CHÂN SAU ---
+        drawLeg(-2, leftLegAngle, leftKneeBend, true);
+
+        // --- LỚP 2: THÂN TRÊN, TAY, ĐẦU & KHĂN QUÀNG (nghiêng theo torsoLean) ---
+        ctx.save();
+        ctx.translate(0, hipY + bodyBobY);
+        ctx.rotate(torsoLean);
+
+        const torsoH = isCrouch ? 13 : 16;
+
+        // 2.1. Cánh tay sau
+        drawArm(-2, -torsoH + 2, leftArmAngle, true);
+
+        // 2.2. Dải khăn quàng đỏ bay phấp phới phía sau theo vận tốc và sóng sin
+        const scarfWave1 = Math.sin(this.time * 10) * (isMoving ? 4.5 : 2.2);
+        const scarfWave2 = Math.cos(this.time * 12) * (isMoving ? 5.5 : 2.5);
+        const scarfLen = isMoving ? 16 : 10;
+        ctx.fillStyle = "#dc2626";
+        ctx.beginPath();
+        ctx.moveTo(-2, -torsoH + 1);
+        ctx.quadraticCurveTo(-2 - scarfLen * 0.5, -torsoH + 3 + scarfWave1, -2 - scarfLen, -torsoH + 6 + scarfWave2);
+        ctx.lineTo(-2 - scarfLen + 2, -torsoH + 10 + scarfWave2);
+        ctx.quadraticCurveTo(-2 - scarfLen * 0.4, -torsoH + 6 + scarfWave1, -1, -torsoH + 4);
+        ctx.closePath();
+        ctx.fill();
+
+        // 2.3. Thân áo ký giả / áo bà ba nâu truyền thống
+        const shirtGrad = ctx.createLinearGradient(-6, -torsoH, 6, 2);
+        shirtGrad.addColorStop(0, "#b45309");
+        shirtGrad.addColorStop(1, "#78350f");
+        ctx.fillStyle = shirtGrad;
+        ctx.beginPath();
+        ctx.roundRect(-6.5, -torsoH, 13, torsoH + 2, 3);
+        ctx.fill();
+        ctx.strokeStyle = "#451a03";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Hàng cúc áo vàng đồng giữa ngực
+        ctx.fillStyle = "#fde047";
+        for (let cy = -torsoH + 4; cy <= -2; cy += 4.5) {
+            ctx.beginPath();
+            ctx.arc(2, cy, 0.9, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Vòng khăn quàng đỏ quanh cổ + nút thắt sao vàng
+        ctx.fillStyle = "#ef4444";
+        ctx.beginPath();
+        ctx.roundRect(-5.5, -torsoH - 1.5, 11, 4, 2);
+        ctx.fill();
+        ctx.fillStyle = "#fde047";
+        ctx.beginPath();
+        ctx.arc(2.5, -torsoH + 0.5, 1.3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 2.4. Đầu & Khuôn mặt (nhịp gật nhẹ theo bước chân)
+        const headBob = isMoving ? Math.sin(runCycle * 2) * 0.8 : Math.sin(idleCycle) * 0.5;
+        ctx.save();
+        ctx.translate(0.5, -torsoH - 8 + headBob);
+
+        // Cổ
+        ctx.fillStyle = "#fed7aa";
+        ctx.fillRect(-2, 4, 4, 4);
+
+        // Khuôn mặt thanh tú
+        ctx.fillStyle = "#ffedd5";
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 6.8, 7.6, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = "#d97706";
+        ctx.lineWidth = 0.7;
+        ctx.stroke();
+
+        // Mái tóc đen rẽ ngôi (nhấp nhô nhẹ theo gió khi chạy/nhảy)
+        const hairLift = isAir ? -1.2 : (isMoving ? Math.sin(runCycle) * 0.7 : 0);
+        ctx.fillStyle = "#1c1917";
+        ctx.beginPath();
+        ctx.arc(0, -1.5 + hairLift * 0.3, 7.2, Math.PI * 0.92, Math.PI * 2.08);
+        ctx.fill();
+        // Phần tóc mái bồng bềnh
+        ctx.beginPath();
+        ctx.moveTo(-6, -2);
+        ctx.quadraticCurveTo(0, -5 + hairLift, 7, -2.5);
+        ctx.quadraticCurveTo(3, -8.5 + hairLift, -5, -6);
+        ctx.closePath();
+        ctx.fill();
+
+        // Đôi mắt cương nghị (có chớp mắt tự nhiên mỗi vài giây)
+        const isBlinking = (Math.floor(this.time * 18) % 55) === 0;
+        ctx.fillStyle = "#1c1917";
+        if (isBlinking) {
+            ctx.fillRect(2, -1, 2.8, 0.9);
+        } else {
+            ctx.beginPath();
+            ctx.ellipse(3.2, -0.8, 1.2, 1.5, 0, 0, Math.PI * 2);
+            ctx.fill();
+            // Ánh sáng mắt
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(3.6, -1.3, 0.5, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Lông mày & Nụ cười kiên định
+        ctx.strokeStyle = "#1c1917";
+        ctx.lineWidth = 1.1;
+        ctx.beginPath();
+        ctx.moveTo(1.5, -3.2);
+        ctx.quadraticCurveTo(3.4, -4, 5, -3);
+        ctx.stroke();
+
+        ctx.strokeStyle = "#9a3412";
+        ctx.lineWidth = 0.9;
+        ctx.beginPath();
+        ctx.arc(2.8, 2.2, 1.8, 0.15, Math.PI * 0.75);
+        ctx.stroke();
+
+        // Nếu đang cải trang (Disguise): vẽ thêm mũ phớt & kính cải trang trên đầu nhân vật
+        if (player.disguiseTimer > 0) {
+            ctx.fillStyle = "#3b0764";
+            ctx.fillRect(-8.5, -5.5, 17, 2.2);
+            ctx.fillRect(-5.5, -10.5, 11, 5.5);
+            ctx.strokeStyle = "#e9d5ff";
+            ctx.lineWidth = 1.1;
+            ctx.strokeRect(1.5, -2.4, 3.6, 2.6);
+        }
+
+        ctx.restore(); // Kết thúc vẽ Đầu
+
+        // 2.5. Cánh tay trước (vung ngược pha với chân trước)
+        drawArm(1.5, -torsoH + 2, rightArmAngle, false);
+
+        ctx.restore(); // Kết thúc lớp Thân trên
+
+        // --- LỚP 3: CHÂN TRƯỚC ---
+        drawLeg(1.5, rightLegAngle, rightKneeBend, false);
 
         ctx.restore();
     }
@@ -1678,29 +1986,49 @@ class GameRenderer {
                 ctx.fill();
             }
 
-            // Thân người đồng chí cách mạng (Áo trấn thủ xanh chàm + khăn quàng đỏ)
+            // Thân người đồng chí cách mạng (Áo trấn thủ xanh chàm + khăn quàng đỏ + nhịp thở/vẫy tay)
+            const npcBreath = Math.sin(this.time * 3.5 + npc.x) * 1.2;
+            const npcWave = npc.isNear ? Math.sin(this.time * 10) * 0.45 : Math.sin(this.time * 2.5) * 0.08;
+
+            // Tay vẫy chào khi người chơi tiến lại gần
+            ctx.save();
+            ctx.translate(sx + npc.width - 5, npc.y + 19 + npcBreath);
+            ctx.rotate(-0.6 + npcWave);
+            ctx.strokeStyle = "#1e3a8a";
+            ctx.lineWidth = 4;
+            ctx.lineCap = "round";
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(5, -7);
+            ctx.stroke();
+            ctx.fillStyle = "#fed7aa";
+            ctx.beginPath();
+            ctx.arc(5, -8, 2.2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
             ctx.fillStyle = "#1e3a8a";
             ctx.beginPath();
-            ctx.roundRect(sx + 4, npc.y + 16, npc.width - 8, 24, 3);
+            ctx.roundRect(sx + 4, npc.y + 16 + npcBreath, npc.width - 8, 24 - npcBreath * 0.5, 3);
             ctx.fill();
             ctx.fillStyle = "#dc2626";
-            ctx.fillRect(sx + 6, npc.y + 16, npc.width - 12, 4);
+            ctx.fillRect(sx + 6, npc.y + 16 + npcBreath, npc.width - 12, 4);
 
             // Đầu và khuôn mặt
             ctx.fillStyle = "#fed7aa";
             ctx.beginPath();
-            ctx.arc(pCenterX, npc.y + 10, 8, 0, Math.PI * 2);
+            ctx.arc(pCenterX, npc.y + 10 + npcBreath, 8, 0, Math.PI * 2);
             ctx.fill();
 
             // Mũ beret / mũ ca-lô có ngôi sao nhỏ
             ctx.fillStyle = "#0f172a";
             ctx.beginPath();
-            ctx.arc(pCenterX, npc.y + 6, 9, Math.PI, 0);
+            ctx.arc(pCenterX, npc.y + 6 + npcBreath, 9, Math.PI, 0);
             ctx.fill();
             ctx.fillStyle = "#fbbf24";
             ctx.font = "800 7px 'Be Vietnam Pro', sans-serif";
             ctx.textAlign = "center";
-            ctx.fillText("★", pCenterX, npc.y + 5);
+            ctx.fillText("★", pCenterX, npc.y + 5 + npcBreath);
 
             // Đôi chân
             ctx.fillStyle = "#0f172a";

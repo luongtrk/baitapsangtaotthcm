@@ -198,6 +198,10 @@ class GameEngine {
         for (const guard of this.guards) {
             if (this.player.canTakedown(guard)) {
                 this.player.takedownCooldown = this.player.maxTakedownCooldown; // Hồi chiêu 8s
+                this.player.actionAnimTimer = 20;
+                this.player.actionAnimType = "takedown";
+                this.player.scaleX = 1.25;
+                this.player.scaleY = 0.84;
                 guard.stun(720); // Choáng 12 giây
                 guard.timesTakenDown++;
 
