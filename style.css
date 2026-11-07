@@ -70,11 +70,45 @@ body {
     align-items: center;
     justify-content: flex-start;
     overflow-x: hidden;
+    position: relative;
     background-image:
-        radial-gradient(circle at 50% 15%, rgba(158, 34, 34, 0.14) 0%, transparent 60%),
-        radial-gradient(circle at 50% 50%, transparent 45%, rgba(8, 6, 4, 0.75) 100%),
-        repeating-linear-gradient(0deg, rgba(212, 163, 73, 0.025) 0px, rgba(212, 163, 73, 0.025) 1px, transparent 1px, transparent 32px),
-        repeating-linear-gradient(90deg, rgba(212, 163, 73, 0.025) 0px, rgba(212, 163, 73, 0.025) 1px, transparent 1px, transparent 32px);
+        /* Vệt ánh sáng cách mạng & sao vàng trung tâm */
+        radial-gradient(circle at 50% 120px, rgba(212, 163, 73, 0.18) 0%, rgba(158, 34, 34, 0.12) 35%, transparent 70%),
+        radial-gradient(circle at 15% 20%, rgba(158, 34, 34, 0.15) 0%, transparent 45%),
+        radial-gradient(circle at 85% 30%, rgba(212, 163, 73, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, transparent 40%, rgba(8, 6, 4, 0.85) 100%),
+        /* Họa tiết lưới tọa độ nghiên cứu tư liệu lịch sử */
+        repeating-linear-gradient(0deg, rgba(212, 163, 73, 0.035) 0px, rgba(212, 163, 73, 0.035) 1px, transparent 1px, transparent 40px),
+        repeating-linear-gradient(90deg, rgba(212, 163, 73, 0.035) 0px, rgba(212, 163, 73, 0.035) 1px, transparent 1px, transparent 40px);
+}
+
+/* Biểu tượng chìm cách mạng hào hùng tạo điểm nhấn cho phông nền */
+body::before {
+    content: "★";
+    position: fixed;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 420px;
+    color: rgba(212, 163, 73, 0.025);
+    pointer-events: none;
+    z-index: 0;
+    line-height: 1;
+    user-select: none;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at 50% 50%, transparent 60%, rgba(6, 4, 2, 0.6) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+header, main, footer, .modal-overlay, .hud-overlay-fullscreen, .mobile-controls-panel {
+    position: relative;
+    z-index: 2;
 }
 
 .text-gold { color: var(--accent-gold) !important; }
@@ -1474,18 +1508,18 @@ body {
 }
 
 /* ============================================================================
-   BÀN PHÍM ẢO CẢM ỨNG DI ĐỘNG GÓC CẠNH
+   BÀN PHÍM ẢO CẢM ỨNG DI ĐỘNG GÓC CẠNH (TỐI ƯU CHO ĐIỆN THOẠI)
    ============================================================================ */
 .mobile-controls-panel {
     position: fixed;
-    bottom: 14px;
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
     left: 0;
     right: 0;
     width: 100%;
     display: none;
     justify-content: space-between;
     align-items: flex-end;
-    padding: 0 18px 6px 18px;
+    padding: 0 max(16px, env(safe-area-inset-right, 0px)) 6px max(16px, env(safe-area-inset-left, 0px));
     pointer-events: none;
     z-index: 150;
     user-select: none;
@@ -1507,19 +1541,19 @@ body.touch-device .mobile-controls-panel {
 
 .touch-dpad, .touch-actions {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     align-items: flex-end;
     pointer-events: auto;
 }
 
 .touch-btn {
-    width: 60px;
-    height: 60px;
-    border-radius: 2px;
-    background: rgba(24, 20, 16, 0.92);
+    width: 62px;
+    height: 62px;
+    border-radius: 4px;
+    background: rgba(26, 21, 16, 0.94);
     border: 2px solid var(--border-brass-bright);
     color: var(--accent-gold);
-    font-size: 1.25rem;
+    font-size: 1.35rem;
     font-weight: 700;
     display: flex;
     flex-direction: column;
@@ -1528,43 +1562,61 @@ body.touch-device .mobile-controls-panel {
     cursor: pointer;
     box-shadow: 3px 3px 0 #090706;
     touch-action: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.05s ease, background-color 0.08s ease;
 }
 
 .touch-btn:active,
 .touch-btn.touch-active {
     transform: translate(2px, 2px);
     box-shadow: 1px 1px 0 #090706;
-    background: #3b3023;
+    background: #423525;
     border-color: #fff;
+    color: #fff;
 }
 
 .btn-subtext {
     font-family: var(--font-heading);
-    font-size: 0.62rem;
+    font-size: 0.65rem;
     letter-spacing: 0.5px;
     line-height: 1;
-    margin-top: 2px;
+    margin-top: 3px;
+    font-weight: 700;
 }
 
 .touch-btn-jump {
-    width: 68px;
-    height: 68px;
-    background: rgba(158, 34, 34, 0.94);
+    width: 72px;
+    height: 72px;
+    background: rgba(168, 32, 32, 0.95);
     border-color: var(--accent-gold);
     color: #fff;
+    box-shadow: 3px 3px 0 #090706;
+}
+
+.touch-btn-jump:active,
+.touch-btn-jump.touch-active {
+    background: #dc2626;
+    border-color: #fff;
 }
 
 .touch-btn-interact {
-    width: 64px;
-    height: 64px;
+    width: 66px;
+    height: 66px;
     background: var(--accent-gold) !important;
     color: var(--ink-dark) !important;
     border-color: #090706 !important;
+    box-shadow: 3px 3px 0 #090706;
+    animation: pulseInteract 1.2s infinite alternate;
+}
+
+@keyframes pulseInteract {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.06); }
 }
 
 .touch-btn-distract {
-    width: 58px;
-    height: 58px;
+    width: 60px;
+    height: 60px;
     background: rgba(42, 36, 29, 0.94);
     border-color: #d4a349;
     color: #efe6d5;
@@ -1572,81 +1624,149 @@ body.touch-device .mobile-controls-panel {
 
 .touch-btn-distract.cooling {
     opacity: 0.45;
+    pointer-events: none;
 }
 
 .touch-btn-takedown {
-    width: 64px;
-    height: 64px;
+    width: 66px;
+    height: 66px;
     background: #b45309 !important;
     border-color: #fde047 !important;
     color: #fff !important;
+    box-shadow: 3px 3px 0 #090706;
 }
 
 .landscape-hint {
     position: fixed;
-    top: 58px;
+    top: 54px;
     left: 50%;
     transform: translateX(-50%);
-    background: #191511;
+    background: rgba(22, 18, 14, 0.96);
     border: 2px solid var(--accent-gold);
     color: var(--accent-gold);
-    padding: 6px 14px;
-    font-size: 0.82rem;
-    font-weight: 600;
+    padding: 8px 16px;
+    font-size: 0.84rem;
+    font-weight: 700;
     display: none;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     z-index: 300;
     box-shadow: var(--shadow-hard);
-    max-width: 92%;
+    max-width: 90%;
 }
 
 .hint-close-btn {
     background: none;
     border: none;
     color: var(--text-light);
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     cursor: pointer;
+    padding: 0 4px;
 }
 
 /* ============================================================================
-   RESPONSIVE
+   RESPONSIVE CHO THIẾT BỊ DI ĐỘNG & MÀN HÌNH NHỎ
    ============================================================================ */
 @media (max-width: 960px) {
     .dossier-desk-layout {
         grid-template-columns: 1fr;
+        gap: 20px;
     }
 }
 
 @media (max-width: 640px) {
     .app-header {
-        padding: 8px 12px;
+        padding: 6px 12px;
         flex-wrap: wrap;
+        gap: 6px;
+    }
+    .brand-logo {
         gap: 8px;
     }
+    .brand-star {
+        width: 30px;
+        height: 30px;
+        font-size: 0.95rem;
+    }
+    .brand-subject-tag {
+        font-size: 0.62rem;
+    }
     .brand-main-title {
-        font-size: 1rem;
+        font-size: 0.96rem;
+    }
+    .brand-year-sub {
+        font-size: 0.72rem;
     }
     .header-actions {
         width: 100%;
         justify-content: flex-end;
-        flex-wrap: wrap;
-        gap: 6px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 5px;
+    }
+    .header-actions .btn {
+        padding: 5px 8px;
+        font-size: 0.8rem;
+    }
+    .btn-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 0.88rem;
+    }
+    .main-wrapper {
+        padding: 12px 10px 24px;
+    }
+    .menu-minimal-card {
+        padding: 18px 14px 16px;
     }
     .dossier-hero-header {
         flex-direction: column;
         align-items: center;
         text-align: center;
+        gap: 14px;
+        margin-bottom: 16px;
+        padding-bottom: 14px;
+    }
+    .hero-portrait-frame {
+        width: 110px;
+        padding: 4px 4px 18px 4px;
+    }
+    .hero-portrait-img {
+        height: 115px;
     }
     .game-title {
-        font-size: 1.85rem;
+        font-size: 1.65rem;
+    }
+    .game-tagline {
+        font-size: 0.84rem;
+    }
+    .game-quote {
+        font-size: 0.82rem;
+        padding: 6px 10px;
+    }
+    .player-name-card {
+        padding: 10px 12px;
+        margin-bottom: 14px;
+    }
+    .player-name-input {
+        font-size: 0.9rem;
+        padding: 8px 10px;
+    }
+    .btn-hero {
+        padding: 12px 20px;
+        font-size: 1.05rem;
     }
     .menu-sub-row,
     .doc-columns {
         grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    .home-leaderboard-card {
+        padding: 16px 12px;
     }
     .grand-stats-grid {
         grid-template-columns: 1fr 1fr;
+        gap: 8px;
     }
     .hud-overlay-fullscreen {
         top: 6px;
@@ -1656,12 +1776,54 @@ body.touch-device .mobile-controls-panel {
     .hud-chapter-title {
         display: none;
     }
+    .hud-overlay-fullscreen .hud-left {
+        padding: 3px 6px;
+    }
     .hud-stat-pill {
-        padding: 3px 7px;
-        font-size: 0.76rem;
+        padding: 2px 6px;
+        font-size: 0.74rem;
+        gap: 4px;
     }
     .hud-hp-track {
+        width: 48px;
+        height: 9px;
+    }
+    .hud-hp-text {
+        font-size: 0.72rem;
+        min-width: 22px;
+    }
+    .btn-icon-hud {
+        width: 32px;
+        height: 32px;
+        font-size: 0.88rem;
+    }
+    .hud-overlay-fullscreen .btn-danger-subtle {
+        padding: 4px 8px;
+        font-size: 0.75rem;
+    }
+    .touch-btn {
         width: 52px;
+        height: 52px;
+        font-size: 1.15rem;
+    }
+    .touch-btn-jump {
+        width: 62px;
+        height: 62px;
+    }
+    .touch-btn-interact,
+    .touch-btn-takedown {
+        width: 56px;
+        height: 56px;
+    }
+    .touch-btn-distract {
+        width: 50px;
+        height: 50px;
+    }
+    .touch-dpad, .touch-actions {
+        gap: 8px;
+    }
+    .modal-content {
+        padding: 18px 14px;
     }
 }
 
@@ -1672,25 +1834,45 @@ body.touch-device .mobile-controls-panel {
         right: 8px;
     }
     .hud-chapter-title {
-        font-size: 0.78rem;
-        padding: 2px 8px;
+        font-size: 0.76rem;
+        padding: 2px 6px;
     }
     .hud-stat-pill {
-        padding: 2px 8px;
-        font-size: 0.76rem;
+        padding: 2px 6px;
+        font-size: 0.72rem;
+    }
+    .hud-hp-track {
+        width: 44px;
+        height: 8px;
     }
     .btn-icon-hud {
-        width: 30px;
-        height: 30px;
-        font-size: 0.85rem;
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
+    }
+    .hud-overlay-fullscreen .btn-danger-subtle {
+        padding: 3px 6px;
+        font-size: 0.72rem;
     }
     .touch-btn {
-        width: 50px;
-        height: 50px;
-        font-size: 1.05rem;
+        width: 48px;
+        height: 48px;
+        font-size: 1rem;
     }
     .touch-btn-jump {
-        width: 58px;
-        height: 58px;
+        width: 56px;
+        height: 56px;
+    }
+    .touch-btn-interact,
+    .touch-btn-takedown {
+        width: 52px;
+        height: 52px;
+    }
+    .touch-btn-distract {
+        width: 46px;
+        height: 46px;
+    }
+    .touch-dpad, .touch-actions {
+        gap: 6px;
     }
 }
