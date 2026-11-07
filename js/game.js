@@ -129,9 +129,11 @@ class GameManager {
         const syncSoundUI = () => {
             if (typeof audio === "undefined") return;
 
-            // 1. Đồng bộ nút Nhạc nền (BGM) ở Header và Game HUD
+            // 1. Đồng bộ nút Nhạc nền (BGM) ở Header và Game HUD (biểu tượng nốt nhạc có gạch chéo rõ ràng)
             const isBgmMuted = audio.isBgmMuted || audio.isMuted;
-            const bgmIconHtml = isBgmMuted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-music"></i>';
+            const bgmIconHtml = isBgmMuted
+                ? '<span class="icon-bgm-slash"><i class="fa-solid fa-music"></i></span>'
+                : '<i class="fa-solid fa-music"></i>';
             const btnBgm = document.getElementById("btn-toggle-bgm");
             const btnGameBgm = document.getElementById("btn-game-toggle-bgm");
             if (btnBgm) {
@@ -169,10 +171,10 @@ class GameManager {
             if (labelBgm) labelBgm.textContent = `${bgmPercent}%`;
             if (btnModalBgm) {
                 if (audio.isBgmMuted) {
-                    btnModalBgm.innerHTML = '<i class="fa-solid fa-volume-xmark"></i> Đã Tắt';
+                    btnModalBgm.innerHTML = '<span class="icon-bgm-slash"><i class="fa-solid fa-music"></i></span> Đã Tắt';
                     btnModalBgm.classList.add("is-muted");
                 } else {
-                    btnModalBgm.innerHTML = '<i class="fa-solid fa-volume-high"></i> Đang Bật';
+                    btnModalBgm.innerHTML = '<i class="fa-solid fa-music"></i> Đang Bật';
                     btnModalBgm.classList.remove("is-muted");
                 }
             }
@@ -612,32 +614,15 @@ class GameManager {
         if (docsCountEl) docsCountEl.innerText = `${this.unlockedDocIds.size}/12`;
         if (starsEl) starsEl.innerText = `${this.engine.starsCollectedCount} ★`;
 
-        // Xử lý gửi tên lưu vào Bảng Vàng
-        const inputName = document.getElementById("grand-player-name");
-        const btnSaveScore = document.getElementById("btn-submit-score");
+        // Tự động lưu thẳng kết quả vào Bảng xếp hạng
+        const nameToSave = (this.playerName || "Khách").trim() || "Khách";
+        this.addLeaderboardEntry(nameToSave, finalScore, finalTime);
+        this.renderLeaderboardTable();
+
         const saveNotice = document.getElementById("grand-save-notice");
-
-        if (inputName) {
-            inputName.value = this.playerName || "Sinh Viên";
-        }
-
-        if (btnSaveScore && inputName) {
-            btnSaveScore.disabled = false;
-            btnSaveScore.innerText = "Lưu Điểm";
-            if (saveNotice) saveNotice.innerText = "";
-
-            btnSaveScore.onclick = () => {
-                const name = inputName.value.trim() || this.playerName || "Sinh Viên";
-                this.playerName = name;
-                localStorage.setItem("tthcm_player_name", name);
-                this.addLeaderboardEntry(name, finalScore, finalTime);
-                btnSaveScore.disabled = true;
-                btnSaveScore.innerHTML = '<i class="fa-solid fa-check"></i> Đã Lưu';
-                if (saveNotice) {
-                    saveNotice.innerText = "Đã lưu vào Bảng xếp hạng!";
-                    saveNotice.style.color = "#4ade80";
-                }
-            };
+        if (saveNotice) {
+            saveNotice.innerHTML = `<i class="fa-solid fa-circle-check"></i> Đã tự động lưu vào Bảng xếp hạng (${nameToSave} — ${finalScore} điểm)!`;
+            saveNotice.style.color = "#4ade80";
         }
 
         // Hiệu ứng pháo hoa ăn mừng

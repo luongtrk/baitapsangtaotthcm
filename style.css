@@ -1382,6 +1382,25 @@ body {
     background: #2a1212 !important;
 }
 
+/* Biểu tượng tắt nhạc nền (Nốt nhạc có vạch gạch chéo riêng biệt) */
+.icon-bgm-slash {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-bgm-slash::after {
+    content: "";
+    position: absolute;
+    width: 135%;
+    height: 2.2px;
+    background: currentColor;
+    box-shadow: 0 0 0 1.2px #1a0b0b;
+    transform: rotate(-45deg);
+    pointer-events: none;
+}
+
 .sound-setting-group {
     background: #15120e;
     border: 1px solid var(--border-brass);
