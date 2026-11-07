@@ -1580,14 +1580,14 @@ main {
    ============================================================================ */
 .mobile-controls-panel {
     position: fixed;
-    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
     left: 0;
     right: 0;
     width: 100%;
     display: none;
     justify-content: space-between;
     align-items: flex-end;
-    padding: 0 max(16px, env(safe-area-inset-right, 0px)) 6px max(16px, env(safe-area-inset-left, 0px));
+    padding: 0 max(22px, env(safe-area-inset-right, 0px)) 6px max(28px, env(safe-area-inset-left, 0px));
     pointer-events: none;
     z-index: 150;
     user-select: none;
@@ -1607,7 +1607,15 @@ body.touch-device .mobile-controls-panel {
     }
 }
 
-.touch-dpad, .touch-actions {
+.touch-dpad {
+    display: flex;
+    gap: 24px;
+    align-items: flex-end;
+    pointer-events: auto;
+    margin-bottom: 4px;
+}
+
+.touch-actions {
     display: flex;
     gap: 12px;
     align-items: flex-end;
@@ -1930,10 +1938,19 @@ body.touch-device .mobile-controls-panel {
         grid-template-columns: 1fr 1fr;
         gap: 8px;
     }
+    .mobile-controls-panel {
+        bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+        padding: 0 max(16px, env(safe-area-inset-right, 0px)) 6px max(22px, env(safe-area-inset-left, 0px));
+    }
     .touch-btn {
         width: 52px;
         height: 52px;
         font-size: 1.15rem;
+    }
+    .touch-btn-dpad {
+        width: 56px;
+        height: 56px;
+        font-size: 1.35rem;
     }
     .touch-btn-jump {
         width: 62px;
@@ -1949,7 +1966,10 @@ body.touch-device .mobile-controls-panel {
         width: 50px;
         height: 50px;
     }
-    .touch-dpad, .touch-actions {
+    .touch-dpad {
+        gap: 20px;
+    }
+    .touch-actions {
         gap: 8px;
     }
     .modal-content {
@@ -1958,10 +1978,19 @@ body.touch-device .mobile-controls-panel {
 }
 
 @media (max-height: 500px) and (orientation: landscape) {
+    .mobile-controls-panel {
+        bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+        padding: 0 max(22px, env(safe-area-inset-right, 0px)) 6px max(28px, env(safe-area-inset-left, 0px));
+    }
     .touch-btn {
         width: 48px;
         height: 48px;
         font-size: 1rem;
+    }
+    .touch-btn-dpad {
+        width: 54px;
+        height: 54px;
+        font-size: 1.3rem;
     }
     .touch-btn-jump {
         width: 56px;
@@ -1977,7 +2006,10 @@ body.touch-device .mobile-controls-panel {
         width: 46px;
         height: 46px;
     }
-    .touch-dpad, .touch-actions {
-        gap: 6px;
+    .touch-dpad {
+        gap: 22px;
+    }
+    .touch-actions {
+        gap: 8px;
     }
 }
