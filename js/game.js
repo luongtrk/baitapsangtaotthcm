@@ -621,7 +621,7 @@ class GameManager {
 
         const saveNotice = document.getElementById("grand-save-notice");
         if (saveNotice) {
-            saveNotice.innerHTML = `<i class="fa-solid fa-circle-check"></i> Đã tự động lưu vào Bảng xếp hạng (${nameToSave} — ${finalScore} điểm)!`;
+            saveNotice.innerHTML = `<i class="fa-solid fa-circle-check"></i> Đã lưu kết quả vào Bảng xếp hạng (${nameToSave} — ${finalScore} điểm)!`;
             saveNotice.style.color = "#4ade80";
         }
 
@@ -708,9 +708,9 @@ class GameManager {
                 let list = JSON.parse(raw);
                 if (Array.isArray(list)) {
                     // Xóa bỏ triệt để toàn bộ các bản ghi giả định cũ
-                    list = list.filter(item => 
-                        item.date !== "Kỷ lục" && 
-                        item.name !== "Chiến Sĩ Quyết Tử" && 
+                    list = list.filter(item =>
+                        item.date !== "Kỷ lục" &&
+                        item.name !== "Chiến Sĩ Quyết Tử" &&
                         item.name !== "Nguyễn Tất Thành" &&
                         item.name !== "Việt Minh 1945" &&
                         item.name !== "Sao Vàng Pác Bó" &&

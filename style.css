@@ -108,7 +108,6 @@ body::after {
 
 header, main, footer, .modal-overlay, .hud-overlay-fullscreen, .mobile-controls-panel {
     position: relative;
-    z-index: 2;
 }
 
 .text-gold { color: var(--accent-gold) !important; }
@@ -901,6 +900,7 @@ header, main, footer, .modal-overlay, .hud-overlay-fullscreen, .mobile-controls-
     height: 100vh;
     display: block;
     image-rendering: pixelated;
+    z-index: 1;
 }
 
 .hud-overlay-fullscreen {
@@ -912,7 +912,7 @@ header, main, footer, .modal-overlay, .hud-overlay-fullscreen, .mobile-controls-
     justify-content: space-between;
     align-items: center;
     pointer-events: none;
-    z-index: 120;
+    z-index: 200;
 }
 
 .hud-overlay-fullscreen .hud-left {
