@@ -61,7 +61,7 @@ code {
 }
 
 body {
-    background-color: var(--bg-desk);
+    background-color: #1f1712;
     color: var(--text-light);
     font-family: var(--font-body);
     min-height: 100vh;
@@ -72,41 +72,90 @@ body {
     overflow-x: hidden;
     position: relative;
     background-image:
-        /* Vệt ánh sáng cách mạng & sao vàng trung tâm */
-        radial-gradient(circle at 50% 120px, rgba(212, 163, 73, 0.18) 0%, rgba(158, 34, 34, 0.12) 35%, transparent 70%),
-        radial-gradient(circle at 15% 20%, rgba(158, 34, 34, 0.15) 0%, transparent 45%),
-        radial-gradient(circle at 85% 30%, rgba(212, 163, 73, 0.1) 0%, transparent 40%),
-        radial-gradient(circle at 50% 50%, transparent 40%, rgba(8, 6, 4, 0.85) 100%),
-        /* Họa tiết lưới tọa độ nghiên cứu tư liệu lịch sử */
-        repeating-linear-gradient(0deg, rgba(212, 163, 73, 0.035) 0px, rgba(212, 163, 73, 0.035) 1px, transparent 1px, transparent 40px),
-        repeating-linear-gradient(90deg, rgba(212, 163, 73, 0.035) 0px, rgba(212, 163, 73, 0.035) 1px, transparent 1px, transparent 40px);
+        /* Ánh sáng son đỏ & vàng đồng lịch sử nổi bật */
+        radial-gradient(circle at 50% 80px, rgba(212, 163, 73, 0.28) 0%, rgba(158, 34, 34, 0.24) 38%, transparent 72%),
+        radial-gradient(circle at 12% 85%, rgba(158, 34, 34, 0.25) 0%, transparent 50%),
+        radial-gradient(circle at 88% 80%, rgba(212, 163, 73, 0.18) 0%, transparent 45%),
+        /* Lưới bản đồ hành trình lịch sử rõ nét */
+        repeating-linear-gradient(0deg, rgba(212, 163, 73, 0.075) 0px, rgba(212, 163, 73, 0.075) 1px, transparent 1px, transparent 48px),
+        repeating-linear-gradient(90deg, rgba(212, 163, 73, 0.075) 0px, rgba(212, 163, 73, 0.075) 1px, transparent 1px, transparent 48px);
 }
 
-/* Biểu tượng chìm cách mạng hào hùng tạo điểm nhấn cho phông nền */
-body::before {
-    content: "★";
+/* ============================================================================
+   TRANG TRÍ NỀN MENU LỊCH SỬ & TƯ TƯỞNG HỒ CHÍ MINH (HISTORICAL BACKDROP)
+   ============================================================================ */
+.historical-bg-decor {
     position: fixed;
-    top: -60px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 420px;
-    color: rgba(212, 163, 73, 0.025);
+    inset: 0;
     pointer-events: none;
     z-index: 0;
-    line-height: 1;
+    overflow: hidden;
     user-select: none;
 }
 
-body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(circle at 50% 50%, transparent 60%, rgba(6, 4, 2, 0.6) 100%);
-    pointer-events: none;
-    z-index: 1;
+/* Tia hào quang 1945 lan tỏa từ phía trên */
+.historical-bg-decor .bg-rays {
+    position: absolute;
+    top: -320px;
+    left: 50%;
+    width: 1500px;
+    height: 1500px;
+    transform: translateX(-50%);
+    background: repeating-conic-gradient(
+        from 0deg,
+        rgba(212, 163, 73, 0.075) 0deg 7deg,
+        transparent 7deg 15deg
+    );
+    mask-image: radial-gradient(circle, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.35) 45%, transparent 70%);
+    -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.35) 45%, transparent 70%);
 }
 
-header, main, footer, .modal-overlay, .hud-overlay-fullscreen, .mobile-controls-panel {
+/* Vòng tròn Trống Đồng & Ngôi Sao Cách Mạng */
+.historical-bg-decor .bg-bronze-drum {
+    position: absolute;
+    top: 52%;
+    left: 50%;
+    width: 760px;
+    height: 760px;
+    transform: translate(-50%, -50%);
+    color: rgba(212, 163, 73, 0.16);
+}
+
+/* Đường hải trình cứu nước cắt ngang nền */
+.historical-bg-decor .bg-journey-map {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    color: rgba(212, 163, 73, 0.18);
+}
+
+/* Các mốc son lịch sử đóng dấu trên nền bản đồ */
+.historical-bg-decor .bg-milestone {
+    position: absolute;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: rgba(212, 163, 73, 0.36);
+    border: 1px dashed rgba(212, 163, 73, 0.32);
+    background: rgba(22, 18, 14, 0.65);
+    padding: 4px 10px;
+    text-transform: uppercase;
+}
+
+.historical-bg-decor .m-1911 { bottom: 38px; left: 32px; }
+.historical-bg-decor .m-1920 { top: 82px; left: 36px; }
+.historical-bg-decor .m-1930 { top: 76px; right: 42px; }
+.historical-bg-decor .m-1941 { bottom: 110px; right: 36px; }
+.historical-bg-decor .m-1945 { bottom: 36px; right: 36px; color: rgba(248, 113, 113, 0.45); border-color: rgba(248, 113, 113, 0.4); }
+
+header, footer {
+    position: relative;
+    z-index: 2;
+}
+
+main {
     position: relative;
 }
 
@@ -1675,6 +1724,13 @@ body.touch-device .mobile-controls-panel {
 }
 
 @media (max-width: 640px) {
+    .historical-bg-decor .bg-milestone {
+        display: none;
+    }
+    .historical-bg-decor .bg-bronze-drum {
+        width: 480px;
+        height: 480px;
+    }
     .app-header {
         padding: 6px 12px;
         flex-wrap: wrap;
