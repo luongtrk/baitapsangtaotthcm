@@ -209,9 +209,8 @@ class GameEngine {
                     guard.y + 10,
                     isFirstTime ? "💥 +150" : "💫"
                 );
-                if (typeof audio !== "undefined" && audio.playTone) {
-                    audio.playTone(320, "triangle", 0.15, 0.25);
-                    setTimeout(() => { if (audio.playTone) audio.playTone(480, "triangle", 0.2, 0.25); }, 80);
+                if (typeof audio !== "undefined" && audio.playTakedown) {
+                    audio.playTakedown();
                 }
                 this.screenShake = 6;
                 this.player.invulnerableTimer = Math.max(this.player.invulnerableTimer, 35);
@@ -258,8 +257,8 @@ class GameEngine {
             const cost = npc.starCost || 3;
             // Kiểm tra đủ số Sao Vàng để đổi liên lạc chưa
             if (this.starsCollectedCount < cost) {
-                if (typeof audio !== "undefined" && audio.playTone) {
-                    audio.playTone(190, "sawtooth", 0.14, 0.18);
+                if (typeof audio !== "undefined" && audio.playLocked) {
+                    audio.playLocked();
                 }
                 this.particles.addFloatingText(
                     npc.x + 14,
@@ -290,7 +289,7 @@ class GameEngine {
                 }
             }
 
-            if (typeof audio !== "undefined" && audio.playCollect) audio.playCollect();
+            if (typeof audio !== "undefined" && audio.playUnlock) audio.playUnlock();
         }
     }
 
@@ -302,8 +301,8 @@ class GameEngine {
         this.nearDocument = null;
         this.updateActionButtons();
 
-        if (typeof audio !== "undefined" && audio.playCollect) {
-            audio.playCollect();
+        if (typeof audio !== "undefined" && audio.playKey) {
+            audio.playKey();
         }
         this.particles.addBurst(doc.x + 14, doc.y + 16, "#fbbf24", 24);
         this.particles.addFloatingText(doc.x + 14, doc.y - 20, "📜", "#fbbf24", 16, 90);
@@ -645,7 +644,7 @@ class GameEngine {
                 this.player.setCheckpoint(cp.x, cp.y - 10);
                 this.particles.addBurst(cp.x, cp.y, "#fbbf24", 20);
                 this.particles.addFloatingText(cp.x, cp.y - 32, "🚩", "#10b981", 16, 100);
-                audio.playTone(660, "triangle", 0.2, 0.15);
+                if (typeof audio !== "undefined" && audio.playKey) audio.playKey();
             }
         }
 
@@ -668,7 +667,7 @@ class GameEngine {
             item.update();
             if (!item.collected && item.checkCollect(this.player)) {
                 item.collected = true;
-                if (typeof audio !== "undefined" && audio.playCollect) audio.playCollect();
+                if (typeof audio !== "undefined" && audio.playPowerup) audio.playPowerup();
 
                 this.applySupplyEffect(item.type, item.x + 12, item.y - 22);
                 this.score += 75;

@@ -1078,9 +1078,8 @@ class DistractionPebble {
     makeNoise(guards, particles) {
         if (this.alertTriggered) return;
         this.alertTriggered = true;
-        if (typeof audio !== "undefined" && audio.playTone) {
-            audio.playTone(840, "sine", 0.08, 0.12);
-            setTimeout(() => { if (audio.playTone) audio.playTone(620, "sine", 0.06, 0.08); }, 50);
+        if (typeof audio !== "undefined" && audio.playPebbleBounce) {
+            audio.playPebbleBounce();
         }
         if (particles && particles.addDistractionWave) {
             particles.addDistractionWave(this.x, this.y);
