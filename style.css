@@ -471,6 +471,28 @@ main {
     gap: 12px;
 }
 
+.student-credit-line {
+    margin-top: 18px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border-brass);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.student-credit-line strong {
+    color: var(--text-light);
+    font-weight: 700;
+}
+
+.student-credit-line .credit-sep {
+    color: var(--border-brass-bright);
+}
+
 .menu-sub-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
