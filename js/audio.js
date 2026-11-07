@@ -6,11 +6,12 @@ class SoundManager {
         this.isMuted = false;
         this.bgmPlaying = false;
 
-        // Danh sách nhạc nền game sample (êm dịu, không hiển thị tên)
+        // Danh sách nhạc nền game sample thuần nhạc cụ (êm dịu, 100% không lời / không giọng nói)
         this.bgmFiles = [
             "assets/audio/bgm/bgm_main.mp3",
             "assets/audio/bgm/bgm_stealth.mp3",
-            "assets/audio/bgm/bgm_action.mp3"
+            "assets/audio/bgm/bgm_action.mp3",
+            "assets/audio/bgm/bgm_retro.mp3"
         ];
         this.currentTrackIndex = 0;
 
