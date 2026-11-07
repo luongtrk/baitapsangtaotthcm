@@ -1775,8 +1775,7 @@ body.touch-device .mobile-controls-panel {
         gap: 4px;
     }
     #btn-next-track,
-    #btn-toggle-sound,
-    #btn-toggle-fullscreen {
+    #btn-toggle-sound {
         display: none;
     }
     .header-actions .btn {
@@ -1803,7 +1802,7 @@ body.touch-device .mobile-controls-panel {
         padding: 1px 4px;
         border-width: 1px;
         box-shadow: 1px 1px 0 #090706;
-        max-width: calc(100vw - 98px);
+        max-width: calc(100vw - 122px);
         overflow: hidden;
     }
     .hud-stat-pill {
@@ -1816,7 +1815,7 @@ body.touch-device .mobile-controls-panel {
         font-size: 0.6rem;
     }
     .hud-player-pill strong {
-        max-width: 38px;
+        max-width: 36px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -1830,7 +1829,7 @@ body.touch-device .mobile-controls-panel {
         font-size: 0.62rem;
     }
     .hud-hp-track {
-        width: 26px;
+        width: 24px;
         height: 6px;
         border-width: 1px;
     }
@@ -1850,8 +1849,7 @@ body.touch-device .mobile-controls-panel {
         box-shadow: 1px 1px 0 #090706;
     }
     #btn-game-next-track,
-    #btn-game-sound,
-    #btn-game-fullscreen {
+    #btn-game-sound {
         display: none;
     }
     .hud-overlay-fullscreen .btn-danger-subtle {
