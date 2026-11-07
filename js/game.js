@@ -405,7 +405,6 @@ class GameManager {
         if (!container) return;
         container.innerHTML = "";
 
-        const roman = ["I", "II", "III", "IV"];
         TTHCM_KNOWLEDGE.chapters.forEach((chap, idx) => {
             const card = document.createElement("div");
             card.className = "chapter-card";
@@ -415,17 +414,17 @@ class GameManager {
             const unlockedCount = chapterDocs.filter(d => this.unlockedDocIds.has(d.id)).length;
 
             card.innerHTML = `
-                <div class="chap-badge">HỒ SƠ ${roman[idx] || idx + 1} // ${chap.yearRange}</div>
+                <div class="chap-badge">${chap.yearRange}</div>
                 <h3>${chap.title}</h3>
                 <div class="chap-subtitle">${chap.subtitle}</div>
                 <p>${chap.desc}</p>
                 <div class="chap-progress">
-                    <span>Tài liệu thu thập: <strong>${unlockedCount}/${chapterDocs.length}</strong></span>
+                    <span>Văn kiện: <strong>${unlockedCount}/${chapterDocs.length}</strong></span>
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: ${(unlockedCount / chapterDocs.length) * 100}%"></div>
                     </div>
                 </div>
-                <button class="btn btn-primary btn-play-chapter"><i class="fa-solid fa-play"></i> Triển Khai Nhiệm Vụ</button>
+                <button class="btn btn-primary btn-play-chapter"><i class="fa-solid fa-play"></i> Chơi màn này</button>
             `;
 
             card.querySelector(".btn-play-chapter").onclick = () => {
@@ -624,7 +623,7 @@ class GameManager {
 
         if (btnSaveScore && inputName) {
             btnSaveScore.disabled = false;
-            btnSaveScore.innerText = "Lưu Thành Tích";
+            btnSaveScore.innerText = "Lưu Điểm";
             if (saveNotice) saveNotice.innerText = "";
 
             btnSaveScore.onclick = () => {
@@ -633,9 +632,9 @@ class GameManager {
                 localStorage.setItem("tthcm_player_name", name);
                 this.addLeaderboardEntry(name, finalScore, finalTime);
                 btnSaveScore.disabled = true;
-                btnSaveScore.innerHTML = '<i class="fa-solid fa-check"></i> Đã Ghi Danh';
+                btnSaveScore.innerHTML = '<i class="fa-solid fa-check"></i> Đã Lưu';
                 if (saveNotice) {
-                    saveNotice.innerText = "Đã vinh danh thành tích lên Bảng Vàng!";
+                    saveNotice.innerText = "Đã lưu vào Bảng xếp hạng!";
                     saveNotice.style.color = "#4ade80";
                 }
             };
@@ -686,7 +685,7 @@ class GameManager {
         const allDocs = Object.values(TTHCM_KNOWLEDGE.documents);
         const unlockedTotal = allDocs.filter(d => this.unlockedDocIds.has(d.id)).length;
 
-        document.getElementById("museum-count-display").innerText = `Đã giải mật: ${unlockedTotal}/${allDocs.length} Văn kiện`;
+        document.getElementById("museum-count-display").innerText = `Đã mở: ${unlockedTotal}/${allDocs.length} Văn kiện`;
 
         allDocs.forEach(doc => {
             const isUnlocked = this.unlockedDocIds.has(doc.id);
@@ -694,12 +693,12 @@ class GameManager {
             card.className = `museum-card ${isUnlocked ? "unlocked" : "locked"}`;
 
             card.innerHTML = `
-                <div class="card-status-badge">${isUnlocked ? 'ĐÃ GIẢI MẬT' : 'HỒ SƠ MẬT'}</div>
-                <div class="card-icon">${isUnlocked ? '<i class="fa-solid fa-scroll"></i>' : '<i class="fa-solid fa-file-shield text-muted"></i>'}</div>
-                <h4>${isUnlocked ? doc.name : "Hồ Sơ Chưa Giải Mật"}</h4>
-                <div class="card-year">${isUnlocked ? doc.year + " • " + doc.location : "Thuộc Chương " + doc.chapterId}</div>
-                <p>${isUnlocked ? "“" + doc.famousQuote + "”" : "Thu thập văn kiện này trong quá trình thực hiện nhiệm vụ để mở khóa."}</p>
-                ${isUnlocked ? `<button class="btn btn-sm btn-outline"><i class="fa-solid fa-book-open"></i> Đọc Hồ Sơ</button>` : ""}
+                <div class="card-status-badge">${isUnlocked ? 'Đã mở' : 'Chưa mở'}</div>
+                <div class="card-icon">${isUnlocked ? '<i class="fa-solid fa-scroll text-gold"></i>' : '<i class="fa-solid fa-lock text-muted"></i>'}</div>
+                <h4>${isUnlocked ? doc.name : "Chưa mở khóa"}</h4>
+                <div class="card-year">${isUnlocked ? doc.year + " • " + doc.location : "Chương " + doc.chapterId}</div>
+                <p>${isUnlocked ? "“" + doc.famousQuote + "”" : "Tìm và nhặt văn kiện này trong màn chơi."}</p>
+                ${isUnlocked ? `<button class="btn btn-sm btn-outline"><i class="fa-solid fa-book-open"></i> Xem</button>` : ""}
             `;
 
             if (isUnlocked) {
@@ -808,11 +807,11 @@ class GameManager {
         if (!list || list.length === 0) {
             html = `
                 <tr>
-                    <td colspan="5" style="text-align: center; padding: 32px 14px; color: var(--text-muted); font-family: var(--font-mono);">
-                        <span style="font-size: 1.7rem; display: block; margin-bottom: 8px; color: var(--accent-gold);"><i class="fa-solid fa-stamp"></i></span>
-                        [SỔ VÀNG ĐANG TRỐNG]<br>
-                        <span style="color: var(--text-light); font-size: 0.84rem; display: inline-block; margin-top: 6px;">
-                            Điền họ tên vào phiếu đăng ký và hoàn thành 4 chương để ghi danh đầu tiên.
+                    <td colspan="5" style="text-align: center; padding: 30px 14px; color: var(--text-muted);">
+                        <span style="font-size: 1.6rem; display: block; margin-bottom: 6px; color: var(--accent-gold);"><i class="fa-solid fa-trophy"></i></span>
+                        Chưa có điểm nào.<br>
+                        <span style="color: var(--text-light); font-size: 0.84rem; display: inline-block; margin-top: 4px;">
+                            Hãy nhập tên và hoàn thành 4 màn chơi để lưu điểm!
                         </span>
                     </td>
                 </tr>

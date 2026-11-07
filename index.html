@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Theo Dấu Chân Người (1911–1945) — Tư Tưởng Hồ Chí Minh</title>
-    <!-- Google Fonts: Oswald (Tiêu đề khắc gỗ/báo chí cổ điển), Be Vietnam Pro (Nội dung), Courier Prime (Máy đánh chữ hồ sơ) -->
+    <title>Theo Dấu Chân Người - Bài Tập Sáng Tạo Tư Tưởng Hồ Chí Minh</title>
+    <!-- Google Fonts: Be Vietnam Pro & Space Mono đồng bộ giữa Menu và trong Game -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <!-- Font Awesome 6 Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
 
-    <!-- Thanh công cụ trên cùng (Archival Top Bar) -->
+    <!-- Thanh Header gọn nhẹ -->
     <header class="app-header">
         <div class="brand-logo">
             <span class="brand-star"><i class="fa-solid fa-star"></i></span>
             <div class="brand-text-block">
-                <span class="brand-subject-tag">HỒ SƠ LỊCH SỬ • TƯ TƯỞNG HỒ CHÍ MINH</span>
-                <span class="brand-main-title">THEO DẤU CHÂN NGƯỜI <small class="brand-year-sub">[1911–1945]</small></span>
+                <span class="brand-subject-tag">BÀI TẬP SÁNG TẠO • TƯ TƯỞNG HỒ CHÍ MINH</span>
+                <span class="brand-main-title">THEO DẤU CHÂN NGƯỜI</span>
             </div>
         </div>
         <div class="header-actions">
@@ -29,80 +29,72 @@
             <button id="btn-toggle-sound" class="btn btn-sm btn-icon" title="Tắt / Bật Toàn bộ âm thanh"><i class="fa-solid fa-volume-high"></i></button>
             <button id="btn-next-track" class="btn btn-sm btn-icon" title="Đổi nhạc nền"><i class="fa-solid fa-forward-step"></i></button>
             <button id="btn-toggle-fullscreen" class="btn btn-sm btn-icon" title="Toàn màn hình"><i class="fa-solid fa-expand"></i></button>
-            <button id="btn-guide-top" class="btn btn-sm btn-outline-subtle" title="Sổ tay hướng dẫn"><i class="fa-solid fa-book-open"></i> Sổ Tay</button>
-            <button id="btn-leaderboard-top" class="btn btn-sm btn-outline-subtle" title="Sổ vàng ghi danh"><i class="fa-solid fa-trophy text-gold"></i> Sổ Vàng</button>
+            <button id="btn-guide-top" class="btn btn-sm btn-outline-subtle"><i class="fa-solid fa-book-open"></i> Hướng Dẫn</button>
+            <button id="btn-leaderboard-top" class="btn btn-sm btn-outline-subtle"><i class="fa-solid fa-trophy text-gold"></i> Bảng Xếp Hạng</button>
         </div>
     </header>
 
-    <!-- Không gian bàn làm việc chính -->
+    <!-- Không gian chính -->
     <main class="main-wrapper">
 
         <!-- ==============================================
-             MÀN HÌNH 1: BÀN HỒ SƠ CHIẾN DỊCH (MENU CHÍNH)
+             MÀN HÌNH 1: MENU CHÍNH
              ============================================== -->
         <section id="screen-menu" class="screen-panel active">
-            <div class="dossier-desk-layout">
+            <div class="menu-grid-layout">
                 
-                <!-- CỘT TRÁI: HỒ SƠ CHIẾN DỊCH & ĐIỀU KHIỂN CHÍNH -->
+                <!-- CỘT TRÁI: THÔNG TIN CHÍNH & NÚT CHƠI -->
                 <div class="menu-minimal-card">
-                    <div class="dossier-folder-tab">HỒ SƠ CHIẾN DỊCH #1911-1945</div>
-                    <div class="dossier-stamp-seal">MẬT • LƯU TRỮ</div>
-
-                    <div class="dossier-hero-header">
-                        <!-- Khung ảnh tư liệu lịch sử có góc kẹp ảnh cổ điển -->
+                    <div class="menu-hero-header">
                         <div class="hero-portrait-frame">
-                            <img src="assets/images/bac_ho.jpg" alt="Chủ tịch Hồ Chí Minh (1890 – 1969)" class="hero-portrait-img" />
-                            <span class="photo-caption">Tư liệu: Nguyễn Ái Quốc – Hồ Chí Minh</span>
+                            <img src="assets/images/bac_ho.jpg" alt="Chủ tịch Hồ Chí Minh" class="hero-portrait-img" />
                         </div>
 
                         <div class="hero-title-group">
-                            <div class="academic-badge">HỌC PHẦN: TƯ TƯỞNG HỒ CHÍ MINH</div>
+                            <div class="academic-badge">Bài Tập Sáng Tạo • Tư Tưởng Hồ Chí Minh</div>
                             <h1 class="game-title">THEO DẤU CHÂN NGƯỜI</h1>
-                            <div class="game-tagline">Hành Trình 30 Năm Bôn Ba Cứu Nước & Giải Phóng Dân Tộc (1911 – 1945)</div>
+                            <div class="game-tagline">Hành trình tìm đường cứu nước (1911 – 1945)</div>
                             <blockquote class="game-quote">“Không có gì quý hơn độc lập, tự do!”</blockquote>
                         </div>
                     </div>
 
-                    <!-- Phiếu đăng ký tên người chơi (kiểu thẻ hồ sơ đánh máy) -->
+                    <!-- Nhập tên người chơi đơn giản -->
                     <div class="player-name-card">
                         <label for="input-player-name" class="player-name-label">
-                            <span class="player-icon"><i class="fa-solid fa-id-card"></i></span>
-                            <span>THẺ ĐĂNG KÝ NGƯỜI CHƠI / SINH VIÊN:</span>
+                            <i class="fa-solid fa-user text-gold"></i>
+                            <span>Tên người chơi:</span>
                         </label>
-                        <div class="player-name-input-wrap">
-                            <input type="text" id="input-player-name" class="player-name-input" placeholder="Gõ họ và tên vào phiếu..." maxlength="30" autocomplete="off" />
-                            <span class="player-name-hint">* Ghi danh trực tiếp vào Sổ Vàng Thành Tích sau khi hoàn thành nhiệm vụ.</span>
-                        </div>
+                        <input type="text" id="input-player-name" class="player-name-input" placeholder="Nhập tên của bạn..." maxlength="30" autocomplete="off" />
                     </div>
 
-                    <!-- Cụm nút bấm cơ học -->
+                    <!-- Các nút điều hướng chính -->
                     <div class="menu-action-buttons">
                         <button id="btn-start-game" class="btn btn-primary btn-hero">
-                            <i class="fa-solid fa-play"></i> BẮT ĐẦU HÀNH TRÌNH
+                            <i class="fa-solid fa-play"></i> Chơi Ngay
                         </button>
                         <div class="menu-sub-row">
                             <button id="btn-select-chapter" class="btn btn-secondary">
-                                <i class="fa-solid fa-folder-open"></i> 4 Chương Lịch Sử
+                                <i class="fa-solid fa-map"></i> Chọn Màn (4 Chương)
                             </button>
                             <button id="btn-open-museum" class="btn btn-secondary">
-                                <i class="fa-solid fa-box-archive"></i> Lưu Trữ (12 Văn Kiện)
+                                <i class="fa-solid fa-scroll"></i> Văn Kiện (12)
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- CỘT PHẢI: SỔ VÀNG GHI DANH (ARCHIVAL LEDGER) -->
+                <!-- CỘT PHẢI: BẢNG XẾP HẠNG -->
                 <div id="home-leaderboard-section" class="home-leaderboard-card">
                     <div class="home-leaderboard-header">
                         <div class="home-leaderboard-title-group">
-                            <span class="home-leaderboard-icon"><i class="fa-solid fa-award text-gold"></i></span>
+                            <span class="home-leaderboard-icon"><i class="fa-solid fa-trophy text-gold"></i></span>
                             <div>
-                                <h2 class="home-leaderboard-heading">SỔ VÀNG GHI DANH</h2>
-                                <p class="home-leaderboard-desc">Lưu trữ kỷ lục hoàn thành 4 chặng đường lịch sử</p>
+                                <h2 class="home-leaderboard-heading">Bảng Xếp Hạng</h2>
+                                <p class="home-leaderboard-desc">Điểm số và thời gian hoàn thành 4 màn</p>
                             </div>
                         </div>
-                        <button id="btn-clear-leaderboard-home" class="btn btn-sm btn-danger-subtle" title="Xóa dữ liệu Sổ Vàng trên máy này">
-                            <i class="fa-solid fa-eraser"></i> Xóa Sổ
+                        <button id="btn-clear-leaderboard-home" class="btn btn-sm btn-danger-subtle" title="Xóa bảng xếp hạng">
+                            <i class="fa-solid fa-trash-can"></i> Xóa bảng
                         </button>
                     </div>
 
@@ -111,14 +103,14 @@
                             <thead>
                                 <tr>
                                     <th style="width: 14%;">Hạng</th>
-                                    <th style="width: 38%;">Người Chơi</th>
+                                    <th style="width: 38%;">Tên</th>
                                     <th style="width: 16%;">Điểm</th>
                                     <th style="width: 16%;">T.Gian</th>
                                     <th style="width: 16%;">Ngày</th>
                                 </tr>
                             </thead>
                             <tbody id="home-leaderboard-tbody">
-                                <!-- Rendered dynamically by JS -->
+                                <!-- Rendered by JS -->
                             </tbody>
                         </table>
                     </div>
@@ -128,35 +120,34 @@
         </section>
 
         <!-- ==============================================
-             MÀN HÌNH 2: CHỌN CHƯƠNG LỊCH SỬ (CHAPTER DOSSIERS)
+             MÀN HÌNH 2: CHỌN MÀN CHƠI (4 CHƯƠNG)
              ============================================== -->
         <section id="screen-chapter-select" class="screen-panel">
             <div class="section-header">
                 <div>
-                    <div class="section-kicker">HỒ SƠ CHIẾN DỊCH // 1911 – 1945</div>
-                    <h2 class="section-title">4 Chặng Đường Lịch Sử Tư Tưởng Hồ Chí Minh</h2>
+                    <h2 class="section-title">Chọn Màn Chơi (4 Chương)</h2>
+                    <p class="section-sub">Hành trình lịch sử từ Bến Nhà Rồng (1911) đến Quảng trường Ba Đình (1945)</p>
                 </div>
-                <button class="btn btn-secondary btn-back-menu"><i class="fa-solid fa-arrow-left"></i> Quay Lại Bàn Hồ Sơ</button>
+                <button class="btn btn-secondary btn-back-menu"><i class="fa-solid fa-arrow-left"></i> Về Menu</button>
             </div>
             <div id="chapter-cards-list" class="chapters-grid">
-                <!-- Rendered dynamically by JS -->
+                <!-- Rendered by JS -->
             </div>
         </section>
 
         <!-- ==============================================
-             MÀN HÌNH 3: KHO LƯU TRỮ VĂN KIỆN (MUSEUM ARCHIVES)
+             MÀN HÌNH 3: BỘ SƯU TẬP VĂN KIỆN
              ============================================== -->
         <section id="screen-museum" class="screen-panel">
             <div class="section-header">
                 <div>
-                    <div class="section-kicker">KHO LƯU TRỮ QUỐC GIA // DI SẢN TƯ TƯỞNG</div>
-                    <h2 class="section-title">Hồ Sơ 12 Văn Kiện & Tác Phẩm Lịch Sử</h2>
-                    <span id="museum-count-display" class="archive-counter-tag">Đã giải mật: 0/12 Văn kiện</span>
+                    <h2 class="section-title">Bộ Sưu Tập Văn Kiện</h2>
+                    <span id="museum-count-display" class="archive-counter-tag">Đã mở: 0/12 Văn kiện</span>
                 </div>
-                <button class="btn btn-secondary btn-back-menu"><i class="fa-solid fa-arrow-left"></i> Quay Lại Bàn Hồ Sơ</button>
+                <button class="btn btn-secondary btn-back-menu"><i class="fa-solid fa-arrow-left"></i> Về Menu</button>
             </div>
             <div id="museum-grid" class="museum-grid">
-                <!-- Rendered dynamically by JS -->
+                <!-- Rendered by JS -->
             </div>
         </section>
 
@@ -164,38 +155,37 @@
              MÀN HÌNH 4: KHÔNG GIAN GAME CANVAS FULLSCREEN
              ============================================== -->
         <section id="screen-game" class="screen-panel fullscreen-mode">
-            <!-- Thanh HUD Chiến Thuật (Tactical Field Strip) -->
+            <!-- Thanh HUD trong Game đồng bộ với phong cách khung phím 3D của Canvas -->
             <div class="hud-overlay-fullscreen">
                 <div class="hud-left">
                     <div id="hud-chapter-name" class="hud-chapter-title">Chương 1</div>
                     <div class="hud-stats">
-                        <div class="hud-stat-pill hud-player-pill" title="Chiến sĩ">
-                            <i class="fa-solid fa-user-secret"></i>
+                        <div class="hud-stat-pill hud-player-pill" title="Người chơi">
+                            <i class="fa-solid fa-user"></i>
                             <strong id="hud-player-name">Khách</strong>
                         </div>
-                        <div class="hud-stat-pill hud-health-pill" title="Sinh lực (100 HP)">
-                            <span class="hud-hp-icon"><i class="fa-solid fa-kit-medical"></i></span>
+                        <div class="hud-stat-pill hud-health-pill" title="Máu (100 HP)">
+                            <span class="hud-hp-icon"><i class="fa-solid fa-heart"></i></span>
                             <div class="hud-hp-track">
                                 <div id="hud-hp-fill" class="hud-hp-bar-fill high" style="width: 100%;"></div>
                             </div>
                             <span id="hud-hp-text" class="hud-hp-text">100</span>
                         </div>
-                        <div class="hud-stat-pill" title="Điểm chiến dịch">
-                            <i class="fa-solid fa-medal text-gold"></i>
+                        <div class="hud-stat-pill" title="Điểm số">
+                            <i class="fa-solid fa-trophy text-gold"></i>
                             <strong id="hud-score">0</strong>
                         </div>
-                        <div class="hud-stat-pill" title="Tín vật Sao vàng (Đủ 3 sao đổi tiếp tế)">
+                        <div class="hud-stat-pill" title="Sao thu thập (Đủ 3 sao đổi vật phẩm)">
                             <i class="fa-solid fa-star text-yellow"></i>
                             <strong id="hud-stars">0</strong>
                         </div>
-                        <div class="hud-stat-pill" title="Thời gian nhiệm vụ">
+                        <div class="hud-stat-pill" title="Thời gian">
                             <i class="fa-regular fa-clock"></i>
                             <strong id="hud-timer">00:00</strong>
                         </div>
                     </div>
                 </div>
 
-                <!-- Thông báo nổi ẩn (Canvas đảm nhiệm) -->
                 <div id="game-notice" class="notice-badge"></div>
 
                 <div class="hud-right">
@@ -204,14 +194,14 @@
                     <button id="btn-game-sound" class="btn btn-sm btn-icon-hud" title="Tắt / Bật Toàn bộ âm thanh"><i class="fa-solid fa-volume-high"></i></button>
                     <button id="btn-game-next-track" class="btn btn-sm btn-icon-hud" title="Đổi nhạc nền"><i class="fa-solid fa-forward-step"></i></button>
                     <button id="btn-game-fullscreen" class="btn btn-sm btn-icon-hud" title="Toàn màn hình"><i class="fa-solid fa-expand"></i></button>
-                    <button class="btn btn-sm btn-danger-subtle btn-back-menu" title="Rút lui về Bàn Hồ Sơ"><i class="fa-solid fa-right-from-bracket"></i> Thoát</button>
+                    <button class="btn btn-sm btn-danger-subtle btn-back-menu" title="Về Menu"><i class="fa-solid fa-xmark"></i> Thoát</button>
                 </div>
             </div>
 
             <!-- Gợi ý xoay ngang màn hình trên thiết bị di động -->
             <div id="landscape-hint" class="landscape-hint" style="display: none;">
                 <span class="hint-icon"><i class="fa-solid fa-mobile-screen-button"></i></span>
-                <span>Xoay ngang màn hình để quan sát bản đồ rộng hơn!</span>
+                <span>Xoay ngang màn hình để chơi dễ hơn!</span>
                 <button id="btn-close-hint" class="hint-close-btn" aria-label="Đóng"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
@@ -222,31 +212,31 @@
             <div class="mobile-controls-panel">
                 <div class="touch-dpad">
                     <button id="btn-touch-left" class="touch-btn touch-btn-dpad" aria-label="Sang trái">
-                        <span><i class="fa-solid fa-caret-left"></i></span>
+                        <span><i class="fa-solid fa-arrow-left"></i></span>
                     </button>
                     <button id="btn-touch-down" class="touch-btn touch-btn-dpad" aria-label="Cúi người ẩn nấp">
-                        <span><i class="fa-solid fa-user-shield"></i></span>
+                        <span><i class="fa-solid fa-shield-halved"></i></span>
                         <span class="btn-subtext">NẤP</span>
                     </button>
                     <button id="btn-touch-right" class="touch-btn touch-btn-dpad" aria-label="Sang phải">
-                        <span><i class="fa-solid fa-caret-right"></i></span>
+                        <span><i class="fa-solid fa-arrow-right"></i></span>
                     </button>
                 </div>
                 <div class="touch-actions">
-                    <button id="btn-touch-distract" class="touch-btn touch-btn-distract" aria-label="Nghi binh ném sỏi">
+                    <button id="btn-touch-distract" class="touch-btn touch-btn-distract" aria-label="Ném sỏi">
                         <span><i class="fa-solid fa-bullseye"></i></span>
                         <span class="btn-subtext">SỎI (F)</span>
                     </button>
-                    <button id="btn-touch-takedown" class="touch-btn touch-btn-takedown" style="display: none;" aria-label="Khống chế sau lưng">
+                    <button id="btn-touch-takedown" class="touch-btn touch-btn-takedown" style="display: none;" aria-label="Đánh ngất">
                         <span><i class="fa-solid fa-hand-fist"></i></span>
                         <span class="btn-subtext">HẠ (Q)</span>
                     </button>
                     <button id="btn-touch-interact" class="touch-btn touch-btn-interact" style="display: none;" aria-label="Tương tác">
-                        <span><i class="fa-solid fa-scroll"></i></span>
+                        <span><i class="fa-solid fa-book-open"></i></span>
                         <span class="btn-subtext">MỞ (E)</span>
                     </button>
                     <button id="btn-touch-jump" class="touch-btn touch-btn-jump" aria-label="Nhảy">
-                        <span><i class="fa-solid fa-caret-up"></i></span>
+                        <span><i class="fa-solid fa-arrow-up"></i></span>
                         <span class="btn-subtext">NHẢY</span>
                     </button>
                 </div>
@@ -256,14 +246,12 @@
     </main>
 
     <!-- ==============================================
-         MODAL 1: HỒ SƠ VĂN KIỆN GỐC (PARCHMENT DOSSIER)
+         MODAL 1: CHI TIẾT VĂN KIỆN & CÂU HỎI
          ============================================== -->
     <div id="modal-document" class="modal-overlay">
-        <div class="modal-content modal-parchment-dossier">
+        <div class="modal-content">
             <button class="modal-close-btn">&times;</button>
-            <div class="parchment-stamp">TÀI LIỆU LỊCH SỬ</div>
             <div class="doc-header-banner">
-                <div class="doc-kicker">HỒ SƠ LƯU TRỮ // ĐÃ GIẢI MẬT</div>
                 <h2 id="modal-doc-title">Tên Văn Kiện</h2>
                 <div id="modal-doc-meta" class="doc-meta"></div>
             </div>
@@ -272,61 +260,59 @@
 
             <div class="doc-columns">
                 <div class="doc-body-section">
-                    <h4><i class="fa-solid fa-landmark"></i> Hoàn Cảnh Lịch Sử</h4>
+                    <h4><i class="fa-solid fa-clock-rotate-left text-gold"></i> Bối cảnh lịch sử</h4>
                     <p id="modal-doc-context"></p>
                 </div>
 
                 <div class="doc-body-section">
-                    <h4><i class="fa-solid fa-feather-pointed"></i> Giá Trị Tư Tưởng Cốt Lõi</h4>
+                    <h4><i class="fa-solid fa-lightbulb text-gold"></i> Nội dung chính</h4>
                     <p id="modal-doc-idea"></p>
                 </div>
             </div>
 
-            <!-- Khu vực câu hỏi trắc nghiệm tương tác -->
+            <!-- Câu hỏi trắc nghiệm -->
             <div id="modal-doc-quiz"></div>
 
             <div class="modal-footer-bar">
-                <button id="btn-resume-game" class="btn btn-primary">Tiếp Tục Nhiệm Vụ <i class="fa-solid fa-arrow-right"></i></button>
+                <button id="btn-resume-game" class="btn btn-primary">Tiếp tục <i class="fa-solid fa-arrow-right"></i></button>
             </div>
         </div>
     </div>
 
     <!-- ==============================================
-         MODAL 2: HOÀN THÀNH CHẶNG ĐƯỜNG (VICTORY MODAL)
+         MODAL 2: QUA MÀN (VICTORY MODAL)
          ============================================== -->
     <div id="modal-victory" class="modal-overlay">
-        <div class="modal-content" style="text-align: center; max-width: 500px;">
-            <div class="dossier-folder-tab">BÁO CÁO NHIỆM VỤ</div>
+        <div class="modal-content" style="text-align: center; max-width: 480px;">
             <div class="victory-medal-row">
                 <i class="fa-solid fa-star"></i>
                 <i class="fa-solid fa-star"></i>
                 <i class="fa-solid fa-star"></i>
             </div>
-            <h2 id="victory-title" class="modal-heading-gold">HOÀN THÀNH CHƯƠNG!</h2>
+            <h2 id="victory-title" class="modal-heading-gold">QUA MÀN!</h2>
             <p id="victory-desc" class="modal-subtext"></p>
             <div id="victory-score" class="victory-score-plaque"></div>
             <div style="display: flex; justify-content: center; gap: 12px;">
-                <button class="btn btn-secondary btn-back-menu"><i class="fa-solid fa-arrow-left"></i> Bàn Hồ Sơ</button>
-                <button id="btn-next-chapter" class="btn btn-primary">Chặng Tiếp Theo <i class="fa-solid fa-arrow-right"></i></button>
+                <button class="btn btn-secondary btn-back-menu"><i class="fa-solid fa-arrow-left"></i> Về Menu</button>
+                <button id="btn-next-chapter" class="btn btn-primary">Màn tiếp theo <i class="fa-solid fa-arrow-right"></i></button>
             </div>
         </div>
     </div>
 
     <!-- ==============================================
-         MODAL 3: ĐẠI THẮNG LỢI & TỔNG KẾT CHIẾN DỊCH
+         MODAL 3: HOÀN THÀNH TRÒ CHƠI
          ============================================== -->
     <div id="modal-grand-victory" class="modal-overlay">
-        <div class="modal-content" style="max-width: 640px; text-align: center;">
-            <div class="dossier-folder-tab">TỔNG KẾT CHIẾN DỊCH 1911–1945</div>
+        <div class="modal-content" style="max-width: 600px; text-align: center;">
             <div class="victory-medal-row">
-                <i class="fa-solid fa-award"></i>
+                <i class="fa-solid fa-trophy"></i>
                 <i class="fa-solid fa-star"></i>
                 <i class="fa-solid fa-star"></i>
                 <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-award"></i>
+                <i class="fa-solid fa-trophy"></i>
             </div>
-            <h2 class="modal-heading-gold" style="font-size: 1.85rem;">ĐỘC LẬP – TỰ DO!</h2>
-            <p class="modal-subtext">Bạn đã hoàn thành trọn vẹn hành trình 30 năm tìm đường cứu nước và giải phóng dân tộc!</p>
+            <h2 class="modal-heading-gold" style="font-size: 1.7rem;">HOÀN THÀNH TRÒ CHƠI!</h2>
+            <p class="modal-subtext">Chúc mừng bạn đã vượt qua cả 4 màn chơi lịch sử!</p>
 
             <div class="grand-stats-grid">
                 <div class="grand-stat-box">
@@ -342,51 +328,51 @@
                     <div id="grand-docs-count" class="grand-stat-value">12/12</div>
                 </div>
                 <div class="grand-stat-box">
-                    <div class="grand-stat-label">Tín Vật Sao</div>
+                    <div class="grand-stat-label">Số Sao</div>
                     <div id="grand-stars" class="grand-stat-value" style="color: var(--accent-gold);">0 ★</div>
                 </div>
             </div>
 
-            <!-- Khung ghi danh vào Sổ Vàng -->
+            <!-- Lưu điểm vào bảng xếp hạng -->
             <div class="leaderboard-submit-box">
-                <h4 style="color: var(--accent-gold); margin-bottom: 10px; font-family: var(--font-heading); letter-spacing: 0.5px;">
-                    <i class="fa-solid fa-feather-pointed"></i> GHI DANH VÀO SỔ VÀNG LỊCH SỬ
+                <h4 style="color: var(--accent-gold); margin-bottom: 10px; font-size: 0.95rem;">
+                    <i class="fa-solid fa-medal"></i> Lưu Kết Quả Vào Bảng Xếp Hạng
                 </h4>
-                <div style="display: flex; justify-content: center; gap: 10px; max-width: 440px; margin: 0 auto;">
-                    <input id="grand-player-name" class="player-name-input" placeholder="Họ và tên người chơi..." maxlength="30" style="text-align: center;">
-                    <button id="btn-submit-score" class="btn btn-primary" style="white-space: nowrap;"><i class="fa-solid fa-stamp"></i> Đóng Dấu Lưu</button>
+                <div style="display: flex; justify-content: center; gap: 10px; max-width: 420px; margin: 0 auto;">
+                    <input id="grand-player-name" class="player-name-input" placeholder="Nhập tên của bạn..." maxlength="30" style="text-align: center;">
+                    <button id="btn-submit-score" class="btn btn-primary" style="white-space: nowrap;"><i class="fa-solid fa-check"></i> Lưu Điểm</button>
                 </div>
                 <div id="grand-save-notice" style="margin-top: 8px; font-size: 0.88rem; font-weight: bold;"></div>
             </div>
 
-            <div style="margin-top: 22px; display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
-                <button id="btn-grand-view-leaderboard" class="btn btn-secondary"><i class="fa-solid fa-book-bookmark"></i> Xem Sổ Vàng</button>
-                <button id="btn-restart-game" class="btn btn-primary"><i class="fa-solid fa-house"></i> Về Bàn Hồ Sơ</button>
+            <div style="margin-top: 20px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+                <button id="btn-grand-view-leaderboard" class="btn btn-secondary"><i class="fa-solid fa-trophy text-gold"></i> Xem Bảng Xếp Hạng</button>
+                <button id="btn-restart-game" class="btn btn-primary"><i class="fa-solid fa-house"></i> Về Menu</button>
             </div>
         </div>
     </div>
 
     <!-- ==============================================
-         MODAL 4: SỔ VÀNG THÀNH TÍCH (LEADERBOARD MODAL)
+         MODAL 4: BẢNG XẾP HẠNG
          ============================================== -->
     <div id="modal-leaderboard" class="modal-overlay">
-        <div class="modal-content" style="max-width: 660px;">
+        <div class="modal-content" style="max-width: 640px;">
             <button class="modal-close-btn">&times;</button>
             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 6px; padding-right: 28px;">
-                <h3 class="modal-heading-gold" style="margin: 0; font-size: 1.35rem;"><i class="fa-solid fa-award"></i> SỔ VÀNG THÀNH TÍCH</h3>
-                <button id="btn-clear-leaderboard" class="btn btn-sm btn-danger-subtle" title="Đặt lại Sổ Vàng"><i class="fa-solid fa-eraser"></i> Xóa Sổ</button>
+                <h3 class="modal-heading-gold" style="margin: 0; font-size: 1.25rem;"><i class="fa-solid fa-trophy text-gold"></i> Bảng Xếp Hạng</h3>
+                <button id="btn-clear-leaderboard" class="btn btn-sm btn-danger-subtle" title="Xóa bảng xếp hạng"><i class="fa-solid fa-trash-can"></i> Xóa bảng</button>
             </div>
-            <p style="color: var(--text-muted); font-size: 0.86rem; margin-bottom: 14px;">Danh sách các đồng chí hoàn thành nhiệm vụ xuất sắc nhất trên thiết bị này.</p>
+            <p style="color: var(--text-muted); font-size: 0.86rem; margin-bottom: 14px;">Danh sách điểm cao nhất trên thiết bị này.</p>
 
             <div style="overflow-x: auto;">
                 <table class="leaderboard-table">
                     <thead>
                         <tr>
                             <th style="width: 15%;">Hạng</th>
-                            <th style="width: 37%;">Họ Tên</th>
+                            <th style="width: 37%;">Tên</th>
                             <th style="width: 16%;">Điểm</th>
-                            <th style="width: 16%;">Thời Gian</th>
-                            <th style="width: 16%;">Ngày Ghi</th>
+                            <th style="width: 16%;">Thời gian</th>
+                            <th style="width: 16%;">Ngày</th>
                         </tr>
                     </thead>
                     <tbody id="leaderboard-tbody"></tbody>
@@ -394,79 +380,76 @@
             </div>
 
             <div style="margin-top: 18px; display: flex; justify-content: flex-end;">
-                <button class="btn btn-primary modal-close-btn" style="position: static; font-size: 0.9rem;"><i class="fa-solid fa-check"></i> Đóng Sổ</button>
+                <button class="btn btn-primary modal-close-btn" style="position: static; font-size: 0.9rem;">Đóng</button>
             </div>
         </div>
     </div>
 
     <!-- ==============================================
-         MODAL 5: SỔ TAY CHIẾN THUẬT (GUIDE MODAL)
+         MODAL 5: HƯỚNG DẪN CHƠI
          ============================================== -->
     <div id="modal-guide" class="modal-overlay">
-        <div class="modal-content" style="max-width: 580px;">
+        <div class="modal-content" style="max-width: 560px;">
             <button class="modal-close-btn">&times;</button>
-            <div class="dossier-folder-tab">SỔ TAY CHIẾN SĨ</div>
-            <h3 class="modal-heading-gold" style="margin-bottom: 14px; font-size: 1.35rem;"><i class="fa-solid fa-compass"></i> Hướng Dẫn Hành Động & Mật Vụ</h3>
+            <h3 class="modal-heading-gold" style="margin-bottom: 14px; font-size: 1.25rem;"><i class="fa-solid fa-gamepad"></i> Hướng Dẫn Chơi</h3>
             <ul class="tactical-guide-list">
-                <li><strong>Di chuyển & Vượt địa hình:</strong> Phím <code>A</code> / <code>D</code> (hoặc <code>←</code> / <code>→</code>) để chạy; <code>W</code> / <code>Space</code> / <code>↑</code> để nhảy (bấm 2 lần nhảy đúp).</li>
-                <li><strong>Ẩn thân:</strong> Giữ <code>S</code> / <code>↓</code> để cúi thấp tại thùng gỗ, bụi rậm, vách đá nhằm tránh đèn rọi của mật thám.</li>
-                <li><strong>Nghi binh (<code>F</code>):</strong> Ném sỏi đánh lạc hướng mật thám quay mặt về phía tiếng động.</li>
-                <li><strong>Khống chế (<code>Q</code>):</strong> Áp sát phía sau lưng mật thám để đánh ngất tạm thời (<code>+150 điểm</code>).</li>
-                <li><strong>Tín vật Sao Vàng & Liên lạc viên (<code>E</code>):</strong> Thu thập đủ <strong>3 Sao Vàng</strong> để trao đổi với Đồng chí Liên lạc — nhận tiếp tế và <strong>mở cầu bí mật</strong>.</li>
-                <li><strong>Tiếp tế chiến trường:</strong>
+                <li><strong>Di chuyển & Nhảy:</strong> Phím <code>A</code> / <code>D</code> (hoặc <code>←</code> / <code>→</code>) để chạy; <code>W</code> / <code>Space</code> / <code>↑</code> để nhảy (bấm 2 lần nhảy đúp).</li>
+                <li><strong>Ẩn nấp:</strong> Giữ <code>S</code> / <code>↓</code> tại thùng hàng, bụi cây, vòm cửa để tránh đèn của lính gác.</li>
+                <li><strong>Ném sỏi (<code>F</code>):</strong> Tạo tiếng động dụ lính gác quay mặt đi hướng khác.</li>
+                <li><strong>Đánh ngất (<code>Q</code>):</strong> Đứng sát phía sau lưng lính gác để làm choáng 12 giây (<code>+150 điểm</code>).</li>
+                <li><strong>Đổi Sao Vàng (<code>E</code>):</strong> Nhặt đủ <strong>3 Sao Vàng</strong> để đổi với người liên lạc — nhận vật phẩm hỗ trợ và <strong>mở cầu qua hố</strong>.</li>
+                <li><strong>Vật phẩm hỗ trợ:</strong>
                     <div class="guide-supply-grid">
-                        <span><i class="fa-solid fa-shield-halved"></i> <strong>Áo Trấn Thủ:</strong> Chặn 1 sát thương</span>
-                        <span><i class="fa-solid fa-bolt"></i> <strong>Dép Cao Su:</strong> Tăng tốc chạy & nhảy</span>
-                        <span><i class="fa-solid fa-user-secret"></i> <strong>Cải Trang:</strong> Qua mắt lính gác (12s)</span>
-                        <span><i class="fa-solid fa-kit-medical"></i> <strong>Lương Khô:</strong> Hồi phục +25 HP</span>
+                        <span><i class="fa-solid fa-shield-halved" style="color:#10b981;"></i> <strong>Áo Trấn Thủ:</strong> Đỡ 1 lần mất máu</span>
+                        <span><i class="fa-solid fa-bolt" style="color:#facc15;"></i> <strong>Dép Cao Su:</strong> Chạy & nhảy nhanh (8s)</span>
+                        <span><i class="fa-solid fa-user-secret" style="color:#c084fc;"></i> <strong>Cải Trang:</strong> Không bị phát hiện (12s)</span>
+                        <span><i class="fa-solid fa-heart" style="color:#22c55e;"></i> <strong>Lương Khô:</strong> Hồi +25 HP</span>
                     </div>
                 </li>
-                <li><strong>Giải mật Văn kiện (<code>E</code>):</strong> Thu thập các tác phẩm lịch sử và trả lời câu hỏi nhận <code>+200 điểm</code>, <code>+25 HP</code>.</li>
+                <li><strong>Văn kiện (<code>E</code>):</strong> Nhặt cuộn giấy và trả lời câu hỏi để nhận <code>+200 điểm</code>, <code>+25 HP</code>.</li>
             </ul>
             <div style="margin-top: 18px; text-align: right;">
-                <button class="btn btn-primary modal-close-btn" style="position: static; font-size: 0.92rem;">Đã Rõ Nhiệm Vụ</button>
+                <button class="btn btn-primary modal-close-btn" style="position: static; font-size: 0.92rem;">Đóng</button>
             </div>
         </div>
     </div>
 
     <!-- ==============================================
-         MODAL 6: NHIỆM VỤ THẤT BẠI (GAME OVER)
+         MODAL 6: THUA CUỘC (GAME OVER)
          ============================================== -->
     <div id="modal-game-over" class="modal-overlay">
-        <div class="modal-content modal-danger" style="max-width: 460px; text-align: center;">
-            <div class="dossier-stamp-seal" style="border-color: #ef4444; color: #ef4444;">THẤT BẠI</div>
-            <div class="game-over-icon" style="color: #dc2626;"><i class="fa-solid fa-triangle-exclamation"></i></div>
-            <h2 class="modal-title-danger">BỊ ĐỊCH PHÁT HIỆN!</h2>
-            <p class="modal-subtitle-danger">Chiến sĩ đã cạn kiệt sinh lực (0 / 100 HP) trước sự truy sát của mật thám.</p>
+        <div class="modal-content modal-danger" style="max-width: 440px; text-align: center;">
+            <div class="game-over-icon" style="color: #ef4444;"><i class="fa-solid fa-heart-crack"></i></div>
+            <h2 class="modal-title-danger">HẾT MÁU!</h2>
+            <p class="modal-subtitle-danger">Nhân vật đã hết máu (0 / 100 HP).</p>
             <div class="game-over-info-box">
-                <p>Hãy tận dụng bóng tối, thùng hàng để ẩn nấp (<code>S</code>), ném sỏi nghi binh (<code>F</code>) hoặc khống chế từ phía sau (<code>Q</code>).</p>
+                <p>Mẹo: Cúi nấp (<code>S</code>) sau thùng hàng, ném sỏi (<code>F</code>) đánh lạc hướng hoặc đi vòng ra sau lưng bấm (<code>Q</code>).</p>
             </div>
             <div style="display: flex; justify-content: center; margin-top: 20px; gap: 12px;">
                 <button id="btn-retry-level" class="btn btn-primary">
-                    <i class="fa-solid fa-rotate-right"></i> Tái Triển Khai
+                    <i class="fa-solid fa-rotate-right"></i> Chơi lại
                 </button>
                 <button class="btn btn-secondary btn-back-menu">
-                    <i class="fa-solid fa-arrow-left"></i> Bàn Hồ Sơ
+                    <i class="fa-solid fa-arrow-left"></i> Về Menu
                 </button>
             </div>
         </div>
     </div>
 
     <!-- ==============================================
-         MODAL 7: ĐIỀU CHỈNH ÂM THANH (AUDIO CONSOLE)
+         MODAL 7: CÀI ĐẶT ÂM THANH
          ============================================== -->
     <div id="modal-sound-settings" class="modal-overlay">
-        <div class="modal-content" style="max-width: 460px;">
+        <div class="modal-content" style="max-width: 440px;">
             <button class="modal-close-btn">&times;</button>
-            <div class="dossier-folder-tab">ĐÀI PHÁT THANH</div>
-            <h3 class="modal-heading-gold" style="margin-bottom: 18px; font-size: 1.3rem;">
-                <i class="fa-solid fa-sliders"></i> Thiết Lập Âm Lượng
+            <h3 class="modal-heading-gold" style="margin-bottom: 16px; font-size: 1.2rem;">
+                <i class="fa-solid fa-sliders"></i> Cài Đặt Âm Thanh
             </h3>
             
             <!-- Nhạc Nền (BGM) -->
             <div class="sound-setting-group">
                 <div class="sound-setting-header">
-                    <span class="setting-title"><i class="fa-solid fa-music text-gold"></i> Nhạc Nền (BGM)</span>
+                    <span class="setting-title"><i class="fa-solid fa-music text-gold"></i> Nhạc nền (BGM)</span>
                     <button id="btn-modal-toggle-bgm" class="btn btn-sm btn-outline-subtle" title="Bật/Tắt nhạc nền">
                         <i class="fa-solid fa-volume-high"></i> Đang Bật
                     </button>
@@ -478,9 +461,9 @@
             </div>
 
             <!-- Hiệu Ứng Âm Thanh (SFX) -->
-            <div class="sound-setting-group" style="margin-top: 14px;">
+            <div class="sound-setting-group" style="margin-top: 12px;">
                 <div class="sound-setting-header">
-                    <span class="setting-title"><i class="fa-solid fa-volume-high text-gold"></i> Tiếng Động (SFX)</span>
+                    <span class="setting-title"><i class="fa-solid fa-volume-high text-gold"></i> Hiệu ứng (SFX)</span>
                     <button id="btn-modal-toggle-sfx" class="btn btn-sm btn-outline-subtle" title="Bật/Tắt hiệu ứng">
                         <i class="fa-solid fa-volume-high"></i> Đang Bật
                     </button>
@@ -492,16 +475,16 @@
             </div>
 
             <!-- Chuyển bài nhạc nền -->
-            <div class="sound-setting-group" style="margin-top: 14px; display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 0.88rem; color: var(--text-muted); font-family: var(--font-mono);">Băng nhạc nền:</span>
+            <div class="sound-setting-group" style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.88rem; color: var(--text-muted);">Đổi bài nhạc nền:</span>
                 <button id="btn-modal-next-track" class="btn btn-sm btn-secondary">
-                    <i class="fa-solid fa-forward-step"></i> Đổi Băng Nhạc
+                    <i class="fa-solid fa-forward-step"></i> Đổi nhạc
                 </button>
             </div>
 
-            <div style="margin-top: 20px; text-align: right;">
-                <button class="btn btn-primary modal-close-btn" style="position: static; font-size: 0.92rem; padding: 8px 20px;">
-                    <i class="fa-solid fa-check"></i> Lưu Cài Đặt
+            <div style="margin-top: 18px; text-align: right;">
+                <button class="btn btn-primary modal-close-btn" style="position: static; font-size: 0.9rem; padding: 8px 20px;">
+                    Đóng
                 </button>
             </div>
         </div>

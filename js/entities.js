@@ -1014,7 +1014,7 @@ class ParticleSystem {
             ctx.translate(screenX, screenY);
             ctx.scale(popScale, popScale);
 
-            ctx.font = `700 ${ft.fontSize}px 'Rowdies', 'Chakra Petch', sans-serif`;
+            ctx.font = `800 ${ft.fontSize}px 'Be Vietnam Pro', 'Space Mono', sans-serif`;
             const textMetrics = ctx.measureText(ft.text);
             const textW = textMetrics.width;
             const padX = 9;
@@ -1022,31 +1022,25 @@ class ParticleSystem {
             const pillW = textW + padX * 2;
             const rx = -pillW / 2;
             const ry = -pillH / 2;
-            const cut = 5; // Vát góc kiểu khung HUD game hành động
 
-            // Nền khung vát góc (chamfered game badge)
-            ctx.fillStyle = "rgba(9, 14, 28, 0.9)";
+            // Đế bóng 3D đồng bộ với nút bấm ở Menu & HUD
+            ctx.fillStyle = "#090d16";
+            ctx.beginPath();
+            ctx.roundRect(rx, ry + 3, pillW, pillH, 5);
+            ctx.fill();
+
+            // Nền khung #1e293b viền 2px đồng bộ với giao diện Menu
+            ctx.fillStyle = "#1e293b";
             ctx.strokeStyle = ft.color;
             ctx.lineWidth = 1.8;
             ctx.beginPath();
-            ctx.moveTo(rx + cut, ry);
-            ctx.lineTo(rx + pillW - cut, ry);
-            ctx.lineTo(rx + pillW, ry + cut);
-            ctx.lineTo(rx + pillW, ry + pillH - cut);
-            ctx.lineTo(rx + pillW - cut, ry + pillH);
-            ctx.lineTo(rx + cut, ry + pillH);
-            ctx.lineTo(rx, ry + pillH - cut);
-            ctx.lineTo(rx, ry + cut);
-            ctx.closePath();
+            ctx.roundRect(rx, ry, pillW, pillH, 5);
             ctx.fill();
             ctx.stroke();
 
-            // Chữ & Icon nổi khối với viền đen dày kiểu Arcade
+            // Chữ & Icon sắc nét
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
-            ctx.lineWidth = 3;
-            ctx.strokeStyle = "#020617";
-            ctx.strokeText(ft.text, 0, 1);
             ctx.fillStyle = ft.color;
             ctx.fillText(ft.text, 0, 1);
             ctx.restore();

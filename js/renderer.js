@@ -243,7 +243,7 @@ class GameRenderer {
 
         // Ký tự phím
         ctx.fillStyle = "#ffffff";
-        ctx.font = "700 11px 'Space Mono', 'Chakra Petch', monospace";
+        ctx.font = "700 11px 'Space Mono', monospace";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText(keyText, x, ry + h / 2 + 0.5);
@@ -273,7 +273,7 @@ class GameRenderer {
             ctx.stroke();
 
             ctx.fillStyle = "#fde047";
-            ctx.font = "700 8px 'Rowdies', sans-serif";
+            ctx.font = "700 8px 'Be Vietnam Pro', sans-serif";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
             ctx.fillText("★", 0, 0.5);
@@ -859,7 +859,7 @@ class GameRenderer {
             // Ngôi sao vàng cách mạng
             if (cp.reached) {
                 ctx.fillStyle = "#fbbf24";
-                ctx.font = "700 11px 'Rowdies', sans-serif";
+                ctx.font = "700 11px 'Be Vietnam Pro', sans-serif";
                 ctx.fillText("★", screenX + 12, cp.y + 14 + fWave * 0.5);
             }
             ctx.restore();
@@ -922,7 +922,7 @@ class GameRenderer {
 
             // Tên tàu son vàng
             ctx.fillStyle = "#fde047";
-            ctx.font = "700 11px 'Rowdies', 'Chakra Petch', sans-serif";
+            ctx.font = "800 11px 'Be Vietnam Pro', sans-serif";
             ctx.fillText("⚓ LATOUCHE-TRÉVILLE (1911)", screenX - 15, y - 45);
         } else if (level.exitType === "train") {
             // Chuyến tàu cách mạng bọc thép
@@ -943,7 +943,7 @@ class GameRenderer {
             }
 
             ctx.fillStyle = "#fde047";
-            ctx.font = "700 11px 'Rowdies', 'Chakra Petch', sans-serif";
+            ctx.font = "800 11px 'Be Vietnam Pro', sans-serif";
             ctx.fillText("🚂 QUẢNG CHÂU (1927)", screenX + 5, y - 15);
         } else if (level.exitType === "cave") {
             // Cửa Hang Pác Bó thiêng liêng
@@ -956,7 +956,7 @@ class GameRenderer {
             ctx.fill();
 
             ctx.fillStyle = "#6ee7b7";
-            ctx.font = "700 12px 'Rowdies', 'Chakra Petch', sans-serif";
+            ctx.font = "800 12px 'Be Vietnam Pro', sans-serif";
             ctx.fillText("⛰️ PÁC BÓ (1941)", screenX + 2, y - 25);
         } else {
             // ĐẠI LỄ ĐÀI QUẢNG TRƯỜNG BA ĐÌNH TRÁNG LỆ
@@ -978,11 +978,11 @@ class GameRenderer {
             ctx.fillStyle = "#dc2626";
             ctx.fillRect(screenX + 68, y - 100, 52 + grandFlagWave, 34);
             ctx.fillStyle = "#fde047";
-            ctx.font = "700 18px 'Rowdies', sans-serif";
+            ctx.font = "800 18px 'Be Vietnam Pro', sans-serif";
             ctx.fillText("★", screenX + 85, y - 76);
 
             ctx.fillStyle = "#fde047";
-            ctx.font = "700 13px 'Rowdies', 'Chakra Petch', sans-serif";
+            ctx.font = "800 13px 'Be Vietnam Pro', sans-serif";
             ctx.fillText("★ BA ĐÌNH (2/9/1945)", screenX + 10, y - 110);
         }
         ctx.restore();
@@ -1013,7 +1013,7 @@ class GameRenderer {
             ctx.fillStyle = "#fde047";
             ctx.strokeStyle = "#92400e";
             ctx.lineWidth = 2;
-            ctx.font = "700 17px 'Rowdies', sans-serif";
+            ctx.font = "800 17px 'Be Vietnam Pro', sans-serif";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
             ctx.strokeText("★", screenX, star.y);
@@ -1069,7 +1069,7 @@ class GameRenderer {
             ctx.arc(docCenterX, doc.y + 16.5, 5, 0, Math.PI * 2);
             ctx.fill();
             ctx.fillStyle = "#fde047";
-            ctx.font = "700 8px 'Rowdies', sans-serif";
+            ctx.font = "800 8px 'Be Vietnam Pro', sans-serif";
             ctx.textAlign = "center";
             ctx.fillText("★", docCenterX, doc.y + 19);
 
@@ -1224,14 +1224,14 @@ class GameRenderer {
                     const sx = screenX + 15 + Math.cos(a) * 15;
                     const sy = guard.y - 10 + Math.sin(a) * 5;
                     ctx.fillStyle = "#facc15";
-                    ctx.font = "700 10px 'Rowdies', sans-serif";
+                    ctx.font = "800 10px 'Be Vietnam Pro', sans-serif";
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
                     ctx.fillText("★", sx, sy);
                 }
                 // Thanh thời gian choáng nhỏ gọn
                 const stunRatio = Math.max(0, Math.min(1, guard.stunTimer / 360));
-                ctx.fillStyle = "rgba(15, 23, 42, 0.85)";
+                ctx.fillStyle = "#090d16";
                 ctx.fillRect(screenX + 3, guard.y - 22, 24, 4);
                 ctx.fillStyle = "#facc15";
                 ctx.fillRect(screenX + 3, guard.y - 22, 24 * stunRatio, 4);
@@ -1239,53 +1239,53 @@ class GameRenderer {
             // D. HIỆU ỨNG ĐI ĐIỀU TRA ÂM THANH NÉM SỎI (DISTRACTED / INVESTIGATING)
             else if (guard.investigateTimer && guard.investigateTimer > 0) {
                 const iconY = guard.y - 14 + Math.sin(this.time * 6) * 2;
-                ctx.fillStyle = "rgba(15, 23, 42, 0.9)";
+                ctx.fillStyle = "#1e293b";
                 ctx.strokeStyle = "#38bdf8";
-                ctx.lineWidth = 1.6;
+                ctx.lineWidth = 1.8;
                 ctx.beginPath();
-                ctx.arc(screenX + 15, iconY, 10, 0, Math.PI * 2);
+                ctx.roundRect(screenX + 5, iconY - 10, 20, 20, 5);
                 ctx.fill();
                 ctx.stroke();
 
                 ctx.fillStyle = "#38bdf8";
-                ctx.font = "700 14px 'Rowdies', sans-serif";
+                ctx.font = "800 13px 'Space Mono', monospace";
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
-                ctx.fillText("?", screenX + 15, iconY + 1);
+                ctx.fillText("?", screenX + 15, iconY + 0.5);
             }
             // E. BIỂU TƯỢNG CẢNH BÁO TRÊN ĐẦU MẬT THÁM (? NGHI VẤN / ! PHÁT HIỆN)
             else if (guard.isAlerted || (guard.crouchSuspicionTimer && guard.crouchSuspicionTimer > 35)) {
                 const iconY = guard.y - 14;
                 if (guard.crouchSuspicionTimer >= 80 || guard.isAiming) {
                     // Huy hiệu chấm than đỏ rực khi sắp phát hiện / đang ngắm bắn!
-                    ctx.fillStyle = "#ef4444";
-                    ctx.strokeStyle = "#fef2f2";
-                    ctx.lineWidth = 1.6;
+                    ctx.fillStyle = "#dc2626";
+                    ctx.strokeStyle = "#fbbf24";
+                    ctx.lineWidth = 1.8;
                     ctx.beginPath();
-                    ctx.arc(screenX + 15, iconY, 11, 0, Math.PI * 2);
+                    ctx.roundRect(screenX + 4, iconY - 10, 22, 20, 5);
                     ctx.fill();
                     ctx.stroke();
 
                     ctx.fillStyle = "#ffffff";
-                    ctx.font = "700 15px 'Rowdies', sans-serif";
+                    ctx.font = "800 14px 'Space Mono', monospace";
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
-                    ctx.fillText("!", screenX + 15, iconY + 1);
+                    ctx.fillText("!", screenX + 15, iconY + 0.5);
                 } else {
                     // Dấu hỏi vàng nghi vấn khi ngồi trước mắt quá lâu
-                    ctx.fillStyle = "rgba(15, 23, 42, 0.9)";
+                    ctx.fillStyle = "#1e293b";
                     ctx.strokeStyle = "#fbbf24";
-                    ctx.lineWidth = 1.5;
+                    ctx.lineWidth = 1.8;
                     ctx.beginPath();
-                    ctx.arc(screenX + 15, iconY, 9.5, 0, Math.PI * 2);
+                    ctx.roundRect(screenX + 5, iconY - 10, 20, 20, 5);
                     ctx.fill();
                     ctx.stroke();
 
                     ctx.fillStyle = "#fbbf24";
-                    ctx.font = "700 13px 'Rowdies', sans-serif";
+                    ctx.font = "800 13px 'Space Mono', monospace";
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
-                    ctx.fillText("?", screenX + 15, iconY + 1);
+                    ctx.fillText("?", screenX + 15, iconY + 0.5);
                 }
             }
 
@@ -1651,7 +1651,7 @@ class GameRenderer {
             ctx.arc(pCenterX, npc.y + 6, 9, Math.PI, 0);
             ctx.fill();
             ctx.fillStyle = "#fbbf24";
-            ctx.font = "700 7px 'Rowdies', sans-serif";
+            ctx.font = "800 7px 'Be Vietnam Pro', sans-serif";
             ctx.textAlign = "center";
             ctx.fillText("★", pCenterX, npc.y + 5);
 
@@ -1670,9 +1670,15 @@ class GameRenderer {
                 const pillX = pCenterX - pillW / 2;
                 const pillY = bobY - pillH / 2;
 
+                // Đế bóng 3D đồng bộ với giao diện Menu & HUD
+                ctx.fillStyle = "#090d16";
+                ctx.beginPath();
+                ctx.roundRect(pillX, pillY + 3, pillW, pillH, 6);
+                ctx.fill();
+
                 // Khung bong bóng trao đổi
-                ctx.fillStyle = "rgba(9, 13, 22, 0.92)";
-                ctx.strokeStyle = canAfford ? "#10b981" : "#f59e0b";
+                ctx.fillStyle = "#1e293b";
+                ctx.strokeStyle = canAfford ? "#10b981" : "#fbbf24";
                 ctx.lineWidth = 1.8;
                 ctx.beginPath();
                 ctx.roundRect(pillX, pillY, pillW, pillH, 6);
@@ -1681,7 +1687,7 @@ class GameRenderer {
 
                 // Sao + Số lượng hiện có / Giá đổi
                 ctx.fillStyle = canAfford ? "#fde047" : "#fca5a5";
-                ctx.font = "700 11px 'Rowdies', 'Chakra Petch', sans-serif";
+                ctx.font = "700 11px 'Space Mono', monospace";
                 ctx.textAlign = "left";
                 ctx.textBaseline = "middle";
                 ctx.fillText(`★${Math.min(starsCount, cost)}/${cost}`, pillX + 6, bobY + 0.5);
@@ -1696,16 +1702,16 @@ class GameRenderer {
 
                 // Nếu đứng gần: Hiện nút phím cơ 3D [E] phía trên bong bóng
                 if (npc.isNear) {
-                    this.drawKeycap(pCenterX, pillY - 13, "E", canAfford ? "#10b981" : "#f59e0b");
+                    this.drawKeycap(pCenterX, pillY - 13, "E", canAfford ? "#10b981" : "#fbbf24");
                 }
             } else {
                 // Đã liên lạc xong: Huy hiệu dấu tích xanh gọn gàng
-                ctx.fillStyle = "rgba(16, 185, 129, 0.92)";
+                ctx.fillStyle = "#10b981";
                 ctx.beginPath();
-                ctx.arc(pCenterX, bobY, 9, 0, Math.PI * 2);
+                ctx.roundRect(pCenterX - 9, bobY - 9, 18, 18, 5);
                 ctx.fill();
                 ctx.fillStyle = "#ffffff";
-                ctx.font = "700 11px 'Rowdies', sans-serif";
+                ctx.font = "800 11px 'Be Vietnam Pro', sans-serif";
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
                 ctx.fillText("✓", pCenterX, bobY + 0.5);
@@ -1765,16 +1771,21 @@ class GameRenderer {
 
                 const midX = sx + sc.w / 2;
                 const midY = sc.y + sc.h / 2;
-                ctx.fillStyle = "rgba(15, 23, 42, 0.85)";
-                ctx.strokeStyle = "rgba(251, 191, 36, 0.55)";
-                ctx.lineWidth = 1.4;
+                ctx.fillStyle = "#090d16";
+                ctx.beginPath();
+                ctx.roundRect(midX - 24, midY - 7, 48, 20, 5);
+                ctx.fill();
+
+                ctx.fillStyle = "#1e293b";
+                ctx.strokeStyle = "#fbbf24";
+                ctx.lineWidth = 1.6;
                 ctx.beginPath();
                 ctx.roundRect(midX - 24, midY - 10, 48, 20, 5);
                 ctx.fill();
                 ctx.stroke();
 
                 ctx.fillStyle = "#fbbf24";
-                ctx.font = "700 10px 'Rowdies', 'Chakra Petch', sans-serif";
+                ctx.font = "700 10px 'Space Mono', monospace";
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
                 ctx.fillText("🔒 ★3", midX, midY + 0.5);
