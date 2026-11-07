@@ -1,16 +1,15 @@
-// Game Audio Manager - Sử dụng bộ Sample Game SFX & BGM nhẹ nhàng, tinh tế (Kenney CC0 & Royalty-Free)
-// Toàn bộ file sample được đóng gói trực tiếp trong thư mục assets/audio/
+// Game Audio Manager - Bộ Sample SFX Kinh Điển & Nhạc Nền Game 2D Thuần Nhạc Cụ
+// Đơn giản, rõ ràng, âm lượng vừa phải, không gây chói tai
 
 class SoundManager {
     constructor() {
         this.isMuted = false;
         this.bgmPlaying = false;
 
-        // Danh sách nhạc nền game sample thuần nhạc cụ (êm dịu, 100% không lời / không giọng nói)
+        // Danh sách 3 bản nhạc nền game thuần nhạc cụ 100% (không có lời / không có giọng nói)
         this.bgmFiles = [
             "assets/audio/bgm/bgm_main.mp3",
             "assets/audio/bgm/bgm_stealth.mp3",
-            "assets/audio/bgm/bgm_action.mp3",
             "assets/audio/bgm/bgm_retro.mp3"
         ];
         this.currentTrackIndex = 0;
@@ -21,24 +20,24 @@ class SoundManager {
         this.bgmAudio.volume = 0.32;
         this.bgmAudio.preload = "auto";
 
-        // Kho hiệu ứng âm thanh dịu nhẹ, mộc mạc, không chói tai (Kenney CC0 gentle sound set)
+        // Kho hiệu ứng âm thanh game 2D kinh điển, đơn giản, nghe rõ ràng mà không bị to
         this.sfxPaths = {
-            jump: "assets/audio/sfx/jump.ogg",
-            double_jump: "assets/audio/sfx/double_jump.ogg",
-            collect: "assets/audio/sfx/collect.ogg",
-            book: "assets/audio/sfx/book.ogg",
-            powerup: "assets/audio/sfx/powerup.ogg",
-            takedown: "assets/audio/sfx/takedown.ogg",
-            unlock: "assets/audio/sfx/unlock.ogg",
-            fail: "assets/audio/sfx/fail.ogg",
-            alert: "assets/audio/sfx/alert.ogg",
-            shot: "assets/audio/sfx/shot.ogg",
-            hit: "assets/audio/sfx/hit.ogg",
-            pebble: "assets/audio/sfx/pebble.ogg",
-            hide: "assets/audio/sfx/hide.ogg",
-            quiz_correct: "assets/audio/sfx/quiz_correct.ogg",
-            win: "assets/audio/sfx/win.ogg",
-            gameover: "assets/audio/sfx/gameover.ogg"
+            jump: "assets/audio/sfx/jump.wav",
+            double_jump: "assets/audio/sfx/double_jump.wav",
+            collect: "assets/audio/sfx/collect.wav",
+            book: "assets/audio/sfx/book.wav",
+            powerup: "assets/audio/sfx/powerup.wav",
+            takedown: "assets/audio/sfx/takedown.wav",
+            unlock: "assets/audio/sfx/unlock.wav",
+            fail: "assets/audio/sfx/fail.wav",
+            alert: "assets/audio/sfx/alert.wav",
+            shot: "assets/audio/sfx/shot.wav",
+            hit: "assets/audio/sfx/hit.wav",
+            pebble: "assets/audio/sfx/pebble.wav",
+            hide: "assets/audio/sfx/hide.wav",
+            quiz_correct: "assets/audio/sfx/quiz_correct.wav",
+            win: "assets/audio/sfx/win.wav",
+            gameover: "assets/audio/sfx/gameover.wav"
         };
 
         // Nạp trước toàn bộ sample vào bộ nhớ đệm để phát tức thì (zero-latency)
@@ -63,8 +62,8 @@ class SoundManager {
         // Giữ tương thích với các lệnh gọi audio.init() trong engine
     }
 
-    // Phát một sample SFX với âm lượng dịu nhẹ (mặc định 0.22 - 0.28, tránh gây giật mình hay lấn át nhạc nền)
-    playSample(name, volume = 0.24, playbackRate = 1.0) {
+    // Phát một sample SFX với âm lượng chuẩn mực (mặc định 0.45 - rõ ràng, sắc nét, không gắt tai)
+    playSample(name, volume = 0.45, playbackRate = 1.0) {
         if (this.isMuted) return;
         const base = this.sfxCache[name];
         if (!base) return;
@@ -83,11 +82,11 @@ class SoundManager {
     playTone(freq = 440) {
         if (this.isMuted) return;
         if (freq < 240) {
-            this.playSample("fail", 0.2);
+            this.playSample("fail", 0.42);
         } else if (freq > 600) {
-            this.playSample("pebble", 0.22);
+            this.playSample("pebble", 0.42);
         } else {
-            this.playSample("collect", 0.22);
+            this.playSample("collect", 0.44);
         }
     }
 
@@ -148,98 +147,97 @@ class SoundManager {
     }
 
     // =========================================================================
-    // CÁC HIỆU ỨNG ÂM THANH TRONG GAME (GENTLE / SUBTLE SFX)
-    // Âm lượng dịu nhẹ (0.20 - 0.28), thanh thoát, không cường điệu
+    // CÁC HIỆU ỨNG ÂM THANH GAME 2D BASIC (RÕ RÀNG, VỪA PHẢI, KHÔNG QUÁ TO)
     // =========================================================================
 
-    // Nhảy đơn nhẹ nhàng
+    // Nhảy đơn
     playJump() {
-        this.playSample("jump", 0.22, 1.0);
+        this.playSample("jump", 0.45, 1.0);
     }
 
-    // Nhảy đúp thanh thoát
+    // Nhảy đúp
     playDoubleJump() {
-        this.playSample("double_jump", 0.22, 1.0);
+        this.playSample("double_jump", 0.45, 1.0);
     }
 
-    // Nhặt Sao Vàng (★) - chuông đôi nhỏ êm
+    // Nhặt Sao Vàng (★) - chuông 2 nốt 'ding-ding' trong trẻo
     playCollect() {
-        this.playSample("collect", 0.25, 1.0);
+        this.playSample("collect", 0.46, 1.0);
     }
 
-    // Nhặt Văn kiện lịch sử hoặc chạm cột mốc Checkpoint - tiếng mở trang giấy dó cổ êm tai
+    // Nhặt Văn kiện lịch sử / Checkpoint - hợp âm chuông 3 nốt
     playKey() {
-        this.playSample("book", 0.26, 1.0);
+        this.playSample("book", 0.45, 1.0);
     }
 
-    // Nhặt vật phẩm tiếp tế (Áo Trấn Thủ, Dép Cao Su, Hòm Cải Trang, Lương Khô)
+    // Nhặt Tiếp tế (Áo Trấn Thủ, Dép Cao Su, Cải Trang, Lương Khô) - thăng hoa 4 nốt
     playPowerup() {
-        this.playSample("powerup", 0.25, 1.0);
+        this.playSample("powerup", 0.45, 1.0);
     }
 
-    // Khống chế mật thám từ phía sau ([Q]) - tiếng cộc nhẹ điểm huyệt gọn gàng
+    // Khống chế mật thám [Q] - tiếng 'bụp' đục gọn gàng
     playTakedown() {
-        this.playSample("takedown", 0.26, 1.0);
+        this.playSample("takedown", 0.48, 1.0);
     }
 
     // Đổi Sao Vàng mở khóa Liên lạc viên & Cầu bí mật
     playUnlock() {
-        this.playSample("unlock", 0.26, 1.0);
+        this.playSample("unlock", 0.45, 1.0);
     }
 
-    // Báo âm khi chưa đủ Sao Vàng (★ < 3)
+    // Báo âm khi chưa đủ Sao Vàng (★ < 3) / Trả lời sai
     playLocked() {
-        this.playSample("fail", 0.22, 1.0);
+        this.playSample("fail", 0.42, 1.0);
     }
 
-    // Tiếng sỏi nghi binh nảy trên mặt đất ([F]) - lách cách nhỏ nhẹ
+    // Tiếng sỏi nghi binh nảy trên mặt đất [F]
     playPebbleBounce() {
-        this.playSample("pebble", 0.24, 1.0);
+        this.playSample("pebble", 0.44, 1.0);
     }
 
-    // Mật thám phát hiện người chơi (!) - âm thông báo nhẹ
+    // Mật thám phát hiện người chơi (!)
     playAlert() {
-        this.playSample("alert", 0.25, 1.0);
+        this.playSample("alert", 0.45, 1.0);
     }
 
-    // Mật thám bắn súng - âm pop ngắn gọn, không đinh tai nhức óc
+    // Mật thám bắn súng - tiếng 'pew' laser/pop ngắn gọn arcade
     playGunshot() {
-        this.playSample("shot", 0.24, 1.0);
+        this.playSample("shot", 0.44, 1.0);
     }
 
-    // Trúng đạn / Va chạm mất máu - âm va chạm vải nhẹ
+    // Trúng đạn / Va chạm mất máu
     playHit() {
-        this.playSample("hit", 0.26, 1.0);
+        this.playSample("hit", 0.46, 1.0);
     }
 
     // Hồi sinh tại Checkpoint
     playRespawn() {
-        this.playSample("powerup", 0.24, 1.0);
+        this.playSample("powerup", 0.42, 1.0);
     }
 
-    // Trả lời đúng câu hỏi trắc nghiệm - jingle nhỏ vui tươi
+    // Trả lời đúng trắc nghiệm
     playQuizSuccess() {
-        this.playSample("quiz_correct", 0.28, 1.0);
+        this.playSample("quiz_correct", 0.46, 1.0);
     }
 
-    // Trả lời sai câu hỏi trắc nghiệm - âm trầm êm dịu
+    // Trả lời sai trắc nghiệm
     playQuizFail() {
-        this.playSample("fail", 0.25, 1.0);
+        this.playSample("fail", 0.44, 1.0);
     }
 
-    // Hoàn thành màn chơi / Qua màn - jingle chiến thắng ngắn gọn êm ái
+    // Hoàn thành màn chơi
     playLevelComplete() {
-        this.playSample("win", 0.30, 1.0);
+        this.playSample("win", 0.48, 1.0);
     }
 
-    // Hết máu / Game Over - jingle kết thúc màn êm đềm
+    // Hết máu / Game Over
     playGameOver() {
-        this.playSample("gameover", 0.28, 1.0);
+        this.playSample("gameover", 0.46, 1.0);
     }
 
-    // Ẩn nấp vào bụi cây / thùng hàng / vòm cửa - sột soạt êm ái
+    // Ẩn nấp vào bụi cây / thùng hàng
     playHide() {
-        this.playSample("hide", 0.20, 1.0);
+        this.playSample("hide", 0.40, 1.0);
     }
 }
 
