@@ -94,14 +94,15 @@ const LEVELS = [
             { x: 2180, y: 485, type: "disguise" } // Hòm cải trang trước Versailles
         ],
 
-        // Đồng chí liên lạc bí mật
+        // Đồng chí liên lạc bí mật (cần 3 Sao Vàng để đổi mật hiệu tiếp tế & mở lối tắt)
         npcs: [
             {
                 x: 750, y: 472,
                 name: "Đồng chí Thợ Thuyền Ba Son",
                 quote: "Anh Ba! Tàu sắp nhổ neo, tôi đã hạ sẵn chiếc cầu bí mật giúp anh vượt qua lạch nước an toàn!",
                 giftType: "shield",
-                shortcutId: "shortcut_harbor"
+                shortcutId: "shortcut_harbor",
+                starCost: 3
             }
         ],
 
@@ -190,7 +191,7 @@ const LEVELS = [
         ],
 
         stars: [
-            { x: 150, y: 470 }, { x: 260, y: 360 }, { x: 490, y: 270 },
+            { x: 150, y: 470 }, { x: 260, y: 360 }, { x: 490, y: 270 }, { x: 620, y: 470 },
             { x: 870, y: 370 }, { x: 1200, y: 360 }, { x: 1430, y: 270 },
             { x: 1910, y: 360 }, { x: 2210, y: 350 }, { x: 2440, y: 260 }
         ],
@@ -203,14 +204,15 @@ const LEVELS = [
             { x: 2450, y: 285, type: "disguise" } // Hòm cải trang tại Quảng Châu
         ],
 
-        // Đồng chí liên lạc bí mật
+        // Đồng chí liên lạc bí mật (cần 3 Sao Vàng để đổi mật hiệu tiếp tế & mở lối tắt)
         npcs: [
             {
                 x: 720, y: 472,
                 name: "Đồng chí Quốc Tế Cộng Sản",
                 quote: "Đồng chí Nguyễn! Luận cương của Lênin là ngọn đuốc soi đường. Cây cầu bí mật vượt vực tuyết đã mở!",
                 giftType: "speed",
-                shortcutId: "shortcut_moscow"
+                shortcutId: "shortcut_moscow",
+                starCost: 3
             }
         ],
 
@@ -311,7 +313,7 @@ const LEVELS = [
         ],
 
         stars: [
-            { x: 120, y: 470 }, { x: 300, y: 370 }, { x: 490, y: 280 },
+            { x: 120, y: 470 }, { x: 230, y: 470 }, { x: 300, y: 370 }, { x: 490, y: 280 },
             { x: 1100, y: 210 }, { x: 1250, y: 300 }, { x: 1700, y: 360 },
             { x: 2090, y: 180 }, { x: 2540, y: 200 }, { x: 2690, y: 290 }
         ],
@@ -324,14 +326,15 @@ const LEVELS = [
             { x: 2360, y: 135, type: "disguise" } // Hòm cải trang đỉnh núi 2
         ],
 
-        // Đồng chí liên lạc bí mật
+        // Đồng chí liên lạc bí mật (cần 3 Sao Vàng để đổi mật hiệu tiếp tế & mở lối tắt)
         npcs: [
             {
                 x: 550, y: 472,
                 name: "Đồng chí Dân Tộc Pác Bó",
                 quote: "Bác đã về với núi rừng quê hương! Đồng bào đã dựng cầu tre bí mật đưa Bác qua dòng thác ghềnh!",
                 giftType: "shield",
-                shortcutId: "shortcut_pacbo"
+                shortcutId: "shortcut_pacbo",
+                starCost: 3
             }
         ],
 
@@ -429,7 +432,7 @@ const LEVELS = [
         ],
 
         stars: [
-            { x: 160, y: 470 }, { x: 300, y: 380 }, { x: 500, y: 290 },
+            { x: 160, y: 470 }, { x: 240, y: 380 }, { x: 330, y: 380 }, { x: 500, y: 290 },
             { x: 950, y: 300 }, { x: 1300, y: 350 }, { x: 1580, y: 250 },
             { x: 2020, y: 270 }, { x: 2500, y: 360 }, { x: 2740, y: 270 }
         ],
@@ -442,14 +445,15 @@ const LEVELS = [
             { x: 2350, y: 485, type: "speed" }    // Dép Cao Su chạy vào lễ đài
         ],
 
-        // Đồng chí liên lạc bí mật
+        // Đồng chí liên lạc bí mật (cần 3 Sao Vàng để đổi mật hiệu tiếp tế & mở lối tắt)
         npcs: [
             {
                 x: 360, y: 472,
                 name: "Nữ Tự Vệ Cứu Quốc Ba Đình",
                 quote: "Thưa Bác! Toàn thể đồng bào đang reo hò đón Bác. Chúng cháu đã mở lối cầu ván vượt qua rào thép gai!",
                 giftType: "disguise",
-                shortcutId: "shortcut_badinh"
+                shortcutId: "shortcut_badinh",
+                starCost: 3
             }
         ],
 

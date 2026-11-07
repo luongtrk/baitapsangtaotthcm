@@ -77,86 +77,101 @@ class GameRenderer {
     }
 
     // =========================================================================
-    // HỆ THỐNG TẠO TEXTURE PATTERNS ĐỒ HỌA CHUYÊN NGHIỆP
+    // HỆ THỐNG TẠO TEXTURE PATTERNS ĐỒ HỌA GAME 2D SẮC NÉT
     // =========================================================================
     initTextures() {
-        // A. Texture Gỗ Bến Cảng (Wood Grain & Iron Rivets)
+        // A. Texture Gỗ Bến Cảng (Beveled Wood Planks & Rivets)
         const canWood = document.createElement("canvas");
-        canWood.width = 40;
-        canWood.height = 20;
+        canWood.width = 48;
+        canWood.height = 24;
         const ctxWood = canWood.getContext("2d");
-        ctxWood.fillStyle = "#78350f";
-        ctxWood.fillRect(0, 0, 40, 20);
-        // Vân thớ gỗ sẫm
-        ctxWood.strokeStyle = "#5a2709";
+        ctxWood.fillStyle = "#6b2f0e";
+        ctxWood.fillRect(0, 0, 48, 24);
+        // Hai tầng ván gỗ xen kẽ màu
+        ctxWood.fillStyle = "#7c3610";
+        ctxWood.fillRect(0, 0, 48, 11);
+        ctxWood.fillStyle = "#5c260a";
+        ctxWood.fillRect(0, 12, 48, 11);
+        // Khe ghép ván đen sẫm
+        ctxWood.strokeStyle = "#2e1103";
+        ctxWood.lineWidth = 1.5;
+        ctxWood.beginPath();
+        ctxWood.moveTo(0, 11.5); ctxWood.lineTo(48, 11.5);
+        ctxWood.moveTo(0, 23.5); ctxWood.lineTo(48, 23.5);
+        ctxWood.moveTo(16, 0); ctxWood.lineTo(16, 11.5);
+        ctxWood.moveTo(36, 11.5); ctxWood.lineTo(36, 24);
+        ctxWood.stroke();
+        // Vân gỗ mảnh và viền bevel bắt sáng
+        ctxWood.strokeStyle = "rgba(251, 191, 36, 0.16)";
         ctxWood.lineWidth = 1;
         ctxWood.beginPath();
-        ctxWood.moveTo(0, 5); ctxWood.lineTo(40, 5);
-        ctxWood.moveTo(0, 15); ctxWood.lineTo(40, 15);
-        ctxWood.moveTo(12, 0); ctxWood.lineTo(12, 5);
-        ctxWood.moveTo(28, 5); ctxWood.lineTo(28, 15);
-        ctxWood.stroke();
-        // Ánh sáng viền thớ gỗ
-        ctxWood.strokeStyle = "#92400e";
-        ctxWood.beginPath();
-        ctxWood.moveTo(0, 6); ctxWood.lineTo(40, 6);
+        ctxWood.moveTo(0, 1.5); ctxWood.lineTo(48, 1.5);
+        ctxWood.moveTo(0, 13); ctxWood.lineTo(48, 13);
         ctxWood.stroke();
         this.patterns.wood = this.ctx.createPattern(canWood, "repeat");
 
-        // B. Texture Đá Cuội Paris Cổ Kính (Cobblestone Masonry)
+        // B. Texture Đá Cuội Paris Cổ Kính (Beveled Cobblestone Masonry)
         const canStone = document.createElement("canvas");
-        canStone.width = 36;
+        canStone.width = 40;
         canStone.height = 24;
         const ctxStone = canStone.getContext("2d");
-        ctxStone.fillStyle = "#334155";
-        ctxStone.fillRect(0, 0, 36, 24);
-        // Mạch vữa sẫm màu
-        ctxStone.strokeStyle = "#1e293b";
-        ctxStone.lineWidth = 1.5;
-        ctxStone.strokeRect(0, 0, 18, 12);
-        ctxStone.strokeRect(18, 0, 18, 12);
-        ctxStone.strokeRect(9, 12, 18, 12);
-        ctxStone.strokeRect(-9, 12, 18, 12);
-        ctxStone.strokeRect(27, 12, 18, 12);
-        // Viền sáng nổi khối các phiến đá
-        ctxStone.strokeStyle = "rgba(255, 255, 255, 0.1)";
-        ctxStone.strokeRect(1, 1, 16, 10);
+        ctxStone.fillStyle = "#1e293b";
+        ctxStone.fillRect(0, 0, 40, 24);
+        const drawBrick = (bx, by, bw, bh, tone) => {
+            ctxStone.fillStyle = tone;
+            ctxStone.fillRect(bx + 1, by + 1, bw - 2, bh - 2);
+            ctxStone.fillStyle = "rgba(255,255,255,0.14)";
+            ctxStone.fillRect(bx + 1, by + 1, bw - 2, 2);
+            ctxStone.fillStyle = "rgba(0,0,0,0.28)";
+            ctxStone.fillRect(bx + 1, by + bh - 3, bw - 2, 2);
+        };
+        drawBrick(0, 0, 20, 12, "#334155");
+        drawBrick(20, 0, 20, 12, "#3b495e");
+        drawBrick(-10, 12, 20, 12, "#3b495e");
+        drawBrick(10, 12, 20, 12, "#2d3a4f");
+        drawBrick(30, 12, 20, 12, "#334155");
         this.patterns.stone = this.ctx.createPattern(canStone, "repeat");
 
-        // C. Texture Gạch Tuyết Moskva (Frosty Brick)
+        // C. Texture Gạch Tuyết Moskva (Frosty Ice-Rim Brick)
         const canSnowBrick = document.createElement("canvas");
-        canSnowBrick.width = 32;
-        canSnowBrick.height = 18;
+        canSnowBrick.width = 36;
+        canSnowBrick.height = 20;
         const ctxSnow = canSnowBrick.getContext("2d");
+        ctxSnow.fillStyle = "#292524";
+        ctxSnow.fillRect(0, 0, 36, 20);
         ctxSnow.fillStyle = "#44403c";
-        ctxSnow.fillRect(0, 0, 32, 18);
-        ctxSnow.strokeStyle = "#292524";
-        ctxSnow.lineWidth = 1.5;
-        ctxSnow.strokeRect(0, 0, 16, 9);
-        ctxSnow.strokeRect(16, 0, 16, 9);
-        ctxSnow.strokeRect(8, 9, 16, 9);
-        ctxSnow.strokeRect(-8, 9, 16, 9);
-        // Vết đóng băng xanh ngọc mờ
-        ctxSnow.fillStyle = "rgba(186, 230, 253, 0.15)";
-        ctxSnow.fillRect(2, 2, 12, 5);
+        ctxSnow.fillRect(1, 1, 16, 8);
+        ctxSnow.fillStyle = "#57534e";
+        ctxSnow.fillRect(19, 1, 16, 8);
+        ctxSnow.fillStyle = "#44403c";
+        ctxSnow.fillRect(10, 11, 16, 8);
+        ctxSnow.fillRect(-8, 11, 16, 8);
+        ctxSnow.fillRect(28, 11, 16, 8);
+        // Vết băng giá xanh ngọc
+        ctxSnow.fillStyle = "rgba(186, 230, 253, 0.22)";
+        ctxSnow.fillRect(2, 1, 14, 2);
+        ctxSnow.fillRect(11, 11, 14, 2);
         this.patterns.snowBrick = this.ctx.createPattern(canSnowBrick, "repeat");
 
-        // D. Texture Đá Rêu Pác Bó (Mossy Bedrock Strata)
+        // D. Texture Đá Rêu Pác Bó (Deep Mossy Limestone Strata)
         const canMoss = document.createElement("canvas");
-        canMoss.width = 40;
-        canMoss.height = 24;
+        canMoss.width = 44;
+        canMoss.height = 26;
         const ctxMoss = canMoss.getContext("2d");
+        ctxMoss.fillStyle = "#0f3f22";
+        ctxMoss.fillRect(0, 0, 44, 26);
         ctxMoss.fillStyle = "#14532d";
-        ctxMoss.fillRect(0, 0, 40, 24);
+        ctxMoss.fillRect(2, 2, 18, 10);
+        ctxMoss.fillRect(22, 12, 20, 11);
         ctxMoss.strokeStyle = "#052e16";
-        ctxMoss.lineWidth = 1.2;
+        ctxMoss.lineWidth = 1.5;
         ctxMoss.beginPath();
-        ctxMoss.moveTo(0, 8); ctxMoss.bezierCurveTo(15, 6, 25, 10, 40, 8);
-        ctxMoss.moveTo(0, 18); ctxMoss.bezierCurveTo(10, 20, 30, 16, 40, 18);
+        ctxMoss.moveTo(0, 9); ctxMoss.bezierCurveTo(15, 6, 28, 12, 44, 9);
+        ctxMoss.moveTo(0, 19); ctxMoss.bezierCurveTo(12, 22, 32, 16, 44, 19);
         ctxMoss.stroke();
-        ctxMoss.fillStyle = "rgba(74, 222, 128, 0.15)";
-        ctxMoss.fillRect(4, 3, 8, 4);
-        ctxMoss.fillRect(24, 12, 10, 4);
+        ctxMoss.fillStyle = "rgba(74, 222, 128, 0.22)";
+        ctxMoss.fillRect(4, 3, 10, 3);
+        ctxMoss.fillRect(24, 13, 12, 3);
         this.patterns.mossRock = this.ctx.createPattern(canMoss, "repeat");
 
         // E. Texture Mái Ngói Vảy Cá Cổ Thăng Long (Terracotta Fish-Scale Roof Tiles)
@@ -164,17 +179,21 @@ class GameRenderer {
         canTile.width = 24;
         canTile.height = 16;
         const ctxTile = canTile.getContext("2d");
-        ctxTile.fillStyle = "#991b1b";
+        ctxTile.fillStyle = "#7f1d1d";
         ctxTile.fillRect(0, 0, 24, 16);
-        // Vòng cung ngói cong âm dương
+        ctxTile.fillStyle = "#991b1b";
+        ctxTile.beginPath();
+        ctxTile.arc(12, 8, 10, Math.PI, 0);
+        ctxTile.fill();
         ctxTile.strokeStyle = "#450a0a";
-        ctxTile.lineWidth = 1.2;
+        ctxTile.lineWidth = 1.4;
         ctxTile.beginPath();
         ctxTile.arc(12, 8, 10, Math.PI, 0);
         ctxTile.stroke();
-        ctxTile.strokeStyle = "#f87171";
+        ctxTile.strokeStyle = "rgba(252, 165, 165, 0.45)";
+        ctxTile.lineWidth = 1;
         ctxTile.beginPath();
-        ctxTile.arc(12, 7, 9, Math.PI * 0.9, Math.PI * 0.1);
+        ctxTile.arc(12, 7.5, 8.5, Math.PI * 1.15, Math.PI * 1.85);
         ctxTile.stroke();
         this.patterns.roofTile = this.ctx.createPattern(canTile, "repeat");
 
@@ -185,13 +204,120 @@ class GameRenderer {
         const ctxMarble = canMarble.getContext("2d");
         ctxMarble.fillStyle = "#78350f";
         ctxMarble.fillRect(0, 0, 48, 24);
-        // Vân đá cẩm thạch vàng son
-        ctxMarble.strokeStyle = "rgba(251, 191, 36, 0.25)";
+        ctxMarble.fillStyle = "rgba(255,255,255,0.06)";
+        ctxMarble.fillRect(1, 1, 22, 10);
+        ctxMarble.fillRect(25, 13, 22, 10);
+        ctxMarble.strokeStyle = "rgba(251, 191, 36, 0.32)";
         ctxMarble.lineWidth = 1.2;
         ctxMarble.beginPath();
         ctxMarble.moveTo(0, 12); ctxMarble.lineTo(18, 4); ctxMarble.lineTo(34, 18); ctxMarble.lineTo(48, 10);
         ctxMarble.stroke();
         this.patterns.marble = this.ctx.createPattern(canMarble, "repeat");
+    }
+
+    // =========================================================================
+    // HELPER: VẼ NÚT PHÍM CƠ 3D TRÊN CANVAS ([E], [Q]) & ICON ĐỒ HỌA
+    // =========================================================================
+    drawKeycap(x, y, keyText, accentColor = "#fbbf24") {
+        const ctx = this.ctx;
+        ctx.save();
+        const w = 22;
+        const h = 20;
+        const rx = x - w / 2;
+        const ry = y - h / 2;
+
+        // Đế phím 3D sẫm
+        ctx.fillStyle = "#090d16";
+        ctx.beginPath();
+        ctx.roundRect(rx, ry + 3, w, h, 4);
+        ctx.fill();
+
+        // Mặt phím trên
+        ctx.fillStyle = "#1e293b";
+        ctx.strokeStyle = accentColor;
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.roundRect(rx, ry, w, h, 4);
+        ctx.fill();
+        ctx.stroke();
+
+        // Ký tự phím
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "700 11px 'Space Mono', 'Chakra Petch', monospace";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(keyText, x, ry + h / 2 + 0.5);
+        ctx.restore();
+    }
+
+    drawSupplyIcon(type, cx, cy, scale = 1) {
+        const ctx = this.ctx;
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.scale(scale, scale);
+
+        if (type === "shield") {
+            // Khiên Áo Trấn Thủ lục bảo viền vàng
+            ctx.fillStyle = "#10b981";
+            ctx.strokeStyle = "#ecfdf5";
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(0, -8);
+            ctx.lineTo(7, -5);
+            ctx.lineTo(7, 1);
+            ctx.quadraticCurveTo(7, 7, 0, 9);
+            ctx.quadraticCurveTo(-7, 7, -7, 1);
+            ctx.lineTo(-7, -5);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = "#fde047";
+            ctx.font = "700 8px 'Rowdies', sans-serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("★", 0, 0.5);
+        } else if (type === "speed") {
+            // Tia chớp tốc độ vàng rực
+            ctx.fillStyle = "#facc15";
+            ctx.strokeStyle = "#713f12";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(2, -9);
+            ctx.lineTo(-6, 1);
+            ctx.lineTo(-1, 1);
+            ctx.lineTo(-3, 9);
+            ctx.lineTo(6, -1);
+            ctx.lineTo(1, -1);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+        } else if (type === "disguise") {
+            // Mũ phớt & mặt nạ cải trang tím neon
+            ctx.fillStyle = "#c084fc";
+            ctx.fillRect(-8, -2, 16, 2.5);
+            ctx.beginPath();
+            ctx.roundRect(-5, -8, 10, 6.5, 2);
+            ctx.fill();
+            // Kính cải trang trắng sáng
+            ctx.strokeStyle = "#f8fafc";
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(-3.2, 3.5, 2.5, 0, Math.PI * 2);
+            ctx.arc(3.2, 3.5, 2.5, 0, Math.PI * 2);
+            ctx.stroke();
+        } else {
+            // Trái tim / Chữ thập hồi máu Lương Khô
+            ctx.fillStyle = "#22c55e";
+            ctx.strokeStyle = "#dcfce7";
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.roundRect(-2.5, -7, 5, 14, 1.5);
+            ctx.roundRect(-7, -2.5, 14, 5, 1.5);
+            ctx.fill();
+            ctx.stroke();
+        }
+        ctx.restore();
     }
 
     // =========================================================================
@@ -226,7 +352,8 @@ class GameRenderer {
             npcs = [],
             shortcuts = [],
             nearGuardForTakedown = false,
-            nearNpc = null
+            nearNpc = null,
+            starsCount = 0
         } = gameState;
 
         // Chấn động màn hình (Screen Shake) chân thực như các game danh tiếng
@@ -262,7 +389,7 @@ class GameRenderer {
         this.drawSupplies(supplies, cameraX, width);
 
         // 6.8. Vẽ Đồng chí liên lạc viên bí mật
-        this.drawNpcs(npcs, cameraX, width);
+        this.drawNpcs(npcs, cameraX, width, starsCount);
 
         // 7. Vẽ Ngôi sao cách mạng 3D tỏa hào quang
         this.drawStars(stars, cameraX, width);
@@ -629,11 +756,18 @@ class GameRenderer {
                 ctx.fill();
             }
 
-            // Huy hiệu chữ "NẤP" nhỏ tinh tế nổi phía trên
-            ctx.fillStyle = "rgba(255, 255, 255, 0.55)";
-            ctx.font = "bold 9px sans-serif";
-            ctx.textAlign = "center";
-            ctx.fillText("NẤP", screenX + spot.w / 2, spot.y - 6);
+            // Icon con mắt ẩn thân tinh tế thay vì chữ "NẤP"
+            const cx = screenX + spot.w / 2;
+            const cy = spot.y - 8;
+            ctx.strokeStyle = "rgba(148, 163, 184, 0.5)";
+            ctx.lineWidth = 1.3;
+            ctx.beginPath();
+            ctx.ellipse(cx, cy, 6, 3.2, 0, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(cx - 5, cy + 4);
+            ctx.lineTo(cx + 5, cy - 4);
+            ctx.stroke();
 
             ctx.restore();
         }
@@ -725,7 +859,7 @@ class GameRenderer {
             // Ngôi sao vàng cách mạng
             if (cp.reached) {
                 ctx.fillStyle = "#fbbf24";
-                ctx.font = "bold 11px sans-serif";
+                ctx.font = "700 11px 'Rowdies', sans-serif";
                 ctx.fillText("★", screenX + 12, cp.y + 14 + fWave * 0.5);
             }
             ctx.restore();
@@ -788,8 +922,8 @@ class GameRenderer {
 
             // Tên tàu son vàng
             ctx.fillStyle = "#fde047";
-            ctx.font = "bold 11px sans-serif";
-            ctx.fillText("TÀU LATOUCHE-TRÉVILLE (1911)", screenX - 15, y - 45);
+            ctx.font = "700 11px 'Rowdies', 'Chakra Petch', sans-serif";
+            ctx.fillText("⚓ LATOUCHE-TRÉVILLE (1911)", screenX - 15, y - 45);
         } else if (level.exitType === "train") {
             // Chuyến tàu cách mạng bọc thép
             ctx.fillStyle = "#334155";
@@ -809,8 +943,8 @@ class GameRenderer {
             }
 
             ctx.fillStyle = "#fde047";
-            ctx.font = "bold 11px sans-serif";
-            ctx.fillText("CHUYẾN TÀU CÁCH MẠNG", screenX, y - 15);
+            ctx.font = "700 11px 'Rowdies', 'Chakra Petch', sans-serif";
+            ctx.fillText("🚂 QUẢNG CHÂU (1927)", screenX + 5, y - 15);
         } else if (level.exitType === "cave") {
             // Cửa Hang Pác Bó thiêng liêng
             const caveGrad = ctx.createRadialGradient(screenX + 50, y + 30, 10, screenX + 50, y + 30, 48);
@@ -822,8 +956,8 @@ class GameRenderer {
             ctx.fill();
 
             ctx.fillStyle = "#6ee7b7";
-            ctx.font = "bold 12px sans-serif";
-            ctx.fillText("HANG PÁC BÓ - CAO BẰNG", screenX - 10, y - 25);
+            ctx.font = "700 12px 'Rowdies', 'Chakra Petch', sans-serif";
+            ctx.fillText("⛰️ PÁC BÓ (1941)", screenX + 2, y - 25);
         } else {
             // ĐẠI LỄ ĐÀI QUẢNG TRƯỜNG BA ĐÌNH TRÁNG LỆ
             ctx.fillStyle = "#991b1b";
@@ -844,12 +978,12 @@ class GameRenderer {
             ctx.fillStyle = "#dc2626";
             ctx.fillRect(screenX + 68, y - 100, 52 + grandFlagWave, 34);
             ctx.fillStyle = "#fde047";
-            ctx.font = "bold 18px sans-serif";
+            ctx.font = "700 18px 'Rowdies', sans-serif";
             ctx.fillText("★", screenX + 85, y - 76);
 
             ctx.fillStyle = "#fde047";
-            ctx.font = "bold 13px sans-serif";
-            ctx.fillText("LỄ ĐÀI BA ĐÌNH (2/9/1945)", screenX + 10, y - 110);
+            ctx.font = "700 13px 'Rowdies', 'Chakra Petch', sans-serif";
+            ctx.fillText("★ BA ĐÌNH (2/9/1945)", screenX + 10, y - 110);
         }
         ctx.restore();
     }
@@ -877,9 +1011,12 @@ class GameRenderer {
 
             // Ngôi sao vàng 5 cánh vát 3D
             ctx.fillStyle = "#fde047";
-            ctx.font = "bold 17px sans-serif";
+            ctx.strokeStyle = "#92400e";
+            ctx.lineWidth = 2;
+            ctx.font = "700 17px 'Rowdies', sans-serif";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
+            ctx.strokeText("★", screenX, star.y);
             ctx.fillText("★", screenX, star.y);
             ctx.restore();
         }
@@ -901,7 +1038,7 @@ class GameRenderer {
 
             // Hào quang tỏa tia sáng xoay tròn
             const docGlow = ctx.createRadialGradient(docCenterX, docCenterY, 4, docCenterX, docCenterY, 26);
-            docGlow.addColorStop(0, "rgba(254, 240, 138, 0.6)");
+            docGlow.addColorStop(0, "rgba(254, 240, 138, 0.65)");
             docGlow.addColorStop(1, "rgba(254, 240, 138, 0)");
             ctx.fillStyle = docGlow;
             ctx.beginPath();
@@ -932,33 +1069,14 @@ class GameRenderer {
             ctx.arc(docCenterX, doc.y + 16.5, 5, 0, Math.PI * 2);
             ctx.fill();
             ctx.fillStyle = "#fde047";
-            ctx.font = "bold 8px sans-serif";
+            ctx.font = "700 8px 'Rowdies', sans-serif";
             ctx.textAlign = "center";
             ctx.fillText("★", docCenterX, doc.y + 19);
 
-            // Khi người chơi đến gần: Hiển thị huy hiệu tương tác bấm [E] ĐỌC
+            // Khi người chơi đến gần: chỉ hiện nút phím cơ [E] sắc nét
             if (doc.isNear) {
-                const badgeY = doc.y - 16;
-                ctx.save();
-                ctx.fillStyle = "rgba(15, 23, 42, 0.92)";
-                ctx.strokeStyle = "#fbbf24";
-                ctx.lineWidth = 1.5;
-                ctx.beginPath();
-                ctx.roundRect(docCenterX - 26, badgeY - 10, 52, 18, 9);
-                ctx.fill();
-                ctx.stroke();
-
-                ctx.fillStyle = "#fbbf24";
-                ctx.font = "bold 10px sans-serif";
-                ctx.textAlign = "center";
-                ctx.fillText("[E] ĐỌC", docCenterX, badgeY + 3);
-                ctx.restore();
-            } else {
-                // Nhãn "VĂN KIỆN" lơ lửng phía trên
-                ctx.fillStyle = "#fef08a";
-                ctx.font = "bold 9px sans-serif";
-                ctx.textAlign = "center";
-                ctx.fillText("VĂN KIỆN", docCenterX, doc.y - 7);
+                const badgeY = doc.y - 16 + Math.sin(this.time * 7) * 2;
+                this.drawKeycap(docCenterX, badgeY, "E", "#fbbf24");
             }
 
             ctx.restore();
@@ -1098,56 +1216,76 @@ class GameRenderer {
                 }
             }
 
-            // C. HIỆU ỨNG CHOÁNG BẤT TỈNH SAU LƯNG (STUNNED BY TAKEDOWN)
+            // C. HIỆU ỨNG CHOÁNG BẤT TỈNH SAU LƯNG (STUNNED BY TAKEDOWN - Vòng sao xoay tròn + thanh đếm ngược)
             if (isStunned) {
                 const stunAngle = this.time * 7;
                 for (let s = 0; s < 3; s++) {
                     const a = stunAngle + (s * (Math.PI * 2 / 3));
-                    const sx = screenX + 15 + Math.cos(a) * 16;
-                    const sy = guard.y - 8 + Math.sin(a) * 6;
+                    const sx = screenX + 15 + Math.cos(a) * 15;
+                    const sy = guard.y - 10 + Math.sin(a) * 5;
                     ctx.fillStyle = "#facc15";
-                    ctx.beginPath();
-                    ctx.arc(sx, sy, 2.5, 0, Math.PI * 2);
-                    ctx.fill();
+                    ctx.font = "700 10px 'Rowdies', sans-serif";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText("★", sx, sy);
                 }
-                ctx.fillStyle = "#94a3b8";
-                ctx.font = "bold 10px sans-serif";
-                ctx.textAlign = "center";
-                ctx.fillText("BẤT TỈNH", screenX + 15, guard.y - 18);
+                // Thanh thời gian choáng nhỏ gọn
+                const stunRatio = Math.max(0, Math.min(1, guard.stunTimer / 360));
+                ctx.fillStyle = "rgba(15, 23, 42, 0.85)";
+                ctx.fillRect(screenX + 3, guard.y - 22, 24, 4);
+                ctx.fillStyle = "#facc15";
+                ctx.fillRect(screenX + 3, guard.y - 22, 24 * stunRatio, 4);
             }
             // D. HIỆU ỨNG ĐI ĐIỀU TRA ÂM THANH NÉM SỎI (DISTRACTED / INVESTIGATING)
             else if (guard.investigateTimer && guard.investigateTimer > 0) {
-                const iconY = guard.y - 12;
-                ctx.fillStyle = "#38bdf8";
-                ctx.font = "bold 16px sans-serif";
-                ctx.textAlign = "center";
-                ctx.fillText("?", screenX + 15, iconY);
+                const iconY = guard.y - 14 + Math.sin(this.time * 6) * 2;
+                ctx.fillStyle = "rgba(15, 23, 42, 0.9)";
+                ctx.strokeStyle = "#38bdf8";
+                ctx.lineWidth = 1.6;
+                ctx.beginPath();
+                ctx.arc(screenX + 15, iconY, 10, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
 
-                ctx.fillStyle = "#7dd3fc";
-                ctx.font = "bold 9px sans-serif";
-                ctx.fillText("NGHI BINH", screenX + 15, iconY - 14);
+                ctx.fillStyle = "#38bdf8";
+                ctx.font = "700 14px 'Rowdies', sans-serif";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText("?", screenX + 15, iconY + 1);
             }
             // E. BIỂU TƯỢNG CẢNH BÁO TRÊN ĐẦU MẬT THÁM (? NGHI VẤN / ! PHÁT HIỆN)
             else if (guard.isAlerted || (guard.crouchSuspicionTimer && guard.crouchSuspicionTimer > 35)) {
-                const iconY = guard.y - 12;
+                const iconY = guard.y - 14;
                 if (guard.crouchSuspicionTimer >= 80 || guard.isAiming) {
-                    // Dấu chấm than đỏ rực khi sắp phát hiện / đang ngắm bắn!
+                    // Huy hiệu chấm than đỏ rực khi sắp phát hiện / đang ngắm bắn!
                     ctx.fillStyle = "#ef4444";
-                    ctx.font = "bold 20px sans-serif";
-                    ctx.textAlign = "center";
-                    ctx.fillText("!", screenX + 15, iconY);
-
-                    ctx.strokeStyle = "rgba(239, 68, 68, 0.65)";
-                    ctx.lineWidth = 1.5;
+                    ctx.strokeStyle = "#fef2f2";
+                    ctx.lineWidth = 1.6;
                     ctx.beginPath();
-                    ctx.arc(screenX + 15, iconY - 6, 9 + Math.sin(this.time * 15) * 3, 0, Math.PI * 2);
+                    ctx.arc(screenX + 15, iconY, 11, 0, Math.PI * 2);
+                    ctx.fill();
                     ctx.stroke();
+
+                    ctx.fillStyle = "#ffffff";
+                    ctx.font = "700 15px 'Rowdies', sans-serif";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText("!", screenX + 15, iconY + 1);
                 } else {
                     // Dấu hỏi vàng nghi vấn khi ngồi trước mắt quá lâu
+                    ctx.fillStyle = "rgba(15, 23, 42, 0.9)";
+                    ctx.strokeStyle = "#fbbf24";
+                    ctx.lineWidth = 1.5;
+                    ctx.beginPath();
+                    ctx.arc(screenX + 15, iconY, 9.5, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+
                     ctx.fillStyle = "#fbbf24";
-                    ctx.font = "bold 15px sans-serif";
+                    ctx.font = "700 13px 'Rowdies', sans-serif";
                     ctx.textAlign = "center";
-                    ctx.fillText("?", screenX + 15, iconY);
+                    ctx.textBaseline = "middle";
+                    ctx.fillText("?", screenX + 15, iconY + 1);
                 }
             }
 
@@ -1256,18 +1394,64 @@ class GameRenderer {
             ctx.restore();
         }
 
-        // D. Độ mờ khi đang nấp an toàn trong vùng ẩn nấp hoặc đang cải trang
+        // D. Huy hiệu Icon + Vòng cung đếm ngược thời gian Buff (Zero-text Game HUD trên đầu nhân vật)
+        const headCenterX = screenX + player.width / 2;
+        const headBadgeY = player.y - 14;
         if (player.isHidden) {
             ctx.globalAlpha = 0.55;
-            ctx.fillStyle = "#4ade80";
-            ctx.font = "bold 10px sans-serif";
-            ctx.textAlign = "center";
-            ctx.fillText("✓ ĐANG NẤP", screenX + player.width / 2, player.y - 8);
+            // Icon con mắt ẩn thân màu xanh lá
+            ctx.save();
+            ctx.fillStyle = "rgba(15, 23, 42, 0.88)";
+            ctx.strokeStyle = "#4ade80";
+            ctx.lineWidth = 1.6;
+            ctx.beginPath();
+            ctx.arc(headCenterX, headBadgeY, 9.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            ctx.strokeStyle = "#4ade80";
+            ctx.lineWidth = 1.4;
+            ctx.beginPath();
+            ctx.ellipse(headCenterX, headBadgeY, 5, 2.8, 0, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(headCenterX - 4, headBadgeY + 4);
+            ctx.lineTo(headCenterX + 4, headBadgeY - 4);
+            ctx.stroke();
+            ctx.restore();
         } else if (player.disguiseTimer > 0) {
-            ctx.fillStyle = "#c084fc";
-            ctx.font = "bold 10px sans-serif";
-            ctx.textAlign = "center";
-            ctx.fillText("🎩 CẢI TRANG", screenX + player.width / 2, player.y - 8);
+            // Huy hiệu Cải Trang + Vòng cung đếm ngược thời gian (Radial Timer Ring)
+            const ratio = Math.max(0, Math.min(1, player.disguiseTimer / 720));
+            ctx.save();
+            ctx.fillStyle = "rgba(15, 23, 42, 0.9)";
+            ctx.beginPath();
+            ctx.arc(headCenterX, headBadgeY, 11, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = "rgba(192, 132, 252, 0.25)";
+            ctx.lineWidth = 2.4;
+            ctx.stroke();
+            // Vòng cung tiến trình
+            ctx.strokeStyle = "#c084fc";
+            ctx.lineWidth = 2.4;
+            ctx.beginPath();
+            ctx.arc(headCenterX, headBadgeY, 11, -Math.PI / 2, -Math.PI / 2 + ratio * Math.PI * 2);
+            ctx.stroke();
+            this.drawSupplyIcon("disguise", headCenterX, headBadgeY, 0.72);
+            ctx.restore();
+        } else if (player.speedBoostTimer > 0) {
+            // Huy hiệu Tăng Tốc + Vòng cung đếm ngược thời gian
+            const ratio = Math.max(0, Math.min(1, player.speedBoostTimer / 480));
+            ctx.save();
+            ctx.fillStyle = "rgba(15, 23, 42, 0.9)";
+            ctx.beginPath();
+            ctx.arc(headCenterX, headBadgeY, 11, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = "#facc15";
+            ctx.lineWidth = 2.4;
+            ctx.beginPath();
+            ctx.arc(headCenterX, headBadgeY, 11, -Math.PI / 2, -Math.PI / 2 + ratio * Math.PI * 2);
+            ctx.stroke();
+            this.drawSupplyIcon("speed", headCenterX, headBadgeY, 0.72);
+            ctx.restore();
         }
 
         // E. Hiệu ứng va chạm trúng bẫy (Hit Reaction Glow)
@@ -1315,18 +1499,10 @@ class GameRenderer {
             ctx.fill();
         }
 
-        // F. Huy hiệu gợi ý [Q] KHỐNG CHẾ khi áp sát sau lưng mật thám
+        // F. Nút phím cơ 3D [Q] + Tia chớp khống chế khi áp sát sau lưng mật thám
         if (nearGuardForTakedown && !player.isDying) {
-            ctx.save();
-            const badgeY = player.y - 20 + Math.sin(this.time * 8) * 2;
-            ctx.fillStyle = "#facc15";
-            ctx.strokeStyle = "#000000";
-            ctx.lineWidth = 2.5;
-            ctx.font = "bold 12px sans-serif";
-            ctx.textAlign = "center";
-            ctx.strokeText("[Q] KHỐNG CHẾ", screenX + player.width / 2, badgeY);
-            ctx.fillText("[Q] KHỐNG CHẾ", screenX + player.width / 2, badgeY);
-            ctx.restore();
+            const badgeY = player.y - 32 + Math.sin(this.time * 8) * 2;
+            this.drawKeycap(headCenterX, badgeY, "Q", "#ef4444");
         }
 
         ctx.restore();
@@ -1365,7 +1541,7 @@ class GameRenderer {
     }
 
     // =========================================================================
-    // 10.8. VẼ VẬT PHẨM TIẾP TẾ CÁCH MẠNG (ÁO TRẤN THỦ, DÉP CAO SU, HÒM CẢI TRANG, LƯƠNG KHÔ)
+    // 10.8. VẼ VẬT PHẨM TIẾP TẾ CÁCH MẠNG (HUY HIỆU GAME LỤC GIÁC + ICON VECTOR, KHÔNG DÙNG CHỮ RƯỜM RÀ)
     // =========================================================================
     drawSupplies(supplies, cameraX, viewWidth = 1000) {
         if (!supplies || supplies.length === 0) return;
@@ -1376,143 +1552,92 @@ class GameRenderer {
             if (sx < -50 || sx > viewWidth + 50) continue;
 
             ctx.save();
-            const floatY = item.y;
+            const cx = sx + 12;
+            const cy = item.y + 12;
 
+            // Màu chủ đạo theo loại trang bị
+            let glowColor = "rgba(34, 197, 94, 0.5)";
+            let rimColor = "#4ade80";
+            let bgColor = "#064e3b";
             if (item.type === "shield") {
-                // Áo Trấn Thủ (Khiên bảo vệ)
-                const grad = ctx.createRadialGradient(sx + 12, floatY + 12, 2, sx + 12, floatY + 12, 20);
-                grad.addColorStop(0, "rgba(16, 185, 129, 0.5)");
-                grad.addColorStop(1, "rgba(16, 185, 129, 0)");
-                ctx.fillStyle = grad;
-                ctx.beginPath();
-                ctx.arc(sx + 12, floatY + 12, 20, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Chiếc khiên / Áo trấn thủ
-                ctx.fillStyle = "#059669";
-                ctx.beginPath();
-                ctx.moveTo(sx + 4, floatY + 2);
-                ctx.lineTo(sx + 20, floatY + 2);
-                ctx.lineTo(sx + 20, floatY + 14);
-                ctx.quadraticCurveTo(sx + 12, floatY + 24, sx + 12, floatY + 24);
-                ctx.quadraticCurveTo(sx + 4, floatY + 14, sx + 4, floatY + 2);
-                ctx.closePath();
-                ctx.fill();
-                ctx.strokeStyle = "#6ee7b7";
-                ctx.lineWidth = 1.5;
-                ctx.stroke();
-
-                // Ngôi sao vàng nhỏ giữa khiên
-                ctx.fillStyle = "#fde047";
-                ctx.beginPath();
-                ctx.arc(sx + 12, floatY + 10, 3, 0, Math.PI * 2);
-                ctx.fill();
-
-                ctx.fillStyle = "#6ee7b7";
-                ctx.font = "bold 9px sans-serif";
-                ctx.textAlign = "center";
-                ctx.fillText("ÁO TRẤN THỦ", sx + 12, floatY - 6);
-
+                glowColor = "rgba(16, 185, 129, 0.55)";
+                rimColor = "#34d399";
+                bgColor = "#064e3b";
             } else if (item.type === "speed") {
-                // Dép Cao Su Vạn Dặm
-                const grad = ctx.createRadialGradient(sx + 12, floatY + 12, 2, sx + 12, floatY + 12, 20);
-                grad.addColorStop(0, "rgba(250, 204, 21, 0.5)");
-                grad.addColorStop(1, "rgba(250, 204, 21, 0)");
-                ctx.fillStyle = grad;
-                ctx.beginPath();
-                ctx.arc(sx + 12, floatY + 12, 20, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Đế dép cao su đen
-                ctx.fillStyle = "#1e293b";
-                ctx.fillRect(sx + 4, floatY + 10, 16, 6);
-                // Quai chéo vàng
-                ctx.strokeStyle = "#facc15";
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                ctx.moveTo(sx + 6, floatY + 10);
-                ctx.lineTo(sx + 12, floatY + 4);
-                ctx.lineTo(sx + 18, floatY + 10);
-                ctx.stroke();
-
-                ctx.fillStyle = "#fde047";
-                ctx.font = "bold 9px sans-serif";
-                ctx.textAlign = "center";
-                ctx.fillText("DÉP CAO SU", sx + 12, floatY - 6);
-
+                glowColor = "rgba(250, 204, 21, 0.55)";
+                rimColor = "#fde047";
+                bgColor = "#422006";
             } else if (item.type === "disguise") {
-                // Hòm Cải Trang
-                const grad = ctx.createRadialGradient(sx + 12, floatY + 12, 2, sx + 12, floatY + 12, 20);
-                grad.addColorStop(0, "rgba(192, 132, 252, 0.5)");
-                grad.addColorStop(1, "rgba(192, 132, 252, 0)");
-                ctx.fillStyle = grad;
-                ctx.beginPath();
-                ctx.arc(sx + 12, floatY + 12, 20, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Vali nâu tím
-                ctx.fillStyle = "#7e22ce";
-                ctx.fillRect(sx + 4, floatY + 6, 16, 12);
-                ctx.strokeStyle = "#d8b4fe";
-                ctx.lineWidth = 1.2;
-                ctx.strokeRect(sx + 4, floatY + 6, 16, 12);
-                // Quai xách
-                ctx.beginPath();
-                ctx.arc(sx + 12, floatY + 5, 4, Math.PI, 0);
-                ctx.stroke();
-
-                ctx.fillStyle = "#d8b4fe";
-                ctx.font = "bold 9px sans-serif";
-                ctx.textAlign = "center";
-                ctx.fillText("CẢI TRANG", sx + 12, floatY - 6);
-
-            } else {
-                // Lương Khô Cách Mạng (Heal)
-                const grad = ctx.createRadialGradient(sx + 12, floatY + 12, 2, sx + 12, floatY + 12, 20);
-                grad.addColorStop(0, "rgba(74, 222, 128, 0.5)");
-                grad.addColorStop(1, "rgba(74, 222, 128, 0)");
-                ctx.fillStyle = grad;
-                ctx.beginPath();
-                ctx.arc(sx + 12, floatY + 12, 20, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Gói lương khô xanh
-                ctx.fillStyle = "#15803d";
-                ctx.fillRect(sx + 4, floatY + 6, 16, 12);
-                // Lạt buộc
-                ctx.strokeStyle = "#fef08a";
-                ctx.lineWidth = 1.5;
-                ctx.beginPath();
-                ctx.moveTo(sx + 12, floatY + 6); ctx.lineTo(sx + 12, floatY + 18);
-                ctx.moveTo(sx + 4, floatY + 12); ctx.lineTo(sx + 20, floatY + 12);
-                ctx.stroke();
-
-                ctx.fillStyle = "#86efac";
-                ctx.font = "bold 9px sans-serif";
-                ctx.textAlign = "center";
-                ctx.fillText("LƯƠNG KHÔ", sx + 12, floatY - 6);
+                glowColor = "rgba(192, 132, 252, 0.55)";
+                rimColor = "#d8b4fe";
+                bgColor = "#3b0764";
             }
+
+            // Hào quang xung nhịp phía sau
+            const pulseR = 19 + Math.sin(this.time * 5 + item.x) * 3;
+            const grad = ctx.createRadialGradient(cx, cy, 3, cx, cy, pulseR);
+            grad.addColorStop(0, glowColor);
+            grad.addColorStop(1, "rgba(0, 0, 0, 0)");
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(cx, cy, pulseR, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Khung huy hiệu lục giác kim loại (Hexagonal Tactical Medallion)
+            const r = 13;
+            ctx.fillStyle = bgColor;
+            ctx.strokeStyle = rimColor;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            for (let i = 0; i < 6; i++) {
+                const angle = (Math.PI / 3) * i - Math.PI / 6;
+                const hx = cx + r * Math.cos(angle);
+                const hy = cy + r * Math.sin(angle);
+                if (i === 0) ctx.moveTo(hx, hy);
+                else ctx.lineTo(hx, hy);
+            }
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Vẽ Icon đồ họa sắc nét ở tâm huy hiệu
+            this.drawSupplyIcon(item.type, cx, cy, 1);
 
             ctx.restore();
         }
     }
 
     // =========================================================================
-    // 10.9. VẼ ĐỒNG CHÍ LIÊN LẠC VIÊN BÍ MẬT (NPC)
+    // 10.9. VẼ ĐỒNG CHÍ LIÊN LẠC VIÊN BÍ MẬT (BONG BÓNG ĐỔI SAO ★ BẰNG ICON)
     // =========================================================================
-    drawNpcs(npcs, cameraX, viewWidth = 1000) {
+    drawNpcs(npcs, cameraX, viewWidth = 1000, starsCount = 0) {
         if (!npcs || npcs.length === 0) return;
         const ctx = this.ctx;
         for (const npc of npcs) {
             const sx = npc.x - cameraX;
-            if (sx < -80 || sx > viewWidth + 80) continue;
+            if (sx < -100 || sx > viewWidth + 100) continue;
 
             ctx.save();
             const pCenterX = sx + npc.width / 2;
 
-            // Thân người đồng chí cách mạng
+            // Hào quang chân đồng chí liên lạc
+            if (!npc.talked) {
+                const baseGlow = ctx.createRadialGradient(pCenterX, npc.y + 44, 2, pCenterX, npc.y + 44, 22);
+                baseGlow.addColorStop(0, "rgba(16, 185, 129, 0.35)");
+                baseGlow.addColorStop(1, "rgba(16, 185, 129, 0)");
+                ctx.fillStyle = baseGlow;
+                ctx.beginPath();
+                ctx.ellipse(pCenterX, npc.y + 46, 20, 6, 0, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Thân người đồng chí cách mạng (Áo trấn thủ xanh chàm + khăn quàng đỏ)
             ctx.fillStyle = "#1e3a8a";
-            ctx.fillRect(sx + 4, npc.y + 16, npc.width - 8, 24);
+            ctx.beginPath();
+            ctx.roundRect(sx + 4, npc.y + 16, npc.width - 8, 24, 3);
+            ctx.fill();
+            ctx.fillStyle = "#dc2626";
+            ctx.fillRect(sx + 6, npc.y + 16, npc.width - 12, 4);
 
             // Đầu và khuôn mặt
             ctx.fillStyle = "#fed7aa";
@@ -1520,33 +1645,70 @@ class GameRenderer {
             ctx.arc(pCenterX, npc.y + 10, 8, 0, Math.PI * 2);
             ctx.fill();
 
-            // Mũ beret / mũ ca-lô
+            // Mũ beret / mũ ca-lô có ngôi sao nhỏ
             ctx.fillStyle = "#0f172a";
             ctx.beginPath();
             ctx.arc(pCenterX, npc.y + 6, 9, Math.PI, 0);
             ctx.fill();
+            ctx.fillStyle = "#fbbf24";
+            ctx.font = "700 7px 'Rowdies', sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText("★", pCenterX, npc.y + 5);
 
             // Đôi chân
             ctx.fillStyle = "#0f172a";
             ctx.fillRect(sx + 6, npc.y + 40, 5, 10);
             ctx.fillRect(sx + npc.width - 11, npc.y + 40, 5, 10);
 
-            // Biểu tượng trên đầu NPC
-            const iconY = npc.y - 12 + Math.sin(this.time * 5) * 3;
+            // Bong bóng trao đổi bằng Icon (Trade Pill: ★ 2/3 ▸ [Icon Quà])
+            const bobY = npc.y - 18 + Math.sin(this.time * 5) * 2.5;
             if (!npc.talked) {
-                ctx.fillStyle = "#10b981";
-                ctx.font = "bold 13px sans-serif";
-                ctx.textAlign = "center";
-                ctx.fillText("🤝", pCenterX, iconY);
+                const cost = npc.starCost || 3;
+                const canAfford = starsCount >= cost;
+                const pillW = 68;
+                const pillH = 22;
+                const pillX = pCenterX - pillW / 2;
+                const pillY = bobY - pillH / 2;
 
-                ctx.fillStyle = "#34d399";
-                ctx.font = "bold 10px sans-serif";
-                ctx.fillText(npc.isNear ? "[E] TRÒ CHUYỆN" : "LIÊN LẠC", pCenterX, iconY - 14);
-            } else {
+                // Khung bong bóng trao đổi
+                ctx.fillStyle = "rgba(9, 13, 22, 0.92)";
+                ctx.strokeStyle = canAfford ? "#10b981" : "#f59e0b";
+                ctx.lineWidth = 1.8;
+                ctx.beginPath();
+                ctx.roundRect(pillX, pillY, pillW, pillH, 6);
+                ctx.fill();
+                ctx.stroke();
+
+                // Sao + Số lượng hiện có / Giá đổi
+                ctx.fillStyle = canAfford ? "#fde047" : "#fca5a5";
+                ctx.font = "700 11px 'Rowdies', 'Chakra Petch', sans-serif";
+                ctx.textAlign = "left";
+                ctx.textBaseline = "middle";
+                ctx.fillText(`★${Math.min(starsCount, cost)}/${cost}`, pillX + 6, bobY + 0.5);
+
+                // Mũi tên đổi
                 ctx.fillStyle = "#94a3b8";
-                ctx.font = "bold 9px sans-serif";
+                ctx.font = "700 10px 'Space Mono', monospace";
+                ctx.fillText("▸", pillX + 39, bobY + 0.5);
+
+                // Icon vật phẩm phần thưởng bên phải
+                this.drawSupplyIcon(npc.giftType || "shield", pillX + 55, bobY, 0.72);
+
+                // Nếu đứng gần: Hiện nút phím cơ 3D [E] phía trên bong bóng
+                if (npc.isNear) {
+                    this.drawKeycap(pCenterX, pillY - 13, "E", canAfford ? "#10b981" : "#f59e0b");
+                }
+            } else {
+                // Đã liên lạc xong: Huy hiệu dấu tích xanh gọn gàng
+                ctx.fillStyle = "rgba(16, 185, 129, 0.92)";
+                ctx.beginPath();
+                ctx.arc(pCenterX, bobY, 9, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "700 11px 'Rowdies', sans-serif";
                 ctx.textAlign = "center";
-                ctx.fillText("✓ ĐỒNG CHÍ", pCenterX, iconY);
+                ctx.textBaseline = "middle";
+                ctx.fillText("✓", pCenterX, bobY + 0.5);
             }
 
             ctx.restore();
@@ -1554,7 +1716,7 @@ class GameRenderer {
     }
 
     // =========================================================================
-    // 10.10. VẼ LỐI TẮT BÍ MẬT (SECRET SHORTCUTS / BRIDGES)
+    // 10.10. VẼ LỐI TẮT BÍ MẬT (SECRET SHORTCUTS / BRIDGES - ICON KHÓA GỌN GÀNG)
     // =========================================================================
     drawShortcuts(shortcuts, cameraX, viewWidth = 1000) {
         if (!shortcuts || shortcuts.length === 0) return;
@@ -1566,44 +1728,56 @@ class GameRenderer {
             ctx.save();
             if (sc.isOpen) {
                 // Cầu gỗ bí mật đã được mở
-                if (this.patterns.wood) {
-                    ctx.fillStyle = this.patterns.wood;
-                } else {
-                    ctx.fillStyle = "#78350f";
-                }
+                ctx.fillStyle = this.patterns.wood || "#78350f";
                 ctx.fillRect(sx, sc.y, sc.w, sc.h);
 
-                // Dây chằng neo cầu hai đầu
-                ctx.strokeStyle = "#d97706";
+                // Viền ván gỗ trên sáng rõ
+                ctx.fillStyle = "#d97706";
+                ctx.fillRect(sx, sc.y, sc.w, 3.5);
+
+                // Lan can dây thừng chiến thuật
+                ctx.strokeStyle = "#b45309";
                 ctx.lineWidth = 2;
                 ctx.beginPath();
-                ctx.moveTo(sx, sc.y); ctx.lineTo(sx + 10, sc.y - 10);
-                ctx.moveTo(sx + sc.w, sc.y); ctx.lineTo(sx + sc.w - 10, sc.y - 10);
+                ctx.moveTo(sx, sc.y - 10);
+                ctx.quadraticCurveTo(sx + sc.w / 2, sc.y - 2, sx + sc.w, sc.y - 10);
                 ctx.stroke();
 
-                // Đinh tán vàng
-                ctx.fillStyle = "#f59e0b";
-                for (let x = sx + 8; x < sx + sc.w; x += 24) {
+                // Cọc gỗ hai đầu cầu
+                ctx.fillStyle = "#78350f";
+                ctx.fillRect(sx, sc.y - 12, 5, 14);
+                ctx.fillRect(sx + sc.w - 5, sc.y - 12, 5, 14);
+
+                // Đinh tán đồng dọc thân cầu
+                ctx.fillStyle = "#fde047";
+                for (let x = sx + 10; x < sx + sc.w; x += 26) {
                     ctx.beginPath();
-                    ctx.arc(x, sc.y + 4, 1.8, 0, Math.PI * 2);
+                    ctx.arc(x, sc.y + 6, 1.8, 0, Math.PI * 2);
                     ctx.fill();
                 }
-
-                ctx.fillStyle = "#34d399";
-                ctx.font = "bold 9px sans-serif";
-                ctx.textAlign = "center";
-                ctx.fillText("LỐI TẮT MỞ", sx + sc.w / 2, sc.y - 6);
             } else {
-                // Cầu chưa mở: đường nét đứt mờ
-                ctx.strokeStyle = "rgba(148, 163, 184, 0.4)";
-                ctx.lineWidth = 2;
+                // Cầu chưa mở: khung nét đứt + Huy hiệu khóa ★3 gọn gàng ở giữa
+                ctx.strokeStyle = "rgba(148, 163, 184, 0.35)";
+                ctx.lineWidth = 1.8;
                 ctx.setLineDash([6, 6]);
                 ctx.strokeRect(sx, sc.y, sc.w, sc.h);
+                ctx.setLineDash([]);
 
-                ctx.fillStyle = "rgba(148, 163, 184, 0.6)";
-                ctx.font = "italic 9px sans-serif";
+                const midX = sx + sc.w / 2;
+                const midY = sc.y + sc.h / 2;
+                ctx.fillStyle = "rgba(15, 23, 42, 0.85)";
+                ctx.strokeStyle = "rgba(251, 191, 36, 0.55)";
+                ctx.lineWidth = 1.4;
+                ctx.beginPath();
+                ctx.roundRect(midX - 24, midY - 10, 48, 20, 5);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = "#fbbf24";
+                ctx.font = "700 10px 'Rowdies', 'Chakra Petch', sans-serif";
                 ctx.textAlign = "center";
-                ctx.fillText("Cần liên lạc mở đường", sx + sc.w / 2, sc.y + sc.h / 2 + 3);
+                ctx.textBaseline = "middle";
+                ctx.fillText("🔒 ★3", midX, midY + 0.5);
             }
             ctx.restore();
         }

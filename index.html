@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Theo Dấu Chân Người - Game Sáng Tạo Môn Tư Tưởng Hồ Chí Minh</title>
-    <!-- Google Fonts for Dignified Typography -->
+    <!-- Google Fonts: Bộ font Game hành động / chiến thuật hỗ trợ đầy đủ tiếng Việt -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Rowdies:wght@700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <!-- Font Awesome 6 Icons (Thư viện icon vector chuyên nghiệp chuẩn Fa*) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -388,22 +388,20 @@
             <button class="modal-close-btn">&times;</button>
             <h3 style="font-family: var(--font-heading); color: var(--accent-gold); margin-bottom: 15px;"><i class="fa-solid fa-circle-question text-gold"></i> Hướng Dẫn Chơi</h3>
             <ul style="color: #e2e8f0; line-height: 1.8; margin-left: 20px; font-size: 0.95rem;">
-                <li><strong>Di chuyển:</strong> Phím <code>A</code> / <code>D</code> hoặc Mũi tên <code>Trái</code> / <code>Phải</code>.</li>
-                <li><strong>Nhảy & Nhảy đúp:</strong> Phím <code>W</code>, <code>Space</code> hoặc Mũi tên <code>Lên</code> (bấm 2 lần để nhảy đúp trên không).</li>
-                <li><strong>Ngồi / Ẩn nấp:</strong> Phím <code>S</code> hoặc Mũi tên <code>Xuống</code>. Đứng cạnh thùng hàng, bụi rậm, hốc đá để ẩn thân.</li>
-                <li><strong>🎯 Nghi Binh (Ném sỏi):</strong> Bấm <code>F</code> hoặc nút cảm ứng <code>SỎI</code> để ném sỏi theo hình parabol thu hút lính gác quay lại điều tra.</li>
-                <li><strong>🥋 Tự Vệ Khống Chế Sau Lưng:</strong> Khi áp sát sau lưng lính gác (&lt; 48px), bấm <code>Q</code> hoặc nút <code>HẠ</code> để khống chế mật thám bất tỉnh 12 giây (+150 điểm mưu lược).</li>
-                <li><strong>🤝 Đồng Chí Liên Lạc Bí Mật:</strong> Bấm <code>E</code> khi gặp đồng chí để tiếp nhận lời dặn lịch sử, nhận quà tiếp tế và mở lối tắt bí mật vượt cạm bẫy.</li>
-                <li><strong>🎒 Vật Phẩm Tiếp Tế Cách Mạng:</strong>
+                <li><strong>Di chuyển & Nhảy đúp:</strong> Phím <code>A</code> / <code>D</code> (hoặc <code>←</code> / <code>→</code>) để chạy; <code>W</code> / <code>Space</code> / <code>↑</code> để nhảy (bấm 2 lần nhảy đúp).</li>
+                <li><strong>Ẩn nấp:</strong> Phím <code>S</code> / <code>↓</code> để cúi. Đứng tại thùng hàng, bụi cây, hốc đá để ẩn thân hoàn toàn.</li>
+                <li><i class="fa-solid fa-bullseye text-gold"></i> <strong>Nghi Binh (<code>F</code>):</strong> Ném sỏi tạo tiếng động dụ mật thám trong bán kính gần quay lại kiểm tra.</li>
+                <li><i class="fa-solid fa-hand-fist text-gold"></i> <strong>Khống Chế (<code>Q</code>):</strong> Áp sát phía sau lưng mật thám để đánh ngất 12 giây (<code>+150 điểm</code>).</li>
+                <li><i class="fa-solid fa-star text-gold"></i> <strong>Tín Vật Sao Vàng & Liên Lạc (<code>E</code>):</strong> Thu thập đủ <strong>3 Sao Vàng</strong> trên đường đi để đổi với Đồng chí Liên lạc — nhận trang bị tiếp tế và <strong>mở cầu bí mật</strong> vượt chướng ngại.</li>
+                <li><i class="fa-solid fa-box-open text-gold"></i> <strong>Vật Phẩm Tiếp Tế:</strong>
                     <ul style="margin-top: 4px; margin-left: 15px; font-size: 0.9rem; color: #cbd5e1;">
-                        <li>🛡️ <em>Áo Trấn Thủ:</em> Khiên đỡ trọn 1 đòn sát thương súng hoặc bẫy mà không mất máu.</li>
-                        <li>⚡ <em>Dép Cao Su Vạn Dặm:</em> Tăng 1.45x tốc độ di chuyển và bật nhảy trong 8 giây.</li>
-                        <li>🎩 <em>Hòm Cải Trang:</em> Hóa trang trong 12 giây, mật thám không thể phát hiện từ xa.</li>
-                        <li>🥖 <em>Lương Khô Cách Mạng:</em> Hồi phục ngay +25 HP và tăng điểm số.</li>
+                        <li><i class="fa-solid fa-shield-halved" style="color:#10b981;"></i> <strong>Áo Trấn Thủ:</strong> Đỡ trọn 1 phát đạn hoặc bẫy.</li>
+                        <li><i class="fa-solid fa-bolt" style="color:#facc15;"></i> <strong>Dép Cao Su:</strong> Tăng 1.45x tốc độ chạy & nhảy (8s).</li>
+                        <li><i class="fa-solid fa-user-secret" style="color:#c084fc;"></i> <strong>Cải Trang:</strong> Mật thám không phát hiện từ xa (12s).</li>
+                        <li><i class="fa-solid fa-kit-medical" style="color:#4ade80;"></i> <strong>Lương Khô:</strong> Hồi phục <code>+25 HP</code>.</li>
                     </ul>
                 </li>
-                <li><strong>Cuộn Văn Kiện & Trắc Nghiệm:</strong> Bấm <code>E</code> đọc văn kiện và trả lời đúng trắc nghiệm môn học để nhận +200 điểm và +25 HP.</li>
-                <li><strong>Sinh lực & Bị bắn:</strong> Máu tối đa 100 HP. Khi hết máu, bạn sẽ phải chơi lại màn từ đầu.</li>
+                <li><i class="fa-solid fa-scroll text-gold"></i> <strong>Văn Kiện (<code>E</code>):</strong> Giải đố trắc nghiệm nhận <code>+200 điểm</code> và <code>+25 HP</code>.</li>
             </ul>
             <div style="margin-top: 20px; text-align: right;">
                 <button class="btn btn-primary modal-close-btn" style="position: static; font-size: 1rem;"><i class="fa-solid fa-xmark"></i> Đóng</button>

@@ -399,10 +399,10 @@ class GameManager {
                             this.engine.particles.addFloatingText(
                                 this.engine.player.x + this.engine.player.width / 2,
                                 this.engine.player.y - 25,
-                                "+200",
+                                "★ +200  ❤️ +25",
                                 "#10b981",
-                                16,
-                                180
+                                15,
+                                150
                             );
                         }
                     }
@@ -418,10 +418,10 @@ class GameManager {
                         this.engine.particles.addFloatingText(
                             this.engine.player.x + this.engine.player.width / 2,
                             this.engine.player.y - 25,
-                            "0 ĐIỂM",
+                            "✗ +0",
                             "#94a3b8",
                             14,
-                            160
+                            120
                         );
                     }
                 }

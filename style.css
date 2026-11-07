@@ -13,8 +13,9 @@
     --bg-card-border: rgba(251, 191, 36, 0.3);
     --text-light: #f8fafc;
     --text-muted: #94a3b8;
-    --font-heading: 'Merriweather', 'Georgia', serif;
-    --font-body: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --font-heading: 'Rowdies', 'Chakra Petch', sans-serif;
+    --font-body: 'Chakra Petch', system-ui, -apple-system, sans-serif;
+    --font-mono: 'Space Mono', 'Chakra Petch', monospace;
 }
 
 * {
@@ -22,6 +23,22 @@
     margin: 0;
     padding: 0;
     -webkit-tap-highlight-color: transparent;
+}
+
+button, input, select, textarea {
+    font-family: var(--font-body);
+}
+
+code {
+    font-family: var(--font-mono);
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(251, 191, 36, 0.45);
+    border-bottom: 3px solid rgba(217, 119, 6, 0.75);
+    color: #fde047;
+    padding: 1px 6px;
+    border-radius: 5px;
+    font-size: 0.85em;
+    font-weight: 700;
 }
 
 body {
@@ -520,7 +537,7 @@ body {
 
 .hud-stat-pill .stat-value {
     color: var(--accent-gold);
-    font-family: monospace, sans-serif;
+    font-family: var(--font-mono);
     font-size: 0.95rem;
     font-weight: 800;
 }
@@ -1188,7 +1205,7 @@ body.touch-device .mobile-controls-panel {
 .grand-stat-value {
     font-size: 1.4rem;
     font-weight: 800;
-    font-family: monospace, sans-serif;
+    font-family: var(--font-mono);
 }
 
 /* Leaderboard Submit Box */
@@ -1615,7 +1632,7 @@ body.touch-device .mobile-controls-panel {
 .hud-hp-text {
     font-size: 0.82rem;
     font-weight: 800;
-    font-family: monospace, sans-serif;
+    font-family: var(--font-mono);
     color: #f1f5f9;
     letter-spacing: 0.5px;
     min-width: 72px;

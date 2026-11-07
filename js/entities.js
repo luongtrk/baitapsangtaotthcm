@@ -918,8 +918,8 @@ class ParticleSystem {
     }
 
     // Hiệu ứng khi khống chế mật thám từ sau lưng thành công
-    addTakedownBurst(x, y, label = "+150 MƯU LƯỢC") {
-        if (label) this.addFloatingText(x, y - 28, label, "#facc15", 15, 170);
+    addTakedownBurst(x, y, label = "💥 +150") {
+        if (label) this.addFloatingText(x, y - 28, label, "#facc15", 15, 110);
         const colors = ["#facc15", "#f59e0b", "#ffffff"];
         for (let i = 0; i < 18; i++) {
             const angle = Math.random() * Math.PI * 2;
@@ -1000,52 +1000,55 @@ class ParticleSystem {
             ctx.restore();
         }
 
-        // Vẽ thông báo nổi phong cách game arcade (viên thuốc bo tròn viền neon, rõ nét lâu phai)
+        // Vẽ thông báo nổi kiểu Game Indie/Arcade (gọn gàng, ưu tiên icon & số, viền đậm sắc nét)
         for (const ft of this.floatingTexts) {
             ctx.save();
             ctx.globalAlpha = Math.max(0, ft.alpha);
             const screenX = ft.x - cameraX;
             const screenY = ft.y;
 
-            ctx.font = `bold ${ft.fontSize}px 'Outfit', -apple-system, sans-serif`;
+            // Hiệu ứng phóng nhẹ lúc mới xuất hiện (pop-in scale)
+            const progress = 1 - (ft.life / ft.duration);
+            const popScale = progress < 0.12 ? 0.75 + (progress / 0.12) * 0.35 : (progress < 0.22 ? 1.1 - ((progress - 0.12) / 0.1) * 0.1 : 1.0);
+
+            ctx.translate(screenX, screenY);
+            ctx.scale(popScale, popScale);
+
+            ctx.font = `700 ${ft.fontSize}px 'Rowdies', 'Chakra Petch', sans-serif`;
             const textMetrics = ctx.measureText(ft.text);
             const textW = textMetrics.width;
-            const padX = 14;
-            const pillH = ft.fontSize + 12;
+            const padX = 9;
+            const pillH = ft.fontSize + 9;
             const pillW = textW + padX * 2;
-            const rx = screenX - pillW / 2;
-            const ry = screenY - pillH / 2;
-            const radius = pillH / 2;
+            const rx = -pillW / 2;
+            const ry = -pillH / 2;
+            const cut = 5; // Vát góc kiểu khung HUD game hành động
 
-            // Nền viên thuốc sẫm màu với viền sáng neon
-            ctx.fillStyle = "rgba(15, 23, 42, 0.94)";
+            // Nền khung vát góc (chamfered game badge)
+            ctx.fillStyle = "rgba(9, 14, 28, 0.9)";
             ctx.strokeStyle = ft.color;
-            ctx.lineWidth = 2.0;
+            ctx.lineWidth = 1.8;
             ctx.beginPath();
-            if (ctx.roundRect) {
-                ctx.roundRect(rx, ry, pillW, pillH, radius);
-            } else {
-                ctx.moveTo(rx + radius, ry);
-                ctx.lineTo(rx + pillW - radius, ry);
-                ctx.quadraticCurveTo(rx + pillW, ry, rx + pillW, ry + radius);
-                ctx.lineTo(rx + pillW, ry + pillH - radius);
-                ctx.quadraticCurveTo(rx + pillW, ry + pillH, rx + pillW - radius, ry + pillH);
-                ctx.lineTo(rx + radius, ry + pillH);
-                ctx.quadraticCurveTo(rx, ry + pillH, rx, ry + pillH - radius);
-                ctx.lineTo(rx, ry + radius);
-                ctx.quadraticCurveTo(rx, ry, rx + radius, ry);
-                ctx.closePath();
-            }
+            ctx.moveTo(rx + cut, ry);
+            ctx.lineTo(rx + pillW - cut, ry);
+            ctx.lineTo(rx + pillW, ry + cut);
+            ctx.lineTo(rx + pillW, ry + pillH - cut);
+            ctx.lineTo(rx + pillW - cut, ry + pillH);
+            ctx.lineTo(rx + cut, ry + pillH);
+            ctx.lineTo(rx, ry + pillH - cut);
+            ctx.lineTo(rx, ry + cut);
+            ctx.closePath();
             ctx.fill();
             ctx.stroke();
 
-            // Chữ hiển thị rực rỡ với đổ bóng nhẹ
-            ctx.fillStyle = ft.color;
+            // Chữ & Icon nổi khối với viền đen dày kiểu Arcade
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
-            ctx.shadowColor = ft.color;
-            ctx.shadowBlur = 8;
-            ctx.fillText(ft.text, screenX, screenY + 1);
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = "#020617";
+            ctx.strokeText(ft.text, 0, 1);
+            ctx.fillStyle = ft.color;
+            ctx.fillText(ft.text, 0, 1);
             ctx.restore();
         }
     }
@@ -1197,8 +1200,9 @@ class ComradeNPC {
         this.name = config.name || "Đồng Chí Liên Lạc";
         this.role = config.role || "Cơ sở bí mật";
         this.quote = config.quote || "Đường cứu nước gian nan, chúc đồng chí bình an!";
-        this.giftType = config.giftType || "shield"; // 'shield', 'speed', 'heal'
+        this.giftType = config.giftType || "shield"; // 'shield', 'speed', 'disguise', 'heal'
         this.shortcutId = config.shortcutId || null;
+        this.starCost = config.starCost || 3; // Số Sao Vàng cần để đổi liên lạc & mở lối tắt
         this.width = 28;
         this.height = 48;
         this.w = 28;
