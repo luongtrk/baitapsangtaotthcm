@@ -1746,48 +1746,135 @@ body.touch-device .mobile-controls-panel {
     }
 }
 
+/* Thu gọn tối đa thanh HUD & thanh công cụ trên điện thoại (cả dọc lẫn ngang) */
+@media (max-width: 900px), (max-height: 520px), (hover: none) and (pointer: coarse) {
+    .app-header {
+        padding: 4px 10px;
+        gap: 6px;
+    }
+    .brand-logo {
+        gap: 6px;
+    }
+    .brand-star {
+        width: 24px;
+        height: 24px;
+        font-size: 0.78rem;
+        border-width: 1.5px;
+    }
+    .brand-subject-tag {
+        display: none;
+    }
+    .brand-main-title {
+        font-size: 0.85rem;
+    }
+    .brand-year-sub {
+        font-size: 0.65rem;
+    }
+    .header-actions {
+        gap: 4px;
+    }
+    #btn-next-track,
+    #btn-toggle-sound,
+    #btn-toggle-fullscreen {
+        display: none;
+    }
+    .header-actions .btn {
+        padding: 3px 7px;
+        font-size: 0.72rem;
+    }
+    .btn-icon {
+        width: 26px;
+        height: 26px;
+        font-size: 0.76rem;
+    }
+
+    /* Thanh HUD trên cùng siêu gọn, không che màn hình chơi game */
+    .hud-overlay-fullscreen {
+        top: 3px;
+        left: 4px;
+        right: 4px;
+        gap: 4px;
+    }
+    .hud-chapter-title {
+        display: none;
+    }
+    .hud-overlay-fullscreen .hud-left {
+        padding: 1px 4px;
+        border-width: 1px;
+        box-shadow: 1px 1px 0 #090706;
+        max-width: calc(100vw - 98px);
+        overflow: hidden;
+    }
+    .hud-stat-pill {
+        padding: 1px 4px;
+        font-size: 0.62rem;
+        gap: 2.5px;
+        white-space: nowrap;
+    }
+    .hud-stat-pill i {
+        font-size: 0.6rem;
+    }
+    .hud-player-pill strong {
+        max-width: 38px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: inline-block;
+        vertical-align: bottom;
+    }
+    .hud-health-pill {
+        gap: 3px;
+    }
+    .hud-hp-icon {
+        font-size: 0.62rem;
+    }
+    .hud-hp-track {
+        width: 26px;
+        height: 6px;
+        border-width: 1px;
+    }
+    .hud-hp-text {
+        font-size: 0.6rem;
+        min-width: 16px;
+    }
+    .hud-overlay-fullscreen .hud-right {
+        gap: 3px;
+        flex-shrink: 0;
+    }
+    .btn-icon-hud {
+        width: 22px;
+        height: 22px;
+        font-size: 0.66rem;
+        border-width: 1px;
+        box-shadow: 1px 1px 0 #090706;
+    }
+    #btn-game-next-track,
+    #btn-game-sound,
+    #btn-game-fullscreen {
+        display: none;
+    }
+    .hud-overlay-fullscreen .btn-danger-subtle {
+        padding: 2px 5px;
+        font-size: 0.6rem;
+        height: 22px;
+        border-width: 1px;
+        box-shadow: 1px 1px 0 #090706;
+        display: inline-flex;
+        align-items: center;
+        gap: 2px;
+    }
+    .landscape-hint {
+        top: 30px;
+        padding: 4px 10px;
+        font-size: 0.72rem;
+        border-width: 1px;
+    }
+}
+
 @media (max-width: 640px) {
     .historical-bg-decor .bg-bronze-drum {
         width: 480px;
         height: 480px;
-    }
-    .app-header {
-        padding: 6px 12px;
-        flex-wrap: wrap;
-        gap: 6px;
-    }
-    .brand-logo {
-        gap: 8px;
-    }
-    .brand-star {
-        width: 30px;
-        height: 30px;
-        font-size: 0.95rem;
-    }
-    .brand-subject-tag {
-        font-size: 0.62rem;
-    }
-    .brand-main-title {
-        font-size: 0.96rem;
-    }
-    .brand-year-sub {
-        font-size: 0.72rem;
-    }
-    .header-actions {
-        width: 100%;
-        justify-content: flex-end;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        gap: 5px;
-    }
-    .header-actions .btn {
-        padding: 5px 8px;
-        font-size: 0.8rem;
-    }
-    .btn-icon {
-        width: 32px;
-        height: 32px;
-        font-size: 0.88rem;
     }
     .main-wrapper {
         padding: 12px 10px 24px;
@@ -1844,39 +1931,6 @@ body.touch-device .mobile-controls-panel {
         grid-template-columns: 1fr 1fr;
         gap: 8px;
     }
-    .hud-overlay-fullscreen {
-        top: 6px;
-        left: 6px;
-        right: 6px;
-    }
-    .hud-chapter-title {
-        display: none;
-    }
-    .hud-overlay-fullscreen .hud-left {
-        padding: 3px 6px;
-    }
-    .hud-stat-pill {
-        padding: 2px 6px;
-        font-size: 0.74rem;
-        gap: 4px;
-    }
-    .hud-hp-track {
-        width: 48px;
-        height: 9px;
-    }
-    .hud-hp-text {
-        font-size: 0.72rem;
-        min-width: 22px;
-    }
-    .btn-icon-hud {
-        width: 32px;
-        height: 32px;
-        font-size: 0.88rem;
-    }
-    .hud-overlay-fullscreen .btn-danger-subtle {
-        padding: 4px 8px;
-        font-size: 0.75rem;
-    }
     .touch-btn {
         width: 52px;
         height: 52px;
@@ -1904,32 +1958,6 @@ body.touch-device .mobile-controls-panel {
 }
 
 @media (max-height: 500px) and (orientation: landscape) {
-    .hud-overlay-fullscreen {
-        top: 4px;
-        left: 8px;
-        right: 8px;
-    }
-    .hud-chapter-title {
-        font-size: 0.76rem;
-        padding: 2px 6px;
-    }
-    .hud-stat-pill {
-        padding: 2px 6px;
-        font-size: 0.72rem;
-    }
-    .hud-hp-track {
-        width: 44px;
-        height: 8px;
-    }
-    .btn-icon-hud {
-        width: 28px;
-        height: 28px;
-        font-size: 0.8rem;
-    }
-    .hud-overlay-fullscreen .btn-danger-subtle {
-        padding: 3px 6px;
-        font-size: 0.72rem;
-    }
     .touch-btn {
         width: 48px;
         height: 48px;
