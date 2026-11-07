@@ -1014,29 +1014,25 @@ class ParticleSystem {
             ctx.translate(screenX, screenY);
             ctx.scale(popScale, popScale);
 
-            ctx.font = `800 ${ft.fontSize}px 'Be Vietnam Pro', 'Space Mono', sans-serif`;
+            ctx.font = `700 ${ft.fontSize}px 'Oswald', 'Courier Prime', sans-serif`;
             const textMetrics = ctx.measureText(ft.text);
             const textW = textMetrics.width;
-            const padX = 9;
+            const padX = 10;
             const pillH = ft.fontSize + 9;
             const pillW = textW + padX * 2;
             const rx = -pillW / 2;
             const ry = -pillH / 2;
 
-            // Đế bóng 3D đồng bộ với nút bấm ở Menu & HUD
-            ctx.fillStyle = "#090d16";
-            ctx.beginPath();
-            ctx.roundRect(rx, ry + 3, pillW, pillH, 5);
-            ctx.fill();
+            // Đế bóng cứng góc cạnh (3px offset) đồng bộ 100% với Menu
+            ctx.fillStyle = "#090706";
+            ctx.fillRect(rx + 3, ry + 3, pillW, pillH);
 
-            // Nền khung #1e293b viền 2px đồng bộ với giao diện Menu
-            ctx.fillStyle = "#1e293b";
+            // Nền bảng vuông vức #211c17 + viền đồng/màu thưởng
+            ctx.fillStyle = "#211c17";
+            ctx.fillRect(rx, ry, pillW, pillH);
             ctx.strokeStyle = ft.color;
             ctx.lineWidth = 1.8;
-            ctx.beginPath();
-            ctx.roundRect(rx, ry, pillW, pillH, 5);
-            ctx.fill();
-            ctx.stroke();
+            ctx.strokeRect(rx, ry, pillW, pillH);
 
             // Chữ & Icon sắc nét
             ctx.textAlign = "center";

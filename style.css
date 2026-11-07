@@ -1,33 +1,40 @@
 /* ============================================================================
-   THEO DẤU CHÂN NGƯỜI — CLEAN 2D PLATFORMER GAME UI
-   Đồng bộ 100% bảng màu, viền phẳng 2px và bóng khối 3D với đồ họa trong Game Canvas
+   THEO DẤU CHÂN NGƯỜI (1911–1945) — SHARP ANGULAR HISTORICAL GAME UI
+   Giao diện góc cạnh, đổ bóng khối cứng (4px 4px 0 #090706), đồng bộ giữa Menu & Game
    ============================================================================ */
 
 :root {
-    /* Đồng bộ trực tiếp với bảng màu của 4 màn chơi trong js/levels.js & js/renderer.js */
-    --bg-main: #0f172a;
-    --bg-panel: #1e293b;
-    --bg-panel-inner: #0f172a;
-    --bg-panel-hover: #283548;
+    --bg-desk: #161310;
+    --bg-desk-deep: #0e0c0a;
+    --bg-panel: #211c17;
+    --bg-panel-raised: #2a241d;
+    --bg-parchment: #f2e8d5;
+    --bg-parchment-dark: #e5d7be;
+    --ink-dark: #1e1914;
+    --ink-muted: #594d3f;
 
-    --border-subtle: #334155;
-    --border-light: #475569;
-    --shadow-3d: #090d16;
+    --primary-red: #9e2222;
+    --primary-red-bright: #b82929;
+    --primary-red-dark: #6e1515;
 
-    --primary-red: #dc2626;
-    --primary-red-hover: #ef4444;
-    --primary-red-border: #991b1b;
+    --accent-gold: #d4a349;
+    --accent-gold-dark: #9c7125;
+    --border-brass: #6e5634;
+    --border-brass-bright: #b08946;
+    --border-dark: #0a0806;
 
-    --accent-gold: #fbbf24;
-    --accent-gold-dark: #d97706;
-    --accent-green: #10b981;
+    --text-light: #efe6d5;
+    --text-muted: #a69882;
+    --olive-green: #587246;
+    --olive-bright: #75965d;
 
-    --text-light: #f8fafc;
-    --text-muted: #94a3b8;
-
-    --font-heading: 'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
+    --font-heading: 'Oswald', sans-serif;
     --font-body: 'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
-    --font-mono: 'Space Mono', monospace;
+    --font-mono: 'Courier Prime', monospace;
+
+    --shadow-hard: 4px 4px 0px #090706;
+    --shadow-hard-sm: 2px 2px 0px #090706;
+    --shadow-hard-lg: 6px 6px 0px #090706;
 }
 
 * {
@@ -41,21 +48,20 @@ button, input, select, textarea {
     font-family: var(--font-body);
 }
 
-/* Phím tắt đồng bộ 100% với hàm drawKeycap() trong js/renderer.js */
 code {
     font-family: var(--font-mono);
-    background: var(--bg-panel);
-    border: 1.5px solid var(--accent-gold);
-    box-shadow: 0 2px 0 var(--shadow-3d);
-    color: #ffffff;
+    background: #14110d;
+    border: 1px solid var(--border-brass-bright);
+    border-bottom: 3px solid var(--border-brass);
+    color: var(--accent-gold);
     padding: 1px 6px;
-    border-radius: 4px;
-    font-size: 0.84em;
+    border-radius: 2px;
+    font-size: 0.86em;
     font-weight: 700;
 }
 
 body {
-    background-color: var(--bg-main);
+    background-color: var(--bg-desk);
     color: var(--text-light);
     font-family: var(--font-body);
     min-height: 100vh;
@@ -64,26 +70,29 @@ body {
     align-items: center;
     justify-content: flex-start;
     overflow-x: hidden;
-    background-image: linear-gradient(180deg, #0b1120 0%, #0f172a 60%, #172033 100%);
+    background-image:
+        radial-gradient(circle at 50% 15%, rgba(158, 34, 34, 0.14) 0%, transparent 60%),
+        radial-gradient(circle at 50% 50%, transparent 45%, rgba(8, 6, 4, 0.75) 100%),
+        repeating-linear-gradient(0deg, rgba(212, 163, 73, 0.025) 0px, rgba(212, 163, 73, 0.025) 1px, transparent 1px, transparent 32px),
+        repeating-linear-gradient(90deg, rgba(212, 163, 73, 0.025) 0px, rgba(212, 163, 73, 0.025) 1px, transparent 1px, transparent 32px);
 }
 
-/* Tiện ích màu sắc */
 .text-gold { color: var(--accent-gold) !important; }
-.text-yellow { color: #fde047 !important; }
-.text-cyan { color: #38bdf8 !important; }
-.text-danger { color: #ef4444 !important; }
+.text-yellow { color: #eab308 !important; }
+.text-cyan { color: #d4a349 !important; }
+.text-danger { color: #dc2626 !important; }
 .text-silver { color: #cbd5e1 !important; }
-.text-bronze { color: #f97316 !important; }
+.text-bronze { color: #d97706 !important; }
 .text-muted { color: var(--text-muted) !important; }
 
 /* ============================================================================
-   THANH HEADER (ĐỒNG BỘ VỚI THANH HUD TRONG GAME)
+   THANH CÔNG CỤ TRÊN CÙNG GÓC CẠNH (TOP HEADER)
    ============================================================================ */
 .app-header {
     width: 100%;
-    background: #141c2b;
-    border-bottom: 2px solid var(--border-subtle);
-    box-shadow: 0 3px 0 var(--shadow-3d);
+    background: #191511;
+    border-bottom: 2px solid var(--border-brass);
+    box-shadow: 0 3px 0 #090706;
     padding: 10px 24px;
     display: flex;
     justify-content: space-between;
@@ -102,12 +111,11 @@ body {
     height: 36px;
     background: var(--primary-red);
     border: 2px solid var(--accent-gold);
-    border-radius: 6px;
-    box-shadow: 0 3px 0 var(--shadow-3d);
+    box-shadow: var(--shadow-hard-sm);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     color: var(--accent-gold);
 }
 
@@ -115,22 +123,33 @@ body {
     display: flex;
     flex-direction: column;
     text-align: left;
-    line-height: 1.25;
+    line-height: 1.2;
 }
 
 .brand-subject-tag {
+    font-family: var(--font-mono);
     font-size: 0.68rem;
     font-weight: 700;
-    letter-spacing: 0.6px;
-    color: var(--accent-gold);
+    letter-spacing: 1px;
+    color: var(--text-muted);
     text-transform: uppercase;
 }
 
 .brand-main-title {
-    font-size: 1.05rem;
-    font-weight: 800;
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 700;
     color: var(--text-light);
-    letter-spacing: 0.4px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.brand-year-sub {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--accent-gold);
+    font-weight: 400;
+    margin-left: 4px;
 }
 
 .header-actions {
@@ -144,8 +163,8 @@ body {
    ============================================================================ */
 .main-wrapper {
     width: 100%;
-    max-width: 1140px;
-    padding: 24px 18px 40px;
+    max-width: 1180px;
+    padding: 24px 20px 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -154,6 +173,7 @@ body {
 .screen-panel {
     display: none;
     width: 100%;
+    animation: dossierReveal 0.2s ease-out;
 }
 
 .screen-panel.active {
@@ -162,54 +182,87 @@ body {
     align-items: center;
 }
 
-/* ============================================================================
-   MÀN HÌNH 1: MENU CHÍNH 2 CỘT GỌN GÀNG
-   ============================================================================ */
-.menu-grid-layout {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 22px;
-    align-items: start;
+@keyframes dossierReveal {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.menu-minimal-card,
-.home-leaderboard-card {
+/* ============================================================================
+   MÀN HÌNH 1: BỐ CỤC MENU GÓC CẠNH 2 CỘT
+   ============================================================================ */
+.dossier-desk-layout {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1.15fr 0.95fr;
+    gap: 28px;
+    align-items: start;
+    margin-top: 8px;
+}
+
+.menu-minimal-card {
     width: 100%;
     background: var(--bg-panel);
-    border: 2px solid var(--border-subtle);
-    border-radius: 8px;
-    box-shadow: 0 5px 0 var(--shadow-3d);
-    padding: 24px;
+    border: 2px solid var(--border-brass);
+    box-shadow: var(--shadow-hard-lg), inset 0 0 0 1px rgba(212, 163, 73, 0.12);
+    padding: 28px 26px 26px;
+    position: relative;
     text-align: left;
 }
 
-.menu-hero-header {
+.dossier-folder-tab {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--ink-dark);
+    background: var(--accent-gold);
+    padding: 3px 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    border: 1px solid #000;
+    box-shadow: 2px 2px 0 #000;
+}
+
+.dossier-hero-header {
     display: flex;
-    gap: 18px;
-    align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 18px;
-    border-bottom: 2px solid var(--border-subtle);
+    gap: 22px;
+    align-items: flex-start;
+    margin-bottom: 22px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed var(--border-brass);
 }
 
 .hero-portrait-frame {
     flex-shrink: 0;
-    width: 112px;
-    height: 126px;
-    border-radius: 6px;
-    border: 2px solid var(--accent-gold);
-    box-shadow: 0 4px 0 var(--shadow-3d);
-    overflow: hidden;
-    background: var(--bg-panel-inner);
+    width: 132px;
+    background: var(--bg-parchment);
+    padding: 6px 6px 22px 6px;
+    border: 1px solid #a39278;
+    box-shadow: var(--shadow-hard);
+    position: relative;
 }
 
 .hero-portrait-img {
     width: 100%;
-    height: 100%;
+    height: 142px;
     object-fit: cover;
     object-position: top center;
     display: block;
+    border: 1px solid #4a3f31;
+    filter: sepia(0.15) contrast(1.05);
+}
+
+.photo-caption {
+    position: absolute;
+    bottom: 4px;
+    left: 4px;
+    right: 4px;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--ink-dark);
+    font-weight: 700;
 }
 
 .hero-title-group {
@@ -219,85 +272,98 @@ body {
 
 .academic-badge {
     display: inline-block;
-    background: var(--bg-panel-inner);
-    border: 1.5px solid var(--accent-gold);
-    color: var(--accent-gold);
-    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
     font-weight: 700;
-    padding: 3px 10px;
-    border-radius: 4px;
-    margin-bottom: 6px;
+    color: var(--accent-gold);
+    letter-spacing: 0.8px;
+    margin-bottom: 4px;
+    text-transform: uppercase;
 }
 
 .game-title {
-    font-size: 1.85rem;
-    font-weight: 800;
+    font-family: var(--font-heading);
+    font-size: 2.3rem;
+    font-weight: 700;
     color: var(--text-light);
-    letter-spacing: 0.5px;
-    line-height: 1.15;
-    margin-bottom: 4px;
+    letter-spacing: 1.5px;
+    line-height: 1.08;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 0 #090706;
 }
 
 .game-tagline {
-    font-size: 0.9rem;
-    color: #cbd5e1;
+    font-size: 0.92rem;
+    color: #d6c7b2;
     font-weight: 500;
-    margin-bottom: 10px;
+    line-height: 1.45;
+    margin-bottom: 12px;
 }
 
 .game-quote {
+    font-family: var(--font-mono);
     font-style: italic;
-    font-weight: 600;
-    color: #fde047;
-    background: var(--bg-panel-inner);
-    font-size: 0.88rem;
-    padding: 7px 12px;
-    border-left: 3px solid var(--primary-red);
-    border-radius: 0 4px 4px 0;
+    font-weight: 700;
+    color: var(--ink-dark);
+    background: var(--bg-parchment);
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    border-left: 4px solid var(--primary-red);
+    box-shadow: var(--shadow-hard-sm);
 }
 
 /* Ô nhập tên người chơi */
 .player-name-card {
-    background: var(--bg-panel-inner);
-    border: 2px solid var(--border-subtle);
-    border-radius: 6px;
-    padding: 12px 14px;
-    margin-bottom: 18px;
+    background: #181410;
+    border: 1px solid var(--border-brass);
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
 }
 
 .player-name-label {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: var(--text-light);
-    font-size: 0.86rem;
+    color: var(--accent-gold);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
     font-weight: 700;
     margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+.player-name-input-wrap {
+    display: flex;
+    flex-direction: column;
 }
 
 .player-name-input {
     width: 100%;
     padding: 9px 12px;
-    background: var(--bg-panel);
-    border: 2px solid var(--border-light);
-    border-radius: 6px;
-    color: var(--text-light);
-    font-size: 0.95rem;
-    font-weight: 600;
+    background: var(--bg-parchment);
+    border: 2px solid #5c4b35;
+    color: var(--ink-dark);
+    font-family: var(--font-mono);
+    font-size: 0.98rem;
+    font-weight: 700;
     outline: none;
-    transition: border-color 0.15s;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
 .player-name-input:focus {
-    border-color: var(--accent-gold);
+    background: #fff9ed;
+    border-color: var(--primary-red);
 }
 
 .player-name-input::placeholder {
-    color: var(--text-muted);
+    color: #7d6f5d;
     font-weight: 400;
+    font-size: 0.88rem;
 }
 
-/* Hệ thống nút bấm 3D Keycap đồng bộ với nút [E], [Q] trong Game */
+/* Cụm nút hành động cơ học góc cạnh */
 .menu-action-buttons {
     display: flex;
     flex-direction: column;
@@ -315,92 +381,100 @@ body {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 10px 18px;
-    font-size: 0.95rem;
-    font-weight: 700;
-    border-radius: 6px;
-    border: 2px solid var(--border-light);
-    box-shadow: 0 4px 0 var(--shadow-3d);
+    padding: 11px 20px;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    border-radius: 2px;
+    border: 2px solid #090706;
     cursor: pointer;
     transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.15s ease;
     text-decoration: none;
+    box-shadow: 0 4px 0 #090706;
 }
 
 .btn:active {
     transform: translateY(3px);
-    box-shadow: 0 1px 0 var(--shadow-3d) !important;
+    box-shadow: 0 1px 0 #090706 !important;
 }
 
 .btn-primary {
     background: var(--primary-red);
-    color: #ffffff;
+    color: #f9f1e1;
     border-color: var(--accent-gold);
 }
 
 .btn-primary:hover {
-    background: var(--primary-red-hover);
+    background: var(--primary-red-bright);
 }
 
 .btn-hero {
-    padding: 13px 24px;
-    font-size: 1.08rem;
+    padding: 14px 28px;
+    font-size: 1.22rem;
+    letter-spacing: 1.5px;
+    box-shadow: 0 5px 0 #090706;
 }
 
 .btn-secondary {
-    background: var(--bg-panel-inner);
+    background: var(--bg-panel-raised);
     color: var(--text-light);
-    border-color: var(--border-light);
+    border-color: var(--border-brass);
 }
 
 .btn-secondary:hover {
-    background: var(--bg-panel-hover);
+    background: #362e25;
     border-color: var(--accent-gold);
+    color: var(--accent-gold);
 }
 
 .btn-outline {
-    background: var(--bg-panel-inner);
+    background: transparent;
     color: var(--accent-gold);
     border: 1.5px solid var(--accent-gold);
-    box-shadow: 0 3px 0 var(--shadow-3d);
+    box-shadow: 2px 2px 0 #090706;
 }
 
 .btn-outline:hover {
-    background: var(--bg-panel-hover);
+    background: rgba(212, 163, 73, 0.15);
 }
 
 .btn-sm {
     padding: 6px 12px;
     font-size: 0.84rem;
-    box-shadow: 0 3px 0 var(--shadow-3d);
+    box-shadow: 2px 2px 0 #090706;
 }
 
 .btn-icon {
     width: 36px;
     height: 36px;
     padding: 0;
-    font-size: 0.98rem;
-    background: var(--bg-panel);
-    border: 2px solid var(--border-light);
-    border-radius: 6px;
+    font-size: 1rem;
+    background: var(--bg-panel-raised);
+    border: 1.5px solid var(--border-brass);
+    border-radius: 2px;
     color: var(--text-light);
-    box-shadow: 0 3px 0 var(--shadow-3d);
+    box-shadow: 2px 2px 0 #090706;
     cursor: pointer;
 }
 
 .btn-icon:hover {
     border-color: var(--accent-gold);
     color: var(--accent-gold);
+    background: #332b22;
 }
 
 .btn-outline-subtle {
-    background: var(--bg-panel);
+    background: var(--bg-panel-raised);
     color: var(--text-light);
-    border: 2px solid var(--border-light);
-    border-radius: 6px;
+    border: 1.5px solid var(--border-brass);
+    border-radius: 2px;
     padding: 6px 12px;
-    font-size: 0.84rem;
-    font-weight: 700;
-    box-shadow: 0 3px 0 var(--shadow-3d);
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    box-shadow: 2px 2px 0 #090706;
     cursor: pointer;
 }
 
@@ -410,62 +484,77 @@ body {
 }
 
 .btn-danger-subtle {
-    background: #7f1d1d;
-    color: #fecaca;
-    border: 2px solid #ef4444;
-    border-radius: 6px;
+    background: #4a1515;
+    color: #fca5a5;
+    border: 1.5px solid #8c2626;
+    border-radius: 2px;
     padding: 5px 12px;
+    font-family: var(--font-heading);
     font-size: 0.82rem;
-    font-weight: 700;
-    box-shadow: 0 3px 0 var(--shadow-3d);
+    letter-spacing: 0.5px;
+    box-shadow: 2px 2px 0 #090706;
     cursor: pointer;
 }
 
 .btn-danger-subtle:hover {
     background: var(--primary-red);
-    color: #ffffff;
+    color: #fff;
+    border-color: #fca5a5;
 }
 
 /* ============================================================================
-   CỘT PHẢI: BẢNG XẾP HẠNG
+   CỘT PHẢI: BẢNG XẾP HẠNG GÓC CẠNH
    ============================================================================ */
+.home-leaderboard-card {
+    width: 100%;
+    background: var(--bg-panel);
+    border: 2px solid var(--border-brass);
+    box-shadow: var(--shadow-hard-lg);
+    padding: 22px 20px;
+    position: relative;
+}
+
 .home-leaderboard-header {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 10px;
     padding-bottom: 14px;
-    border-bottom: 2px solid var(--border-subtle);
+    border-bottom: 2px solid var(--border-brass);
     margin-bottom: 12px;
 }
 
 .home-leaderboard-title-group {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    text-align: left;
 }
 
 .home-leaderboard-icon {
-    width: 38px;
-    height: 38px;
-    background: var(--bg-panel-inner);
-    border: 2px solid var(--accent-gold);
-    border-radius: 6px;
+    width: 40px;
+    height: 40px;
+    background: #16130f;
+    border: 1.5px solid var(--accent-gold);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.15rem;
+    font-size: 1.3rem;
     flex-shrink: 0;
 }
 
 .home-leaderboard-heading {
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: var(--text-light);
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--accent-gold);
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .home-leaderboard-desc {
-    font-size: 0.78rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
     color: var(--text-muted);
     margin-top: 2px;
 }
@@ -477,139 +566,158 @@ body {
 .leaderboard-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.86rem;
+    font-size: 0.88rem;
 }
 
 .leaderboard-table th {
-    font-size: 0.76rem;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
     text-transform: uppercase;
-    color: var(--text-muted);
-    background: var(--bg-panel-inner);
-    padding: 8px;
+    color: var(--accent-gold);
+    background: #16130f;
+    padding: 8px 8px;
     text-align: left;
-    border-bottom: 2px solid var(--border-subtle);
+    border-bottom: 2px solid var(--border-brass);
+    letter-spacing: 0.5px;
 }
 
 .leaderboard-table td {
     padding: 9px 8px;
-    border-bottom: 1px solid var(--border-subtle);
+    border-bottom: 1px dashed rgba(176, 137, 70, 0.25);
     color: var(--text-light);
 }
 
 .leaderboard-row.rank-gold td {
-    background: rgba(251, 191, 36, 0.08);
+    background: rgba(212, 163, 73, 0.12);
+}
+
+.leaderboard-row.rank-silver td {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.leaderboard-row.rank-bronze td {
+    background: rgba(180, 83, 9, 0.08);
 }
 
 /* ============================================================================
-   MÀN HÌNH 2 & 3: CHỌN MÀN CHƠI & BỘ SƯU TẬP VĂN KIỆN
+   MÀN HÌNH 2 & 3: CHỌN MÀN & BỘ SƯU TẬP VĂN KIỆN
    ============================================================================ */
 .section-header {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+    align-items: flex-end;
+    margin-bottom: 24px;
     padding-bottom: 14px;
-    border-bottom: 2px solid var(--border-subtle);
-    gap: 12px;
+    border-bottom: 2px solid var(--border-brass);
+    gap: 16px;
     flex-wrap: wrap;
 }
 
-.section-title {
-    font-size: 1.5rem;
-    font-weight: 800;
+.section-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
     color: var(--accent-gold);
+    letter-spacing: 1.2px;
+    margin-bottom: 4px;
 }
 
-.section-sub {
-    font-size: 0.88rem;
-    color: var(--text-muted);
-    margin-top: 2px;
+.section-title {
+    font-family: var(--font-heading);
+    font-size: 1.85rem;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .archive-counter-tag {
     display: inline-block;
-    margin-top: 4px;
+    margin-top: 6px;
     font-family: var(--font-mono);
     font-size: 0.82rem;
     font-weight: 700;
-    color: var(--accent-gold);
+    color: var(--ink-dark);
+    background: var(--accent-gold);
+    padding: 2px 10px;
 }
 
 .chapters-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
     width: 100%;
 }
 
 .chapter-card {
     background: var(--bg-panel);
-    border: 2px solid var(--border-subtle);
-    border-radius: 8px;
-    box-shadow: 0 4px 0 var(--shadow-3d);
-    padding: 18px;
+    border: 2px solid var(--border-brass);
+    box-shadow: var(--shadow-hard);
+    padding: 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    transition: border-color 0.15s ease;
+    position: relative;
+    transition: transform 0.15s ease, border-color 0.15s ease;
 }
 
 .chapter-card:hover {
+    transform: translateY(-3px);
     border-color: var(--accent-gold);
 }
 
 .chap-badge {
     align-self: flex-start;
     font-family: var(--font-mono);
-    background: var(--bg-panel-inner);
-    border: 1.5px solid var(--accent-gold);
+    background: #14110d;
+    border: 1px solid var(--accent-gold);
     color: var(--accent-gold);
-    font-size: 0.74rem;
+    font-size: 0.75rem;
     font-weight: 700;
-    padding: 2px 9px;
-    border-radius: 4px;
-    margin-bottom: 10px;
+    padding: 3px 10px;
+    margin-bottom: 12px;
 }
 
 .chapter-card h3 {
-    font-size: 1.12rem;
-    font-weight: 800;
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
     color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     margin-bottom: 4px;
 }
 
 .chap-subtitle {
-    font-size: 0.84rem;
-    color: #fca5a5;
-    font-weight: 600;
-    margin-bottom: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: #e07a5f;
+    font-weight: 700;
+    margin-bottom: 10px;
 }
 
 .chapter-card p {
-    font-size: 0.85rem;
+    font-size: 0.86rem;
     color: var(--text-muted);
-    line-height: 1.5;
-    margin-bottom: 14px;
+    line-height: 1.55;
+    margin-bottom: 16px;
     flex-grow: 1;
 }
 
 .chap-progress {
+    font-family: var(--font-mono);
     font-size: 0.8rem;
-    color: #cbd5e1;
-    margin-bottom: 14px;
-    background: var(--bg-panel-inner);
+    color: var(--text-light);
+    margin-bottom: 16px;
+    background: #16130f;
     padding: 8px 10px;
-    border-radius: 6px;
-    border: 1px solid var(--border-subtle);
+    border: 1px solid rgba(176, 137, 70, 0.3);
 }
 
 .progress-bar {
     width: 100%;
-    height: 7px;
-    background: #1e293b;
-    border-radius: 4px;
-    overflow: hidden;
+    height: 8px;
+    background: #0d0b09;
+    border: 1px solid var(--border-brass);
     margin-top: 6px;
 }
 
@@ -622,85 +730,121 @@ body {
 /* Bộ sưu tập Văn kiện */
 .museum-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
+    gap: 18px;
     width: 100%;
 }
 
 .museum-card {
     background: var(--bg-panel);
-    border: 2px solid var(--border-subtle);
-    border-radius: 8px;
-    box-shadow: 0 4px 0 var(--shadow-3d);
-    padding: 16px;
+    border: 2px solid #3d3326;
+    box-shadow: var(--shadow-hard);
+    padding: 18px;
     display: flex;
     flex-direction: column;
     position: relative;
+    transition: transform 0.15s ease, border-color 0.15s ease;
 }
 
 .museum-card.unlocked {
-    border-color: var(--accent-gold);
+    background: var(--bg-parchment);
+    color: var(--ink-dark);
+    border-color: var(--border-brass-bright);
     cursor: pointer;
 }
 
 .museum-card.unlocked:hover {
-    background: var(--bg-panel-hover);
+    transform: translateY(-3px);
+    border-color: var(--primary-red);
 }
 
 .museum-card.locked {
-    opacity: 0.65;
+    opacity: 0.72;
+    background: #1a1612;
+    border-style: dashed;
 }
 
 .card-status-badge {
     position: absolute;
     top: 12px;
     right: 12px;
-    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
     font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 4px;
-    background: var(--bg-panel-inner);
+    padding: 2px 7px;
+    border: 1px solid currentColor;
+    text-transform: uppercase;
 }
 
 .museum-card.unlocked .card-status-badge {
-    color: #4ade80;
-    border: 1px solid #22c55e;
+    color: var(--primary-red);
+    border-color: var(--primary-red);
 }
 
 .museum-card.locked .card-status-badge {
     color: var(--text-muted);
-    border: 1px solid var(--border-subtle);
 }
 
 .card-icon {
-    font-size: 1.6rem;
-    margin-bottom: 8px;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+
+.museum-card.unlocked .card-icon i {
+    color: var(--primary-red) !important;
 }
 
 .museum-card h4 {
-    font-size: 1rem;
-    font-weight: 800;
-    color: var(--text-light);
+    font-family: var(--font-heading);
+    font-size: 1.12rem;
+    text-transform: uppercase;
     margin-bottom: 4px;
 }
 
+.museum-card.unlocked h4 {
+    color: var(--ink-dark);
+}
+
+.museum-card.locked h4 {
+    color: var(--text-muted);
+}
+
 .card-year {
+    font-family: var(--font-mono);
     font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--accent-gold);
+    font-weight: 700;
+    color: var(--primary-red);
     margin-bottom: 8px;
 }
 
+.museum-card.locked .card-year {
+    color: #8c7a65;
+}
+
 .museum-card p {
-    font-size: 0.82rem;
-    color: var(--text-muted);
-    line-height: 1.45;
+    font-size: 0.83rem;
+    line-height: 1.5;
     margin-bottom: 12px;
     flex-grow: 1;
 }
 
+.museum-card.unlocked p {
+    color: #3d3326;
+    font-style: italic;
+}
+
+.museum-card.locked p {
+    color: #756857;
+}
+
+.museum-card.unlocked .btn-outline {
+    background: var(--primary-red);
+    color: #fff;
+    border-color: #090706;
+}
+
 /* ============================================================================
-   MÀN HÌNH 4: KHÔNG GIAN GAME & THANH HUD ĐỒNG BỘ VỚI CANVAS
+   MÀN HÌNH 4: KHÔNG GIAN GAME & THANH HUD GÓC CẠNH ĐỒNG BỘ
    ============================================================================ */
 .screen-panel.fullscreen-mode {
     position: fixed;
@@ -722,9 +866,9 @@ body {
     width: 100vw;
     height: 100vh;
     display: block;
+    image-rendering: pixelated;
 }
 
-/* Thanh HUD đồng bộ màu #0f172a / #1e293b và viền 2px của bong bóng NPC trong Canvas */
 .hud-overlay-fullscreen {
     position: fixed;
     top: 10px;
@@ -740,35 +884,39 @@ body {
 .hud-overlay-fullscreen .hud-left {
     display: flex;
     align-items: center;
-    background: rgba(15, 23, 42, 0.94);
-    border: 2px solid var(--border-light);
-    border-radius: 6px;
-    box-shadow: 0 3px 0 var(--shadow-3d);
+    background: rgba(22, 18, 14, 0.94);
+    border: 2px solid var(--border-brass-bright);
+    box-shadow: var(--shadow-hard);
     padding: 4px 8px;
+    gap: 0;
 }
 
 .hud-chapter-title {
+    font-family: var(--font-heading);
     color: var(--accent-gold);
-    font-size: 0.88rem;
-    font-weight: 800;
+    font-size: 0.92rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
     padding: 4px 12px 4px 6px;
-    border-right: 1.5px solid var(--border-subtle);
+    border-right: 1px solid var(--border-brass);
 }
 
 .hud-overlay-fullscreen .hud-stats {
     display: flex;
     align-items: center;
+    gap: 0;
 }
 
 .hud-stat-pill {
-    padding: 4px 10px;
-    border-right: 1.5px solid var(--border-subtle);
+    padding: 4px 11px;
+    border-right: 1px solid rgba(176, 137, 70, 0.3);
     display: flex;
     align-items: center;
     gap: 6px;
     color: var(--text-light);
     font-family: var(--font-mono);
-    font-size: 0.86rem;
+    font-size: 0.88rem;
     font-weight: 700;
 }
 
@@ -777,27 +925,26 @@ body {
 }
 
 .hud-player-pill {
-    font-family: var(--font-body);
-    color: #fde047;
+    color: var(--accent-gold);
 }
 
 .hud-health-pill {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
 }
 
 .hud-hp-icon {
-    color: #ef4444;
-    font-size: 0.9rem;
+    color: #dc2626;
+    font-size: 0.95rem;
 }
 
 .hud-hp-track {
-    width: 80px;
-    height: 10px;
-    background: #090d16;
-    border: 1.5px solid var(--border-light);
-    border-radius: 3px;
+    width: 84px;
+    height: 11px;
+    background: #0c0a08;
+    border: 1.5px solid #8a7352;
+    position: relative;
     overflow: hidden;
 }
 
@@ -807,15 +954,21 @@ body {
 }
 
 .hud-hp-bar-fill.high {
-    background: #22c55e;
+    background: #4d8b31;
 }
 
 .hud-hp-bar-fill.mid {
-    background: #f59e0b;
+    background: #d97706;
 }
 
 .hud-hp-bar-fill.low {
-    background: #ef4444;
+    background: #dc2626;
+    animation: pulseHpDanger 0.6s infinite alternate;
+}
+
+@keyframes pulseHpDanger {
+    0% { opacity: 0.65; }
+    100% { opacity: 1; }
 }
 
 .hud-hp-text {
@@ -823,7 +976,7 @@ body {
     font-size: 0.8rem;
     font-weight: 700;
     color: var(--text-light);
-    min-width: 26px;
+    min-width: 28px;
     text-align: right;
 }
 
@@ -835,19 +988,20 @@ body {
 }
 
 .btn-icon-hud {
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
     padding: 0;
-    font-size: 0.95rem;
-    background: rgba(15, 23, 42, 0.94);
-    border: 2px solid var(--border-light);
-    border-radius: 6px;
+    font-size: 0.98rem;
+    background: rgba(22, 18, 14, 0.94);
+    border: 2px solid var(--border-brass);
+    border-radius: 2px;
     color: var(--text-light);
     cursor: pointer;
-    box-shadow: 0 3px 0 var(--shadow-3d);
+    box-shadow: var(--shadow-hard-sm);
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    transition: border-color 0.15s, color 0.15s;
 }
 
 .btn-icon-hud:hover {
@@ -860,12 +1014,12 @@ body {
 }
 
 /* ============================================================================
-   HỆ THỐNG MODAL ĐỒNG BỘ MÀU SẮC VỚI GAME
+   HỆ THỐNG MODAL GÓC CẠNH & VĂN KIỆN GIẤY CỔ
    ============================================================================ */
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(9, 13, 22, 0.82);
+    background: rgba(8, 6, 4, 0.82);
     display: none;
     align-items: center;
     justify-content: center;
@@ -875,18 +1029,18 @@ body {
 
 .modal-overlay.active {
     display: flex;
+    animation: dossierReveal 0.18s ease-out;
 }
 
 .modal-content {
     background: var(--bg-panel);
-    border: 2px solid var(--accent-gold);
-    border-radius: 8px;
-    box-shadow: 0 6px 0 var(--shadow-3d);
+    border: 2px solid var(--border-brass-bright);
+    box-shadow: 8px 8px 0px #050403;
     width: 100%;
-    max-width: 640px;
+    max-width: 660px;
     max-height: 90vh;
     overflow-y: auto;
-    padding: 24px;
+    padding: 26px;
     position: relative;
     color: var(--text-light);
 }
@@ -895,7 +1049,7 @@ body {
     position: absolute;
     top: 12px;
     right: 16px;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     background: none;
     border: none;
     color: var(--text-muted);
@@ -904,109 +1058,139 @@ body {
 }
 
 .modal-close-btn:hover {
-    color: var(--text-light);
+    color: var(--accent-gold);
 }
 
 .modal-heading-gold {
+    font-family: var(--font-heading);
     color: var(--accent-gold);
-    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .modal-subtext {
-    color: #cbd5e1;
-    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-size: 0.92rem;
     line-height: 1.5;
-    margin: 6px 0 14px;
+    margin: 8px 0 16px;
 }
 
-/* Chi tiết Văn kiện */
+/* Modal Văn kiện trên nền giấy cổ */
+.modal-parchment-dossier {
+    background: var(--bg-parchment);
+    color: var(--ink-dark);
+    border: 3px solid #4a3b28;
+    box-shadow: 8px 8px 0px #070504, inset 0 0 0 2px #c7b292;
+}
+
+.modal-parchment-dossier .modal-close-btn {
+    color: #594d3f;
+}
+
+.modal-parchment-dossier .modal-close-btn:hover {
+    color: var(--primary-red);
+}
+
+.doc-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--primary-red);
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+}
+
 .doc-header-banner {
-    border-bottom: 2px solid var(--border-subtle);
+    border-bottom: 2px solid #4a3b28;
     padding-bottom: 12px;
     margin-bottom: 14px;
-    padding-right: 24px;
 }
 
 .doc-header-banner h2 {
-    font-size: 1.35rem;
-    font-weight: 800;
-    color: var(--accent-gold);
+    font-family: var(--font-heading);
+    font-size: 1.55rem;
+    color: var(--ink-dark);
+    text-transform: uppercase;
     margin-bottom: 6px;
 }
 
 .doc-meta {
+    font-family: var(--font-mono);
     font-size: 0.82rem;
-    color: #cbd5e1;
+    color: #4a3f31;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
 }
 
 .badge-gold {
-    background: var(--accent-gold);
-    color: #090d16;
+    background: var(--primary-red);
+    color: #fff;
     padding: 1px 8px;
-    border-radius: 4px;
     font-weight: 700;
 }
 
 .doc-quote-card {
-    background: var(--bg-panel-inner);
+    background: var(--bg-parchment-dark);
     border-left: 4px solid var(--primary-red);
-    padding: 10px 14px;
-    border-radius: 0 6px 6px 0;
-    margin-bottom: 14px;
-    font-size: 0.9rem;
-    color: #fde047;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-family: var(--font-mono);
+    font-size: 0.94rem;
+    font-weight: 700;
+    color: var(--ink-dark);
     line-height: 1.5;
 }
 
 .doc-columns {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 16px;
     margin-bottom: 14px;
 }
 
 .doc-body-section {
-    background: var(--bg-panel-inner);
-    border: 1.5px solid var(--border-subtle);
-    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.35);
+    border: 1px solid #cbbba0;
     padding: 12px;
 }
 
 .doc-body-section h4 {
-    font-size: 0.88rem;
-    color: var(--accent-gold);
+    font-family: var(--font-heading);
+    font-size: 0.92rem;
+    color: var(--primary-red);
     margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .doc-body-section p {
-    font-size: 0.85rem;
-    color: #e2e8f0;
+    font-size: 0.86rem;
+    color: var(--ink-dark);
     line-height: 1.55;
 }
 
 /* Câu hỏi trắc nghiệm */
 .quiz-box {
-    background: var(--bg-panel-inner);
-    border: 2px solid var(--border-light);
-    border-radius: 6px;
-    padding: 14px;
+    background: #e6d8bf;
+    border: 2px solid #4a3b28;
+    padding: 16px;
     margin-top: 12px;
 }
 
 .quiz-box h4 {
-    color: var(--accent-gold);
-    font-size: 0.92rem;
+    font-family: var(--font-heading);
+    color: var(--primary-red);
+    font-size: 0.98rem;
+    text-transform: uppercase;
     margin-bottom: 6px;
 }
 
 .quiz-question {
-    font-size: 0.9rem;
+    font-size: 0.92rem;
     font-weight: 700;
-    color: var(--text-light);
-    margin-bottom: 10px;
+    color: var(--ink-dark);
+    margin-bottom: 12px;
 }
 
 .quiz-options {
@@ -1017,123 +1201,121 @@ body {
 
 .quiz-opt-btn {
     text-align: left;
-    background: var(--bg-panel);
-    border: 2px solid var(--border-subtle);
-    border-radius: 6px;
-    color: var(--text-light);
+    background: #f8f1e3;
+    border: 1.5px solid #6e5b43;
+    color: var(--ink-dark);
     padding: 9px 12px;
     font-size: 0.86rem;
     font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 2px 0 var(--shadow-3d);
+    box-shadow: 2px 2px 0 #4a3b28;
+    transition: transform 0.08s, background-color 0.12s;
 }
 
 .quiz-opt-btn:hover {
-    border-color: var(--accent-gold);
-    background: var(--bg-panel-hover);
+    background: #fffdf9;
+    border-color: var(--primary-red);
 }
 
 .quiz-opt-btn.correct {
-    background: #14532d !important;
-    border-color: #22c55e !important;
-    color: #ffffff !important;
+    background: #2e5a27 !important;
+    border-color: #173312 !important;
+    color: #fff !important;
     font-weight: 700;
 }
 
 .quiz-opt-btn.wrong {
-    background: #7f1d1d !important;
-    border-color: #ef4444 !important;
-    color: #ffffff !important;
+    background: #8c2222 !important;
+    border-color: #4d0f0f !important;
+    color: #fff !important;
 }
 
 .quiz-feedback {
-    margin-top: 10px;
+    margin-top: 12px;
     padding: 10px 12px;
-    border-radius: 6px;
     font-size: 0.85rem;
-    line-height: 1.45;
+    line-height: 1.5;
+    border: 1.5px solid;
 }
 
 .quiz-feedback.correct {
-    background: rgba(20, 83, 45, 0.5);
-    border: 1.5px solid #22c55e;
-    color: #86efac;
+    background: #dff0d8;
+    border-color: #3c763d;
+    color: #1e4620;
 }
 
 .quiz-feedback.wrong {
-    background: rgba(127, 29, 29, 0.5);
-    border: 1.5px solid #ef4444;
-    color: #fca5a5;
+    background: #f2dede;
+    border-color: #a94442;
+    color: #6b1919;
 }
 
 .modal-footer-bar {
-    margin-top: 16px;
+    margin-top: 18px;
     text-align: right;
 }
 
-/* Modal Thắng Màn & Hoàn Thành */
+/* Modal Thắng màn, Hoàn thành, Hướng dẫn & Game Over */
 .victory-medal-row {
-    font-size: 1.9rem;
+    font-size: 2rem;
     color: var(--accent-gold);
-    margin: 4px 0 8px;
+    margin: 6px 0 10px;
     display: flex;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
 }
 
 .victory-score-plaque {
     font-family: var(--font-mono);
-    font-size: 0.92rem;
+    font-size: 0.95rem;
     font-weight: 700;
-    color: #86efac;
-    background: var(--bg-panel-inner);
-    border: 1.5px solid var(--border-subtle);
-    border-radius: 6px;
+    color: var(--accent-gold);
+    background: #14110d;
+    border: 1px solid var(--border-brass);
     padding: 10px;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
 }
 
 .grand-stats-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
-    margin: 14px 0;
+    margin: 16px 0;
 }
 
 .grand-stat-box {
-    background: var(--bg-panel-inner);
-    border: 1.5px solid var(--border-subtle);
-    border-radius: 6px;
-    padding: 10px 8px;
+    background: #15120e;
+    border: 1.5px solid var(--border-brass);
+    padding: 12px 8px;
 }
 
 .grand-stat-label {
-    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
     color: var(--text-muted);
     margin-bottom: 4px;
+    text-transform: uppercase;
 }
 
 .grand-stat-value {
-    font-size: 1.25rem;
+    font-size: 1.3rem;
     font-weight: 700;
     font-family: var(--font-mono);
     color: var(--text-light);
 }
 
 .leaderboard-submit-box {
-    background: var(--bg-panel-inner);
-    border: 1.5px solid var(--border-subtle);
-    border-radius: 6px;
-    padding: 14px;
-    margin: 12px 0 16px;
+    background: #16130f;
+    border: 1px dashed var(--border-brass-bright);
+    padding: 16px;
+    margin: 14px 0 18px;
 }
 
-/* Hướng dẫn */
 .tactical-guide-list {
-    color: #e2e8f0;
+    color: var(--text-light);
     line-height: 1.75;
     margin-left: 18px;
-    font-size: 0.88rem;
+    font-size: 0.9rem;
 }
 
 .tactical-guide-list li {
@@ -1144,62 +1326,65 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 6px 12px;
-    background: var(--bg-panel-inner);
-    border: 1.5px solid var(--border-subtle);
-    border-radius: 6px;
+    background: #15120e;
+    border: 1px solid var(--border-brass);
     padding: 8px 12px;
     margin-top: 6px;
     font-size: 0.82rem;
 }
 
-/* Modal Game Over */
+.guide-supply-grid i {
+    color: var(--accent-gold);
+    margin-right: 4px;
+}
+
 .modal-danger {
-    border: 2px solid #ef4444 !important;
+    border: 2px solid #b91c1c !important;
 }
 
 .game-over-icon {
-    font-size: 2.8rem;
+    font-size: 3rem;
     margin-bottom: 6px;
 }
 
 .modal-title-danger {
-    font-size: 1.65rem;
-    font-weight: 800;
+    font-family: var(--font-heading);
+    font-size: 1.9rem;
     color: #ef4444;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
 }
 
 .modal-subtitle-danger {
-    color: #cbd5e1;
-    font-size: 0.9rem;
-    margin-bottom: 12px;
+    color: var(--text-light);
+    font-size: 0.92rem;
+    margin-bottom: 14px;
 }
 
 .game-over-info-box {
-    background: var(--bg-panel-inner);
-    border: 1.5px solid var(--border-subtle);
-    border-radius: 6px;
+    background: #15120e;
+    border-left: 3px solid #b91c1c;
     padding: 10px 14px;
     color: var(--text-muted);
     font-size: 0.85rem;
     line-height: 1.5;
+    text-align: left;
 }
 
 /* ============================================================================
-   MODAL CÀI ĐẶT ÂM LƯỢNG
+   MODAL CÀI ĐẶT ÂM LƯỢNG GÓC CẠNH
    ============================================================================ */
 .btn-icon.is-muted,
 .btn-icon-hud.is-muted,
 .btn.is-muted {
     color: #ef4444 !important;
-    border-color: #ef4444 !important;
-    background: #2a1215 !important;
+    border-color: #991b1b !important;
+    background: #2a1212 !important;
 }
 
 .sound-setting-group {
-    background: var(--bg-panel-inner);
-    border: 1.5px solid var(--border-subtle);
-    border-radius: 6px;
+    background: #15120e;
+    border: 1px solid var(--border-brass);
     padding: 12px 14px;
 }
 
@@ -1211,12 +1396,15 @@ body {
 }
 
 .setting-title {
-    font-weight: 700;
-    font-size: 0.92rem;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
     color: var(--text-light);
     display: flex;
     align-items: center;
     gap: 8px;
+    text-transform: uppercase;
 }
 
 .sound-slider-wrap {
@@ -1230,9 +1418,8 @@ body {
     -webkit-appearance: none;
     appearance: none;
     height: 8px;
-    border-radius: 4px;
-    background: var(--bg-panel);
-    border: 1px solid var(--border-light);
+    background: #0a0806;
+    border: 1px solid var(--border-brass);
     outline: none;
     cursor: pointer;
 }
@@ -1241,37 +1428,34 @@ body {
     -webkit-appearance: none;
     appearance: none;
     width: 18px;
-    height: 18px;
-    border-radius: 4px;
+    height: 22px;
     background: var(--accent-gold);
-    border: 2px solid #090d16;
+    border: 2px solid #090706;
     cursor: pointer;
 }
 
 .audio-range-slider::-moz-range-thumb {
     width: 18px;
-    height: 18px;
-    border-radius: 4px;
+    height: 22px;
     background: var(--accent-gold);
-    border: 2px solid #090d16;
+    border: 2px solid #090706;
     cursor: pointer;
 }
 
 .slider-val-badge {
-    min-width: 46px;
+    min-width: 48px;
     text-align: right;
     font-family: var(--font-mono);
     font-weight: 700;
-    font-size: 0.86rem;
+    font-size: 0.88rem;
     color: var(--accent-gold);
-    background: var(--bg-panel);
-    padding: 2px 6px;
-    border-radius: 4px;
-    border: 1px solid var(--border-subtle);
+    background: #0c0a08;
+    padding: 3px 7px;
+    border: 1px solid var(--border-brass);
 }
 
 /* ============================================================================
-   BÀN PHÍM ẢO CẢM ỨNG DI ĐỘNG (ĐỒNG BỘ VỚI PHÍM 3D TRONG CANVAS)
+   BÀN PHÍM ẢO CẢM ỨNG DI ĐỘNG GÓC CẠNH
    ============================================================================ */
 .mobile-controls-panel {
     position: fixed;
@@ -1310,59 +1494,61 @@ body.touch-device .mobile-controls-panel {
 }
 
 .touch-btn {
-    width: 58px;
-    height: 58px;
-    border-radius: 8px;
-    background: rgba(30, 41, 59, 0.92);
-    border: 2px solid var(--accent-gold);
+    width: 60px;
+    height: 60px;
+    border-radius: 2px;
+    background: rgba(24, 20, 16, 0.92);
+    border: 2px solid var(--border-brass-bright);
     color: var(--accent-gold);
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     font-weight: 700;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 4px 0 var(--shadow-3d);
+    box-shadow: 3px 3px 0 #090706;
     touch-action: none;
 }
 
 .touch-btn:active,
 .touch-btn.touch-active {
-    transform: translateY(3px);
-    box-shadow: 0 1px 0 var(--shadow-3d);
-    background: #334155;
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 #090706;
+    background: #3b3023;
+    border-color: #fff;
 }
 
 .btn-subtext {
-    font-size: 0.6rem;
-    font-weight: 800;
+    font-family: var(--font-heading);
+    font-size: 0.62rem;
+    letter-spacing: 0.5px;
     line-height: 1;
     margin-top: 2px;
 }
 
 .touch-btn-jump {
-    width: 66px;
-    height: 66px;
-    background: var(--primary-red);
+    width: 68px;
+    height: 68px;
+    background: rgba(158, 34, 34, 0.94);
     border-color: var(--accent-gold);
-    color: #ffffff;
+    color: #fff;
 }
 
 .touch-btn-interact {
-    width: 62px;
-    height: 62px;
+    width: 64px;
+    height: 64px;
     background: var(--accent-gold) !important;
-    color: #090d16 !important;
-    border-color: #ffffff !important;
+    color: var(--ink-dark) !important;
+    border-color: #090706 !important;
 }
 
 .touch-btn-distract {
-    width: 56px;
-    height: 56px;
-    background: #0284c7;
-    border-color: #7dd3fc;
-    color: #ffffff;
+    width: 58px;
+    height: 58px;
+    background: rgba(42, 36, 29, 0.94);
+    border-color: #d4a349;
+    color: #efe6d5;
 }
 
 .touch-btn-distract.cooling {
@@ -1370,22 +1556,21 @@ body.touch-device .mobile-controls-panel {
 }
 
 .touch-btn-takedown {
-    width: 62px;
-    height: 62px;
-    background: #d97706 !important;
+    width: 64px;
+    height: 64px;
+    background: #b45309 !important;
     border-color: #fde047 !important;
-    color: #ffffff !important;
+    color: #fff !important;
 }
 
 .landscape-hint {
     position: fixed;
-    top: 56px;
+    top: 58px;
     left: 50%;
     transform: translateX(-50%);
-    background: var(--bg-panel);
+    background: #191511;
     border: 2px solid var(--accent-gold);
-    border-radius: 6px;
-    color: #fde047;
+    color: var(--accent-gold);
     padding: 6px 14px;
     font-size: 0.82rem;
     font-weight: 600;
@@ -1393,7 +1578,8 @@ body.touch-device .mobile-controls-panel {
     align-items: center;
     gap: 8px;
     z-index: 300;
-    box-shadow: 0 4px 0 var(--shadow-3d);
+    box-shadow: var(--shadow-hard);
+    max-width: 92%;
 }
 
 .hint-close-btn {
@@ -1407,8 +1593,8 @@ body.touch-device .mobile-controls-panel {
 /* ============================================================================
    RESPONSIVE
    ============================================================================ */
-@media (max-width: 920px) {
-    .menu-grid-layout {
+@media (max-width: 960px) {
+    .dossier-desk-layout {
         grid-template-columns: 1fr;
     }
 }
@@ -1419,18 +1605,22 @@ body.touch-device .mobile-controls-panel {
         flex-wrap: wrap;
         gap: 8px;
     }
+    .brand-main-title {
+        font-size: 1rem;
+    }
     .header-actions {
         width: 100%;
         justify-content: flex-end;
         flex-wrap: wrap;
         gap: 6px;
     }
-    .menu-hero-header {
+    .dossier-hero-header {
         flex-direction: column;
+        align-items: center;
         text-align: center;
     }
     .game-title {
-        font-size: 1.55rem;
+        font-size: 1.85rem;
     }
     .menu-sub-row,
     .doc-columns {
@@ -1452,7 +1642,7 @@ body.touch-device .mobile-controls-panel {
         font-size: 0.76rem;
     }
     .hud-hp-track {
-        width: 50px;
+        width: 52px;
     }
 }
 
@@ -1476,12 +1666,12 @@ body.touch-device .mobile-controls-panel {
         font-size: 0.85rem;
     }
     .touch-btn {
-        width: 48px;
-        height: 48px;
-        font-size: 1rem;
+        width: 50px;
+        height: 50px;
+        font-size: 1.05rem;
     }
     .touch-btn-jump {
-        width: 56px;
-        height: 56px;
+        width: 58px;
+        height: 58px;
     }
 }

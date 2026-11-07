@@ -218,7 +218,7 @@ class GameRenderer {
     // =========================================================================
     // HELPER: VẼ NÚT PHÍM CƠ 3D TRÊN CANVAS ([E], [Q]) & ICON ĐỒ HỌA
     // =========================================================================
-    drawKeycap(x, y, keyText, accentColor = "#fbbf24") {
+    drawKeycap(x, y, keyText, accentColor = "#d4a349") {
         const ctx = this.ctx;
         ctx.save();
         const w = 22;
@@ -226,24 +226,20 @@ class GameRenderer {
         const rx = x - w / 2;
         const ry = y - h / 2;
 
-        // Đế phím 3D sẫm
-        ctx.fillStyle = "#090d16";
-        ctx.beginPath();
-        ctx.roundRect(rx, ry + 3, w, h, 4);
-        ctx.fill();
+        // Đế bóng cứng góc cạnh đồng bộ với Menu
+        ctx.fillStyle = "#090706";
+        ctx.fillRect(rx + 2, ry + 3, w, h);
 
-        // Mặt phím trên
-        ctx.fillStyle = "#1e293b";
+        // Mặt phím vuông vức #211c17 viền đồng
+        ctx.fillStyle = "#211c17";
+        ctx.fillRect(rx, ry, w, h);
         ctx.strokeStyle = accentColor;
         ctx.lineWidth = 1.6;
-        ctx.beginPath();
-        ctx.roundRect(rx, ry, w, h, 4);
-        ctx.fill();
-        ctx.stroke();
+        ctx.strokeRect(rx, ry, w, h);
 
         // Ký tự phím
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "700 11px 'Space Mono', monospace";
+        ctx.fillStyle = "#efe6d5";
+        ctx.font = "700 11px 'Courier Prime', monospace";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText(keyText, x, ry + h / 2 + 0.5);
@@ -415,11 +411,23 @@ class GameRenderer {
         // 12. Hiệu ứng khí hậu đặc biệt (Tuyết rơi đa tầng Moskva)
         this.drawWeatherEffects(currentLevel.id, width, height);
 
+        // 13. Lớp phủ Vignette cổ điển & khung viền đồng bộ với giao diện Menu góc cạnh
+        ctx.save();
+        const vig = ctx.createRadialGradient(
+            width / 2, height / 2, Math.min(width, height) * 0.35,
+            width / 2, height / 2, Math.max(width, height) * 0.72
+        );
+        vig.addColorStop(0, "rgba(22, 19, 16, 0)");
+        vig.addColorStop(1, "rgba(14, 12, 10, 0.42)");
+        ctx.fillStyle = vig;
+        ctx.fillRect(0, 0, width, height);
+        ctx.restore();
+
         // Chớp đỏ màn hình (Hit Flash Vignette) khi bị chấn động va chạm
         if (screenShake > 3) {
             ctx.save();
             const flashAlpha = Math.min(0.28, screenShake / 35);
-            ctx.fillStyle = `rgba(239, 68, 68, ${flashAlpha})`;
+            ctx.fillStyle = `rgba(185, 28, 28, ${flashAlpha})`;
             ctx.fillRect(0, 0, width, height);
             ctx.restore();
         }
@@ -920,10 +928,17 @@ class GameRenderer {
                 ctx.fill();
             }
 
-            // Tên tàu son vàng
-            ctx.fillStyle = "#fde047";
-            ctx.font = "800 11px 'Be Vietnam Pro', sans-serif";
-            ctx.fillText("⚓ LATOUCHE-TRÉVILLE (1911)", screenX - 15, y - 45);
+            // Bảng tên đích góc cạnh đồng bộ với Menu
+            ctx.fillStyle = "#090706";
+            ctx.fillRect(screenX - 16, y - 59, 168, 22);
+            ctx.fillStyle = "#211c17";
+            ctx.fillRect(screenX - 18, y - 61, 168, 22);
+            ctx.strokeStyle = "#d4a349";
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(screenX - 18, y - 61, 168, 22);
+            ctx.fillStyle = "#d4a349";
+            ctx.font = "700 11px 'Oswald', sans-serif";
+            ctx.fillText("⚓ LATOUCHE-TRÉVILLE (1911)", screenX - 10, y - 46);
         } else if (level.exitType === "train") {
             // Chuyến tàu cách mạng bọc thép
             ctx.fillStyle = "#334155";
@@ -942,9 +957,16 @@ class GameRenderer {
                 ctx.stroke();
             }
 
-            ctx.fillStyle = "#fde047";
-            ctx.font = "800 11px 'Be Vietnam Pro', sans-serif";
-            ctx.fillText("🚂 QUẢNG CHÂU (1927)", screenX + 5, y - 15);
+            ctx.fillStyle = "#090706";
+            ctx.fillRect(screenX, y - 31, 126, 22);
+            ctx.fillStyle = "#211c17";
+            ctx.fillRect(screenX - 2, y - 33, 126, 22);
+            ctx.strokeStyle = "#d4a349";
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(screenX - 2, y - 33, 126, 22);
+            ctx.fillStyle = "#d4a349";
+            ctx.font = "700 11px 'Oswald', sans-serif";
+            ctx.fillText("🚂 QUẢNG CHÂU (1927)", screenX + 6, y - 18);
         } else if (level.exitType === "cave") {
             // Cửa Hang Pác Bó thiêng liêng
             const caveGrad = ctx.createRadialGradient(screenX + 50, y + 30, 10, screenX + 50, y + 30, 48);
@@ -955,9 +977,16 @@ class GameRenderer {
             ctx.arc(screenX + 50, y + 30, 48, Math.PI, 0);
             ctx.fill();
 
-            ctx.fillStyle = "#6ee7b7";
-            ctx.font = "800 12px 'Be Vietnam Pro', sans-serif";
-            ctx.fillText("⛰️ PÁC BÓ (1941)", screenX + 2, y - 25);
+            ctx.fillStyle = "#090706";
+            ctx.fillRect(screenX - 2, y - 41, 108, 22);
+            ctx.fillStyle = "#211c17";
+            ctx.fillRect(screenX - 4, y - 43, 108, 22);
+            ctx.strokeStyle = "#d4a349";
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(screenX - 4, y - 43, 108, 22);
+            ctx.fillStyle = "#d4a349";
+            ctx.font = "700 11px 'Oswald', sans-serif";
+            ctx.fillText("⛰️ PÁC BÓ (1941)", screenX + 4, y - 28);
         } else {
             // ĐẠI LỄ ĐÀI QUẢNG TRƯỜNG BA ĐÌNH TRÁNG LỆ
             ctx.fillStyle = "#991b1b";
@@ -981,9 +1010,16 @@ class GameRenderer {
             ctx.font = "800 18px 'Be Vietnam Pro', sans-serif";
             ctx.fillText("★", screenX + 85, y - 76);
 
-            ctx.fillStyle = "#fde047";
-            ctx.font = "800 13px 'Be Vietnam Pro', sans-serif";
-            ctx.fillText("★ BA ĐÌNH (2/9/1945)", screenX + 10, y - 110);
+            ctx.fillStyle = "#090706";
+            ctx.fillRect(screenX + 2, y - 127, 136, 22);
+            ctx.fillStyle = "#211c17";
+            ctx.fillRect(screenX, y - 129, 136, 22);
+            ctx.strokeStyle = "#d4a349";
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(screenX, y - 129, 136, 22);
+            ctx.fillStyle = "#d4a349";
+            ctx.font = "700 12px 'Oswald', sans-serif";
+            ctx.fillText("★ BA ĐÌNH (2/9/1945)", screenX + 10, y - 114);
         }
         ctx.restore();
     }
@@ -1239,16 +1275,16 @@ class GameRenderer {
             // D. HIỆU ỨNG ĐI ĐIỀU TRA ÂM THANH NÉM SỎI (DISTRACTED / INVESTIGATING)
             else if (guard.investigateTimer && guard.investigateTimer > 0) {
                 const iconY = guard.y - 14 + Math.sin(this.time * 6) * 2;
-                ctx.fillStyle = "#1e293b";
-                ctx.strokeStyle = "#38bdf8";
+                ctx.fillStyle = "#090706";
+                ctx.fillRect(screenX + 7, iconY - 8, 20, 20);
+                ctx.fillStyle = "#211c17";
+                ctx.fillRect(screenX + 5, iconY - 10, 20, 20);
+                ctx.strokeStyle = "#d4a349";
                 ctx.lineWidth = 1.8;
-                ctx.beginPath();
-                ctx.roundRect(screenX + 5, iconY - 10, 20, 20, 5);
-                ctx.fill();
-                ctx.stroke();
+                ctx.strokeRect(screenX + 5, iconY - 10, 20, 20);
 
-                ctx.fillStyle = "#38bdf8";
-                ctx.font = "800 13px 'Space Mono', monospace";
+                ctx.fillStyle = "#d4a349";
+                ctx.font = "700 13px 'Courier Prime', monospace";
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
                 ctx.fillText("?", screenX + 15, iconY + 0.5);
@@ -1257,32 +1293,32 @@ class GameRenderer {
             else if (guard.isAlerted || (guard.crouchSuspicionTimer && guard.crouchSuspicionTimer > 35)) {
                 const iconY = guard.y - 14;
                 if (guard.crouchSuspicionTimer >= 80 || guard.isAiming) {
-                    // Huy hiệu chấm than đỏ rực khi sắp phát hiện / đang ngắm bắn!
-                    ctx.fillStyle = "#dc2626";
-                    ctx.strokeStyle = "#fbbf24";
+                    // Huy hiệu chấm than đỏ góc cạnh khi phát hiện!
+                    ctx.fillStyle = "#090706";
+                    ctx.fillRect(screenX + 6, iconY - 8, 22, 20);
+                    ctx.fillStyle = "#9e2222";
+                    ctx.fillRect(screenX + 4, iconY - 10, 22, 20);
+                    ctx.strokeStyle = "#d4a349";
                     ctx.lineWidth = 1.8;
-                    ctx.beginPath();
-                    ctx.roundRect(screenX + 4, iconY - 10, 22, 20, 5);
-                    ctx.fill();
-                    ctx.stroke();
+                    ctx.strokeRect(screenX + 4, iconY - 10, 22, 20);
 
-                    ctx.fillStyle = "#ffffff";
-                    ctx.font = "800 14px 'Space Mono', monospace";
+                    ctx.fillStyle = "#efe6d5";
+                    ctx.font = "700 14px 'Courier Prime', monospace";
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
                     ctx.fillText("!", screenX + 15, iconY + 0.5);
                 } else {
-                    // Dấu hỏi vàng nghi vấn khi ngồi trước mắt quá lâu
-                    ctx.fillStyle = "#1e293b";
-                    ctx.strokeStyle = "#fbbf24";
+                    // Dấu hỏi vàng nghi vấn góc cạnh
+                    ctx.fillStyle = "#090706";
+                    ctx.fillRect(screenX + 7, iconY - 8, 20, 20);
+                    ctx.fillStyle = "#211c17";
+                    ctx.fillRect(screenX + 5, iconY - 10, 20, 20);
+                    ctx.strokeStyle = "#d4a349";
                     ctx.lineWidth = 1.8;
-                    ctx.beginPath();
-                    ctx.roundRect(screenX + 5, iconY - 10, 20, 20, 5);
-                    ctx.fill();
-                    ctx.stroke();
+                    ctx.strokeRect(screenX + 5, iconY - 10, 20, 20);
 
-                    ctx.fillStyle = "#fbbf24";
-                    ctx.font = "800 13px 'Space Mono', monospace";
+                    ctx.fillStyle = "#d4a349";
+                    ctx.font = "700 13px 'Courier Prime', monospace";
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
                     ctx.fillText("?", screenX + 15, iconY + 0.5);
@@ -1670,31 +1706,27 @@ class GameRenderer {
                 const pillX = pCenterX - pillW / 2;
                 const pillY = bobY - pillH / 2;
 
-                // Đế bóng 3D đồng bộ với giao diện Menu & HUD
-                ctx.fillStyle = "#090d16";
-                ctx.beginPath();
-                ctx.roundRect(pillX, pillY + 3, pillW, pillH, 6);
-                ctx.fill();
+                // Đế bóng cứng góc cạnh đồng bộ với giao diện Menu & HUD
+                ctx.fillStyle = "#090706";
+                ctx.fillRect(pillX + 3, pillY + 3, pillW, pillH);
 
-                // Khung bong bóng trao đổi
-                ctx.fillStyle = "#1e293b";
-                ctx.strokeStyle = canAfford ? "#10b981" : "#fbbf24";
+                // Khung bảng trao đổi góc cạnh #211c17
+                ctx.fillStyle = "#211c17";
+                ctx.fillRect(pillX, pillY, pillW, pillH);
+                ctx.strokeStyle = canAfford ? "#75965d" : "#d4a349";
                 ctx.lineWidth = 1.8;
-                ctx.beginPath();
-                ctx.roundRect(pillX, pillY, pillW, pillH, 6);
-                ctx.fill();
-                ctx.stroke();
+                ctx.strokeRect(pillX, pillY, pillW, pillH);
 
                 // Sao + Số lượng hiện có / Giá đổi
                 ctx.fillStyle = canAfford ? "#fde047" : "#fca5a5";
-                ctx.font = "700 11px 'Space Mono', monospace";
+                ctx.font = "700 11px 'Courier Prime', monospace";
                 ctx.textAlign = "left";
                 ctx.textBaseline = "middle";
                 ctx.fillText(`★${Math.min(starsCount, cost)}/${cost}`, pillX + 6, bobY + 0.5);
 
                 // Mũi tên đổi
-                ctx.fillStyle = "#94a3b8";
-                ctx.font = "700 10px 'Space Mono', monospace";
+                ctx.fillStyle = "#a69882";
+                ctx.font = "700 10px 'Courier Prime', monospace";
                 ctx.fillText("▸", pillX + 39, bobY + 0.5);
 
                 // Icon vật phẩm phần thưởng bên phải
@@ -1702,16 +1734,19 @@ class GameRenderer {
 
                 // Nếu đứng gần: Hiện nút phím cơ 3D [E] phía trên bong bóng
                 if (npc.isNear) {
-                    this.drawKeycap(pCenterX, pillY - 13, "E", canAfford ? "#10b981" : "#fbbf24");
+                    this.drawKeycap(pCenterX, pillY - 13, "E", canAfford ? "#75965d" : "#d4a349");
                 }
             } else {
-                // Đã liên lạc xong: Huy hiệu dấu tích xanh gọn gàng
-                ctx.fillStyle = "#10b981";
-                ctx.beginPath();
-                ctx.roundRect(pCenterX - 9, bobY - 9, 18, 18, 5);
-                ctx.fill();
+                // Đã liên lạc xong: Huy hiệu dấu tích vuông vức
+                ctx.fillStyle = "#090706";
+                ctx.fillRect(pCenterX - 7, bobY - 7, 18, 18);
+                ctx.fillStyle = "#4d8b31";
+                ctx.fillRect(pCenterX - 9, bobY - 9, 18, 18);
+                ctx.strokeStyle = "#d4a349";
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(pCenterX - 9, bobY - 9, 18, 18);
                 ctx.fillStyle = "#ffffff";
-                ctx.font = "800 11px 'Be Vietnam Pro', sans-serif";
+                ctx.font = "700 11px 'Courier Prime', monospace";
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
                 ctx.fillText("✓", pCenterX, bobY + 0.5);
@@ -1762,8 +1797,8 @@ class GameRenderer {
                     ctx.fill();
                 }
             } else {
-                // Cầu chưa mở: khung nét đứt + Huy hiệu khóa ★3 gọn gàng ở giữa
-                ctx.strokeStyle = "rgba(148, 163, 184, 0.35)";
+                // Cầu chưa mở: khung nét đứt + Huy hiệu khóa ★3 góc cạnh ở giữa
+                ctx.strokeStyle = "rgba(212, 163, 73, 0.45)";
                 ctx.lineWidth = 1.8;
                 ctx.setLineDash([6, 6]);
                 ctx.strokeRect(sx, sc.y, sc.w, sc.h);
@@ -1771,21 +1806,17 @@ class GameRenderer {
 
                 const midX = sx + sc.w / 2;
                 const midY = sc.y + sc.h / 2;
-                ctx.fillStyle = "#090d16";
-                ctx.beginPath();
-                ctx.roundRect(midX - 24, midY - 7, 48, 20, 5);
-                ctx.fill();
+                ctx.fillStyle = "#090706";
+                ctx.fillRect(midX - 21, midY - 7, 48, 20);
 
-                ctx.fillStyle = "#1e293b";
-                ctx.strokeStyle = "#fbbf24";
+                ctx.fillStyle = "#211c17";
+                ctx.fillRect(midX - 24, midY - 10, 48, 20);
+                ctx.strokeStyle = "#d4a349";
                 ctx.lineWidth = 1.6;
-                ctx.beginPath();
-                ctx.roundRect(midX - 24, midY - 10, 48, 20, 5);
-                ctx.fill();
-                ctx.stroke();
+                ctx.strokeRect(midX - 24, midY - 10, 48, 20);
 
-                ctx.fillStyle = "#fbbf24";
-                ctx.font = "700 10px 'Space Mono', monospace";
+                ctx.fillStyle = "#d4a349";
+                ctx.font = "700 10px 'Courier Prime', monospace";
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
                 ctx.fillText("🔒 ★3", midX, midY + 0.5);
