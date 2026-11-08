@@ -611,7 +611,8 @@ class GameManager {
 
         if (scoreEl) scoreEl.innerText = finalScore;
         if (timeEl) timeEl.innerText = finalTime;
-        if (docsCountEl) docsCountEl.innerText = `${this.unlockedDocIds.size}/12`;
+        const totalDocsCount = Object.keys(TTHCM_KNOWLEDGE.documents).length || 20;
+        if (docsCountEl) docsCountEl.innerText = `${this.unlockedDocIds.size}/${totalDocsCount}`;
         if (starsEl) starsEl.innerText = `${this.engine.starsCollectedCount} ★`;
 
         // Tự động lưu thẳng kết quả vào Bảng xếp hạng

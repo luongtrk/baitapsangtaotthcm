@@ -9,36 +9,58 @@ const TTHCM_KNOWLEDGE = {
             subtitle: "Từ Bến Cảng Sài Gòn Đến Diễn Đàn Versailles",
             desc: "Chàng thanh niên Nguyễn Tất Thành rời Tổ quốc, bôn ba qua nhiều châu lục, thấu hiểu nỗi khổ của các dân tộc bị áp bức và gửi Bản Yêu sách 8 điểm đến Hội nghị Versailles.",
             yearRange: "1911 - 1919",
-            docIds: ["ben_nha_rong", "hoi_yeu_nuoc", "yeu_sach_1919"]
+            docIds: ["truoc_1911", "ben_nha_rong", "hoi_yeu_nuoc", "nam_chau_1917", "yeu_sach_1919"]
         },
         {
             id: 2,
             title: "Chương 2: Ánh Sáng Luận Cương & Đường Kách Mệnh (1920 - 1927)",
             subtitle: "Bước Ngoặt Tư Tưởng & Ngọn Lửa Lý Luận",
-            desc: "Tiếp cận Luận cương Lênin, bỏ phiếu tán thành Quốc tế III, sáng lập Báo Le Paria và xuất bản tác phẩm lý luận kinh điển Đường Kách Mệnh.",
+            desc: "Tiếp cận Luận cương Lênin, bỏ phiếu tán thành Quốc tế III tại Đại hội Tours, sáng lập Báo Le Paria, viết Bản án chế độ thực dân Pháp và xuất bản cuốn Đường Kách Mệnh.",
             yearRange: "1920 - 1927",
-            docIds: ["luan_cuong_lenin", "le_paria", "duong_kach_menh"]
+            docIds: ["luan_cuong_lenin", "dai_hoi_tours_1920", "le_paria", "ban_an_thuc_dan", "duong_kach_menh"]
         },
         {
             id: 3,
             title: "Chương 3: Thành Lập Đảng & Tiếng Gọi Pác Bó (1930 - 1941)",
             subtitle: "Hợp Nhất Phong Trào & Trở Về Đất Mẹ",
-            desc: "Chủ trì Hội nghị thành lập Đảng Cộng sản Việt Nam, vượt qua cảnh ngục tù và sự truy lùng ráo riết của đế quốc để trở về Pác Bó lãnh đạo cách mạng giải phóng dân tộc.",
-            yearRange: "1930 - 1941",
-            docIds: ["cuong_linh_1930", "cot_moc_108", "doi_tuyentruyen_1944"]
+            desc: "Chủ trì Hội nghị thành lập Đảng Cộng sản Việt Nam, vượt qua cảnh ngục tù và sự truy lùng ráo riết của đế quốc để trở về Pác Bó triệu tập Hội nghị TW 8 và thành lập Đội VN Tuyên truyền Giải phóng quân.",
+            yearRange: "1930 - 1944",
+            docIds: ["cuong_linh_1930", "cot_moc_108", "mat_tran_viet_minh", "doi_tuyentruyen_1944", "nen_tang_tu_tuong"]
         },
         {
             id: 4,
             title: "Chương 4: Mùa Thu Độc Lập - Ba Đình Lịch Sử (1945)",
             subtitle: "Tổng Khởi Nghĩa & Khai Sinh Nước Việt Nam Mới",
-            desc: "Chớp thời cơ ngàn năm có một, lãnh đạo Tổng khởi nghĩa Tháng Tám thắng lợi và soạn thảo Bản Tuyên ngôn Độc lập khai sinh nước Việt Nam Dân chủ Cộng hòa.",
+            desc: "Chớp thời cơ ngàn năm có một, triệu tập Quốc dân Đại hội Tân Trào, lãnh đạo Tổng khởi nghĩa Tháng Tám thắng lợi và soạn thảo Bản Tuyên ngôn Độc lập tại 48 Hàng Ngang.",
             yearRange: "1945",
-            docIds: ["nhat_phap_1945", "tong_khoi_nghia", "tuyen_ngon_1945"]
+            docIds: ["nhat_phap_1945", "dai_hoi_tan_trao", "tong_khoi_nghia", "so_48_hang_ngang", "tuyen_ngon_1945"]
         }
     ],
 
-    // Danh sách 12 Văn kiện & Di sản lịch sử quý giá
+    // Danh sách 20 Văn kiện & Di sản lịch sử quý giá (tích hợp chuẩn từ 100 câu trắc nghiệm TTHCM)
     documents: {
+        "truoc_1911": {
+            id: "truoc_1911",
+            chapterId: 1,
+            name: "Hình Thành Tư Tưởng Yêu Nước & Chí Hướng Cứu Nước",
+            year: "Trước 1911",
+            location: "Nghệ An - Huế - Phan Thiết",
+            badge: "Nguồn Cội Quê Hương",
+            historicalContext: "Sinh ra trong một gia đình nhà nho yêu nước, lớn lên tại quê hương giàu truyền thống chống ngoại xâm, chứng kiến nỗi thống khổ của nhân dân và sự bế tắc của các phong trào Cần Vương, Đông Du... Nguyễn Tất Thành đã sớm hình thành tư tưởng yêu nước, thương dân sâu sắc.",
+            coreIdea: "Kế thừa lòng yêu nước nồng nàn của dân tộc, hình thành hoài bão cứu nước cứu dân nhưng không tán thành con đường của các bậc tiền bối, nung nấu ý chí tự mình đi tìm một con đường cứu nước mới.",
+            famousQuote: "Tôi muốn đi ra ngoài xem nước Pháp và các nước khác làm như thế nào, rồi trở về giúp đồng bào ta.",
+            quiz: {
+                question: "Trong tiến trình hình thành và phát triển tư tưởng Hồ Chí Minh, giai đoạn 'Hình thành tư tưởng yêu nước và chí hướng cứu nước' được xác định trong khoảng thời gian nào?",
+                options: [
+                    "Thời kỳ trước năm 1911",
+                    "Thời kỳ 1911 - 1920",
+                    "Thời kỳ 1920 - 1930",
+                    "Thời kỳ 1930 - 1945"
+                ],
+                correctIndex: 0,
+                explanation: "Theo giáo trình Tư tưởng Hồ Chí Minh, thời kỳ trước năm 1911 là thời kỳ hình thành tư tưởng yêu nước và chí hướng cách mạng của Nguyễn Tất Thành dưới ảnh hưởng gia đình, quê hương và truyền thống dân tộc."
+            }
+        },
         "ben_nha_rong": {
             id: "ben_nha_rong",
             chapterId: 1,
@@ -81,6 +103,28 @@ const TTHCM_KNOWLEDGE = {
                 ],
                 correctIndex: 1,
                 explanation: "Giai đoạn 1911 - 1920 là thời kỳ Nguyễn Ái Quốc bôn ba qua nhiều nước tư bản và thuộc địa, tham gia các tổ chức yêu nước tiến bộ, tìm thấy con đường cứu nước đúng đắn qua Luận cương Lênin."
+            }
+        },
+        "nam_chau_1917": {
+            id: "nam_chau_1917",
+            chapterId: 1,
+            name: "Khảo Sát Thực Tiễn Tư Bản & Cách Mạng Tháng Mười",
+            year: "1917 - 1918",
+            location: "Mỹ, Anh, Pháp",
+            badge: "Nhãn Quan Toàn Cầu",
+            historicalContext: "Trải qua cuộc sống lao động vất vả cùng nhân dân các nước Âu - Mỹ và các xứ thuộc địa châu Phi, Người nhận thấy ở đâu bọn đế quốc thực dân cũng tàn bạo, ở đâu người lao động cũng bị bóc lột. Năm 1917, thắng lợi của Cách mạng Tháng Mười Nga đã mở ra thời đại mới.",
+            coreIdea: "Nhận thức sâu sắc rằng cách mạng tư sản (như ở Mỹ 1776, Pháp 1789) là 'cách mệnh chưa đến nơi'. Cách mạng muốn triệt để phải giải phóng hoàn toàn giai cấp cần lao và các dân tộc thuộc địa.",
+            famousQuote: "Trong thế giới chỉ có hai giống người: giống người bóc lột và giống người bị bóc lột. Nhưng chỉ có một mối tình hữu ái là thật mà thôi: tình hữu ái vô sản.",
+            quiz: {
+                question: "Theo Hồ Chí Minh, cuộc cách mạng nào trên thế giới mở ra thời đại mới trong lịch sử loài người và chỉ ra con đường giải phóng cho các dân tộc bị áp bức?",
+                options: [
+                    "Cách mạng tư sản Anh thế kỷ XVII",
+                    "Cách mạng tư sản Pháp 1789",
+                    "Cách mạng Tháng Mười Nga năm 1917",
+                    "Cách mạng Tân Hợi năm 1911"
+                ],
+                correctIndex: 2,
+                explanation: "Hồ Chí Minh đánh giá: 'Trong thế giới bây giờ chỉ có cách mệnh Nga là đã thành công, và thành công đến nơi... Cách mệnh Nga dạy cho chúng ta rằng, muốn cách mệnh thành công thì phải lấy dân chúng làm gốc'."
             }
         },
         "yeu_sach_1919": {
@@ -127,16 +171,38 @@ const TTHCM_KNOWLEDGE = {
                 explanation: "Tháng 7/1920, khi đọc Luận cương của Lênin trên báo L'Humanité, Nguyễn Ái Quốc tìm thấy con đường cứu nước chân chính: 'Muốn cứu nước và giải phóng dân tộc không có con đường nào khác con đường cách mạng vô sản'."
             }
         },
+        "dai_hoi_tours_1920": {
+            id: "dai_hoi_tours_1920",
+            chapterId: 2,
+            name: "Đại Hội Tours & Sáng Lập Đảng Cộng Sản Pháp",
+            year: "Tháng 12/1920",
+            location: "Thành phố Tours, Pháp",
+            badge: "Bước Ngoặt Lịch Sử",
+            historicalContext: "Tại Đại hội lần thứ XVIII của Đảng Xã hội Pháp họp ở Tours, Nguyễn Ái Quốc đã bỏ phiếu tán thành gia nhập Quốc tế thứ ba (Quốc tế Cộng sản) và tham gia sáng lập Đảng Cộng sản Pháp, trở thành người cộng sản Việt Nam đầu tiên.",
+            coreIdea: "Đánh dấu bước ngoặt quyết định từ một người yêu nước tiến bộ trở thành một chiến sĩ cộng sản kiên trung; gắn độc lập dân tộc với chủ nghĩa xã hội.",
+            famousQuote: "Tự do cho đồng bào tôi, độc lập cho Tổ quốc tôi, đấy là tất cả những điều tôi muốn, đấy là tất cả những điều tôi hiểu.",
+            quiz: {
+                question: "Sự kiện Nguyễn Ái Quốc bỏ phiếu tán thành gia nhập Quốc tế Cộng sản và tham gia sáng lập Đảng Cộng sản Pháp tại Đại hội Tours (12/1920) đánh dấu bước chuyển biến gì?",
+                options: [
+                    "Từ chủ nghĩa yêu nước đến với chủ nghĩa Mác - Lênin, giác ngộ cách mạng vô sản",
+                    "Bắt đầu giai đoạn bôn ba tìm đường cứu nước",
+                    "Hoàn thành việc soạn thảo Cương lĩnh chính trị đầu tiên",
+                    "Thành lập Mặt trận dân tộc thống nhất Việt Minh"
+                ],
+                correctIndex: 0,
+                explanation: "Đại hội Tours (12/1920) là mốc đánh dấu bước nhảy vọt về chất trong tư tưởng của Nguyễn Ái Quốc: từ chủ nghĩa yêu nước đến với chủ nghĩa Mác - Lênin, từ người yêu nước trở thành người cộng sản đầu tiên của Việt Nam."
+            }
+        },
         "le_paria": {
             id: "le_paria",
             chapterId: 2,
-            name: "Báo Le Paria & Bản Án Chế Độ Thực Dân",
+            name: "Báo Le Paria (Người Cùng Khổ)",
             year: "1922 - 1925",
-            location: "Paris (Pháp) - Moskva (Liên Xô)",
+            location: "Paris, Pháp",
             badge: "Vũ Khí Báo Chí",
-            historicalContext: "Nguyễn Ái Quốc cùng các nhà hoạt động thuộc địa sáng lập Hội Liên hiệp Thuộc địa và xuất bản báo Le Paria (Người cùng khổ). Năm 1925, tác phẩm 'Bản án chế độ thực dân Pháp' xuất bản tại Paris vạch trần tội ác dã man của chủ nghĩa thực dân.",
-            coreIdea: "Tư tưởng về liên minh chiến đấu giữa các dân tộc thuộc địa và giai cấp vô sản quốc tế. Hồ Chí Minh coi báo chí cách mạng là vũ khí sắc bén để thức tỉnh quần chúng, truyền bá tư tưởng độc lập, tự do.",
-            famousQuote: "Chủ nghĩa tư bản là một con đỉa hai vòi: một vòi cắm vào giai cấp vô sản ở chính quốc, một vòi cắm vào các dân tộc thuộc địa.",
+            historicalContext: "Nguyễn Ái Quốc cùng các nhà hoạt động thuộc địa sáng lập Hội Liên hiệp Thuộc địa và xuất bản báo Le Paria (Người cùng khổ). Tờ báo trở thành diễn đàn vạch trần tội ác dã man của thực dân và hiệu triệu các dân tộc bị áp bức vùng lên.",
+            coreIdea: "Tư tưởng về liên minh chiến đấu giữa nhân dân các nước thuộc địa và giai cấp vô sản chính quốc; báo chí là vũ khí sắc bén để tuyên truyền giác ngộ quần chúng.",
+            famousQuote: "Báo Le Paria là vũ khí giải phóng của những người bị áp bức ở tất cả các xứ thuộc địa.",
             quiz: {
                 question: "Tờ báo 'Le Paria' (Người cùng khổ) do Nguyễn Ái Quốc đồng sáng lập và làm chủ nhiệm kiêm chủ bút được xuất bản số đầu tiên tại đâu?",
                 options: [
@@ -147,6 +213,28 @@ const TTHCM_KNOWLEDGE = {
                 ],
                 correctIndex: 2,
                 explanation: "Báo Le Paria ra số đầu tiên ngày 1/4/1922 tại thủ đô Paris (Pháp), là cơ quan ngôn luận của Hội Liên hiệp thuộc địa nhằm vạch trần tội ác thực dân và thức tỉnh các dân tộc bị áp bức."
+            }
+        },
+        "ban_an_thuc_dan": {
+            id: "ban_an_thuc_dan",
+            chapterId: 2,
+            name: "Bản Án Chế Độ Thực Dân Pháp",
+            year: "1925",
+            location: "Paris, Pháp",
+            badge: "Đòn Giáng Sấm Sét",
+            historicalContext: "Tác phẩm được viết bằng tiếng Pháp, xuất bản lần đầu tại Paris năm 1925. Bằng những cứ liệu thực tế sống động, Nguyễn Ái Quốc đã lên án tội ác diệt chủng, cướp bóc, bóc lột thậm tệ của chủ nghĩa thực dân Pháp tại Đông Dương và châu Phi.",
+            coreIdea: "Luận điểm sáng tạo: Chủ nghĩa tư bản như con đỉa hai vòi. Cách mạng giải phóng dân tộc ở thuộc địa có mối quan hệ khăng khít với cách mạng vô sản ở chính quốc, nhưng có tính chủ động và có thể giành thắng lợi trước cách mạng ở chính quốc.",
+            famousQuote: "Chủ nghĩa tư bản là một con đỉa có một cái vòi bám vào giai cấp vô sản ở chính quốc và một cái vòi khác bám vào giai cấp vô sản ở các thuộc địa.",
+            quiz: {
+                question: "Luận điểm nổi tiếng: 'Chủ nghĩa tư bản là một con đỉa có hai cái vòi...' được Nguyễn Ái Quốc nêu ra trong tác phẩm kinh điển nào?",
+                options: [
+                    "Bản án chế độ thực dân Pháp (1925)",
+                    "Đường Kách mệnh (1927)",
+                    "Tuyên ngôn Độc lập (1945)",
+                    "Cương lĩnh chính trị đầu tiên (1930)"
+                ],
+                correctIndex: 0,
+                explanation: "Trong 'Bản án chế độ thực dân Pháp' (1925), Người đã ví chủ nghĩa tư bản như một con đỉa hai vòi và khẳng định muốn tiêu diệt nó phải đồng thời cắt đứt cả hai vòi ở chính quốc lẫn thuộc địa."
             }
         },
         "duong_kach_menh": {
@@ -178,7 +266,7 @@ const TTHCM_KNOWLEDGE = {
             year: "3/2/1930",
             location: "Hương Cảng (Cửu Long, Hong Kong)",
             badge: "Hợp Nhất Lịch Sử",
-            historicalContext: "Đầu năm 1930, trước nguy cơ chia rẽ của 3 tổ chức cộng sản trong nước, Nguyễn Ái Quốc với tư cách phái viên Quốc tế Cộng sản đã triệu tập và chủ trì Hội nghị hợp nhất, sáng lập Đảng Cộng sản Việt Nam và soạn thảo Cương lĩnh chính trị đầu tiên.",
+            historicalContext: "Đầu năm 1930, trước nguy cơ chia rẽ của 3 tổ chức cộng sản trong nước, Nguyễn Ái Quốc với tư cách phái viên Quốc tế Cộng sản đã triệu tập và chủ trì Hội nghị hợp nhất, sáng lập Đảng Cộng sản Việt Nam và soạn thảo Cương lĩnh chính trị đầu tiên (Chánh cương vắn tắt, Sách lược vắn tắt).",
             coreIdea: "Xác định đường lối chiến lược: 'Làm tư sản dân quyền cách mạng và thổ địa cách mạng để đi tới xã hội cộng sản'. Đặt nhiệm vụ chống đế quốc, giành độc lập dân tộc lên hàng đầu. Xác định lực lượng cách mạng là toàn thể nhân dân yêu nước (công nông là gốc).",
             famousQuote: "Đảng là đội tiên phong của vô sản giai cấp, phải thu phục cho được đại bộ phận giai cấp mình... và lôi kéo tiểu tư sản, trí thức, trung nông về phía vô sản.",
             quiz: {
@@ -215,6 +303,28 @@ const TTHCM_KNOWLEDGE = {
                 explanation: "Ngày 28/1/1941, Bác vượt qua cột mốc 108 trên biên giới Việt - Trung (xã Trường Hà, huyện Hà Quảng, tỉnh Cao Bằng) để trở về đất mẹ trực tiếp lãnh đạo cách mạng."
             }
         },
+        "mat_tran_viet_minh": {
+            id: "mat_tran_viet_minh",
+            chapterId: 3,
+            name: "Hội Nghị Trung Ương 8 & Mặt Trận Việt Minh",
+            year: "Tháng 5/1941",
+            location: "Lán Khuổi Nặm, Pác Bó (Cao Bằng)",
+            badge: "Đại Đoàn Kết Dân Tộc",
+            historicalContext: "Tháng 5/1941, Nguyễn Ái Quốc chủ trì Hội nghị Trung ương 8, hoàn chỉnh sự chuyển hướng chiến lược: Đặt nhiệm vụ giải phóng dân tộc lên trên hết, tạm gác khẩu hiệu cách mạng ruộng đất, quyết định thành lập Việt Nam Độc lập Đồng minh (Mặt trận Việt Minh).",
+            coreIdea: "Đỉnh cao nghệ thuật đại đoàn kết dân tộc của Hồ Chí Minh: Tập hợp mọi giai cấp, tầng lớp, đồng bào yêu nước cùng chung mục tiêu đánh đuổi giặc Pháp - Nhật, giành độc lập cho Tổ quốc.",
+            famousQuote: "Trong lúc này quyền lợi dân tộc giải phóng cao hơn hết thảy. Không giải quyết được vấn đề dân tộc giải phóng thì chẳng những toàn thể quốc gia dân tộc còn chịu mãi kiếp ngựa trâu, mà quyền lợi của bộ phận, giai cấp đến vạn năm cũng không đòi lại được.",
+            quiz: {
+                question: "Hội nghị Trung ương lần thứ 8 của Đảng (tháng 5/1941) do Nguyễn Ái Quốc chủ trì tại Pác Bó đã quyết định thành lập mặt trận dân tộc thống nhất có tên là gì?",
+                options: [
+                    "Mặt trận Dân chủ Đông Dương",
+                    "Hội Phản đế Đồng minh",
+                    "Việt Nam Độc lập Đồng minh (Mặt trận Việt Minh)",
+                    "Mặt trận Liên Việt"
+                ],
+                correctIndex: 2,
+                explanation: "Hội nghị Trung ương 8 (5/1941) đã quyết định thành lập Mặt trận Việt Nam Độc lập Đồng minh (gọi tắt là Việt Minh) nhằm giương cao ngọn cờ giải phóng dân tộc, đoàn kết toàn thể đồng bào kháng chiến."
+            }
+        },
         "doi_tuyentruyen_1944": {
             id: "doi_tuyentruyen_1944",
             chapterId: 3,
@@ -235,6 +345,28 @@ const TTHCM_KNOWLEDGE = {
                 ],
                 correctIndex: 1,
                 explanation: "Ngày 22/12/1944, tại rừng Trần Hưng Đạo (Cao Bằng), Đội Việt Nam Tuyên truyền Giải phóng quân được thành lập theo chỉ thị của lãnh tụ Hồ Chí Minh gồm 34 chiến sĩ, do đồng chí Võ Nguyên Giáp chỉ huy."
+            }
+        },
+        "nen_tang_tu_tuong": {
+            id: "nen_tang_tu_tuong",
+            chapterId: 3,
+            name: "Nền Tảng Tư Tưởng & Kim Chỉ Nam Hành Động",
+            year: "Văn Kiện Đại Hội Đảng",
+            location: "Hà Nội",
+            badge: "Kim Chỉ Nam Thời Đại",
+            historicalContext: "Thực tiễn thắng lợi của cách mạng Việt Nam từ năm 1930 đến nay chứng minh tính đúng đắn, khoa học của tư tưởng Hồ Chí Minh. Đảng ta luôn khẳng định chủ nghĩa Mác - Lênin và tư tưởng Hồ Chí Minh là ngọn cờ dẫn đường thắng lợi.",
+            coreIdea: "Tư tưởng Hồ Chí Minh là một hệ thống quan điểm toàn diện và sâu sắc về những vấn đề cơ bản của cách mạng Việt Nam, là tài sản tinh thần vô giá của Đảng và dân tộc.",
+            famousQuote: "Đoàn kết, đoàn kết, đại đoàn kết. Thành công, thành công, đại thành công!",
+            quiz: {
+                question: "Đảng Cộng sản Việt Nam lần đầu tiên chính thức khẳng định 'Đảng lấy chủ nghĩa Mác - Lênin và tư tưởng Hồ Chí Minh làm nền tảng tư tưởng và kim chỉ nam cho hành động' tại Đại hội nào?",
+                options: [
+                    "Đại hội IV (1976)",
+                    "Đại hội VI (1986)",
+                    "Đại hội VII (1991)",
+                    "Đại hội IX (2001)"
+                ],
+                correctIndex: 2,
+                explanation: "Tại Đại hội đại biểu toàn quốc lần thứ VII (tháng 6/1991), Đảng ta lần đầu tiên khẳng định: 'Đảng lấy chủ nghĩa Mác - Lênin và tư tưởng Hồ Chí Minh làm nền tảng tư tưởng, kim chỉ nam cho hành động'."
             }
         },
         "nhat_phap_1945": {
@@ -259,6 +391,28 @@ const TTHCM_KNOWLEDGE = {
                 explanation: "Tháng 8/1945, khi đang lâm bệnh nặng tại lán Nà Nưa (Tân Trào), Bác đã căn dặn đồng chí Võ Nguyên Giáp thể hiện quyết tâm sắt đá phải chớp thời cơ ngàn năm có một để giành độc lập."
             }
         },
+        "dai_hoi_tan_trao": {
+            id: "dai_hoi_tan_trao",
+            chapterId: 4,
+            name: "Quốc Dân Đại Hội Tân Trào",
+            year: "16 - 17/8/1945",
+            location: "Đình Tân Trào, Sơn Dương, Tuyên Quang",
+            badge: "Hội Nghị Diên Hồng",
+            historicalContext: "Trước thời cơ Nhật đầu hàng Đồng minh, ngày 16/8/1945, Quốc dân Đại hội họp tại đình Tân Trào với sự tham dự của hơn 60 đại biểu từ ba miền Bắc - Trung - Nam và kiều bào ở nước ngoài. Đại hội tán thành lệnh Tổng khởi nghĩa và bầu ra Ủy ban Dân tộc Giải phóng Việt Nam do Hồ Chí Minh làm Chủ tịch.",
+            coreIdea: "Ý chí đại đoàn kết toàn dân tộc, thiết lập chính quyền của dân, do dân, vì dân, quyết tâm giành độc lập trước khi quân Đồng minh vào tước khí giới phát xít Nhật.",
+            famousQuote: "Giờ quyết định cho vận mệnh dân tộc ta đã đến. Toàn quốc đồng bào hãy đứng dậy đem sức ta mà tự giải phóng cho ta!",
+            quiz: {
+                question: "Quốc dân Đại hội Tân Trào (16 - 17/8/1945) đã bầu ra cơ quan nào do đồng chí Hồ Chí Minh làm Chủ tịch?",
+                options: [
+                    "Chính phủ Liên hiệp Kháng chiến",
+                    "Ủy ban Dân tộc Giải phóng Việt Nam",
+                    "Hội đồng Cố vấn Tối cao Chính phủ",
+                    "Ủy ban Quân sự Cách mạng Bắc Kỳ"
+                ],
+                correctIndex: 1,
+                explanation: "Quốc dân Đại hội Tân Trào đã thông qua 10 chính sách lớn của Việt Minh, quyết định Tổng khởi nghĩa và bầu ra Ủy ban Dân tộc Giải phóng Việt Nam (tức Chính phủ lâm thời) do Hồ Chí Minh làm Chủ tịch."
+            }
+        },
         "tong_khoi_nghia": {
             id: "tong_khoi_nghia",
             chapterId: 4,
@@ -279,6 +433,28 @@ const TTHCM_KNOWLEDGE = {
                 ],
                 correctIndex: 0,
                 explanation: "Tháng 8/1945, trong Thư kêu gọi Tổng khởi nghĩa, Hồ Chí Minh kêu gọi toàn dân phát huy tinh thần độc lập tự chủ, dựa vào sức mạnh đại đoàn kết dân tộc để tự giải phóng cho mình."
+            }
+        },
+        "so_48_hang_ngang": {
+            id: "so_48_hang_ngang",
+            chapterId: 4,
+            name: "Địa Chỉ Lịch Sử Số 48 Phố Hàng Ngang",
+            year: "Cuối tháng 8/1945",
+            location: "Số 48 phố Hàng Ngang, Hà Nội",
+            badge: "Nơi Khởi Thảo Độc Lập",
+            historicalContext: "Sau thắng lợi giòn giã của khởi nghĩa tại Hà Nội (19/8), Chủ tịch Hồ Chí Minh từ Tân Trào về tới Hà Nội. Người được bố trí ở và làm việc tại tầng 2 ngôi nhà số 48 phố Hàng Ngang của gia đình nhà tư sản yêu nước Trịnh Văn Bô.",
+            coreIdea: "Nơi Chủ tịch Hồ Chí Minh đặt bút khởi thảo bản Tuyên ngôn Độc lập lịch sử, kết tinh tư tưởng độc lập tự do và quyền con người của dân tộc Việt Nam.",
+            famousQuote: "Tất cả mọi người đều sinh ra có quyền bình đẳng. Tạo hóa cho họ những quyền không ai có thể xâm phạm được; trong những quyền ấy, có quyền được sống, quyền tự do và quyền mưu cầu hạnh phúc.",
+            quiz: {
+                question: "Chủ tịch Hồ Chí Minh đã soạn thảo bản Tuyên ngôn Độc lập lịch sử tại địa chỉ nào ở thủ đô Hà Nội?",
+                options: [
+                    "Số nhà 48 phố Hàng Đào",
+                    "Số nhà 48 phố Hàng Ngang",
+                    "Số nhà 5D phố Hàm Long",
+                    "Bắc Bộ Phủ (phố Ngô Quyền)"
+                ],
+                correctIndex: 1,
+                explanation: "Từ ngày 28/8 đến 31/8/1945, tại tầng 2 ngôi nhà số 48 phố Hàng Ngang (Hà Nội), Chủ tịch Hồ Chí Minh đã soạn thảo bản Tuyên ngôn Độc lập khai sinh nước Việt Nam Dân chủ Cộng hòa."
             }
         },
         "tuyen_ngon_1945": {
