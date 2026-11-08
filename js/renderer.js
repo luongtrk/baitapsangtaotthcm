@@ -1480,7 +1480,7 @@ class GameRenderer {
             ctx.restore();
         } else if (player.disguiseTimer > 0) {
             // Huy hiệu Cải Trang + Vòng cung đếm ngược thời gian (Radial Timer Ring)
-            const ratio = Math.max(0, Math.min(1, player.disguiseTimer / 840));
+            const ratio = Math.max(0, Math.min(1, player.disguiseTimer / 720));
             ctx.save();
             ctx.fillStyle = "rgba(15, 23, 42, 0.9)";
             ctx.beginPath();
@@ -1499,7 +1499,7 @@ class GameRenderer {
             ctx.restore();
         } else if (player.speedBoostTimer > 0) {
             // Huy hiệu Tăng Tốc + Vòng cung đếm ngược thời gian
-            const ratio = Math.max(0, Math.min(1, player.speedBoostTimer / 540));
+            const ratio = Math.max(0, Math.min(1, player.speedBoostTimer / 480));
             ctx.save();
             ctx.fillStyle = "rgba(15, 23, 42, 0.9)";
             ctx.beginPath();
@@ -1667,7 +1667,6 @@ class GameRenderer {
         }
 
         const hipY = isCrouch ? -14 : -20;
-        const isDisguised = player.disguiseTimer > 0;
 
         // Hàm vẽ 1 chân có khớp đùi - gối - giày
         const drawLeg = (hipOffsetX, thighAngle, kneeBend, isBackLeg) => {
@@ -1678,12 +1677,8 @@ class GameRenderer {
             const thighLen = isCrouch ? 7 : 10;
             const shinLen = isCrouch ? 7 : 9;
 
-            // Đùi quần: nếu đang cải trang thì mặc quần âu đen/xám than giống mật thám
-            if (isDisguised) {
-                ctx.strokeStyle = isBackLeg ? "#090d16" : "#0f172a";
-            } else {
-                ctx.strokeStyle = isBackLeg ? "#1e293b" : "#334155";
-            }
+            // Đùi quần vải sẫm
+            ctx.strokeStyle = isBackLeg ? "#1e293b" : "#334155";
             ctx.lineWidth = 5.5;
             ctx.lineCap = "round";
             ctx.beginPath();
@@ -1699,11 +1694,9 @@ class GameRenderer {
             ctx.lineTo(0, shinLen);
             ctx.stroke();
 
-            // Giày da đen bóng của mật thám / Dép cao su
+            // Giày da / Dép cao su
             ctx.translate(0, shinLen);
-            ctx.fillStyle = player.speedBoostTimer > 0
-                ? "#eab308"
-                : (isDisguised ? (isBackLeg ? "#090d16" : "#1e293b") : (isBackLeg ? "#1c1917" : "#451a03"));
+            ctx.fillStyle = player.speedBoostTimer > 0 ? "#eab308" : (isBackLeg ? "#1c1917" : "#451a03");
             ctx.beginPath();
             ctx.roundRect(-2.5, -2, 7.5, 4.2, 1.5);
             ctx.fill();
@@ -1719,13 +1712,8 @@ class GameRenderer {
             const upperLen = 8;
             const foreLen = 7;
 
-            // Tay áo: khi cải trang chuyển sang ống tay áo măng-tô xám than của địch
-            if (isDisguised) {
-                ctx.strokeStyle = isBackArm ? "#0f172a" : "#1e293b";
-            } else {
-                ctx.strokeStyle = isBackArm ? "#78350f" : "#9a3412";
-            }
-            ctx.lineWidth = 4.6;
+            ctx.strokeStyle = isBackArm ? "#78350f" : "#9a3412";
+            ctx.lineWidth = 4.5;
             ctx.lineCap = "round";
             ctx.beginPath();
             ctx.moveTo(0, 0);
@@ -1740,31 +1728,11 @@ class GameRenderer {
             ctx.lineTo(0, foreLen);
             ctx.stroke();
 
-            // Bàn tay (khi cải trang có thể đeo găng xám hoặc cầm đèn bão tuần tra giả dạng địch)
-            ctx.fillStyle = isDisguised ? "#334155" : "#fed7aa";
+            // Bàn tay
+            ctx.fillStyle = "#fed7aa";
             ctx.beginPath();
             ctx.arc(0, foreLen + 1, 2.5, 0, Math.PI * 2);
             ctx.fill();
-
-            // Nếu đang cải trang, tay trước cầm chiếc đèn bão bọc đồng giống hệt mật thám tuần tra
-            if (isDisguised && !isBackArm) {
-                ctx.save();
-                ctx.translate(0.5, foreLen + 2);
-                ctx.rotate(0.38 - armAngle * 0.5); // Giữ đèn rủ xuống tự nhiên theo trọng lực
-                // Quai đèn
-                ctx.strokeStyle = "#94a3b8";
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.arc(0, 1, 2.2, Math.PI, 0);
-                ctx.stroke();
-                // Thân đèn đồng & tim đèn vàng giống mật thám
-                ctx.fillStyle = "#ca8a04";
-                ctx.fillRect(-3, 1.5, 6, 8);
-                ctx.fillStyle = "#fde047";
-                ctx.fillRect(-1.2, 3, 2.4, 5);
-                ctx.restore();
-            }
-
             ctx.restore();
         };
 
@@ -1781,108 +1749,51 @@ class GameRenderer {
         // 2.1. Cánh tay sau
         drawArm(-2, -torsoH + 2, leftArmAngle, true);
 
-        // 2.2. Dải khăn quàng đỏ (hoặc vạt áo măng-tô xám than khi đang cải trang thành địch)
+        // 2.2. Dải khăn quàng đỏ bay phấp phới phía sau theo vận tốc và sóng sin
         const hasMomentum = isRunning || isIceSliding || isAir;
         const scarfWave1 = Math.sin(this.time * 10) * (hasMomentum ? 4.5 : 2.2);
         const scarfWave2 = Math.cos(this.time * 12) * (hasMomentum ? 5.5 : 2.5);
-        if (isDisguised) {
-            // Vạt áo khoác măng-tô xám than bay nhẹ phía sau giống trang phục mật thám
-            const coatTailLen = hasMomentum ? 12 : 7;
-            ctx.fillStyle = "#0f172a";
+        const scarfLen = hasMomentum ? 16 : 10;
+        ctx.fillStyle = "#dc2626";
+        ctx.beginPath();
+        ctx.moveTo(-2, -torsoH + 1);
+        ctx.quadraticCurveTo(-2 - scarfLen * 0.5, -torsoH + 3 + scarfWave1, -2 - scarfLen, -torsoH + 6 + scarfWave2);
+        ctx.lineTo(-2 - scarfLen + 2, -torsoH + 10 + scarfWave2);
+        ctx.quadraticCurveTo(-2 - scarfLen * 0.4, -torsoH + 6 + scarfWave1, -1, -torsoH + 4);
+        ctx.closePath();
+        ctx.fill();
+
+        // 2.3. Thân áo ký giả / áo bà ba nâu truyền thống
+        const shirtGrad = ctx.createLinearGradient(-6, -torsoH, 6, 2);
+        shirtGrad.addColorStop(0, "#b45309");
+        shirtGrad.addColorStop(1, "#78350f");
+        ctx.fillStyle = shirtGrad;
+        ctx.beginPath();
+        ctx.roundRect(-6.5, -torsoH, 13, torsoH + 2, 3);
+        ctx.fill();
+        ctx.strokeStyle = "#451a03";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Hàng cúc áo vàng đồng giữa ngực
+        ctx.fillStyle = "#fde047";
+        for (let cy = -torsoH + 4; cy <= -2; cy += 4.5) {
             ctx.beginPath();
-            ctx.moveTo(-4, -6);
-            ctx.quadraticCurveTo(-4 - coatTailLen * 0.5, -2 + scarfWave1 * 0.5, -5 - coatTailLen, 4 + scarfWave2 * 0.5);
-            ctx.lineTo(-1, 5);
-            ctx.closePath();
-            ctx.fill();
-        } else {
-            const scarfLen = hasMomentum ? 16 : 10;
-            ctx.fillStyle = "#dc2626";
-            ctx.beginPath();
-            ctx.moveTo(-2, -torsoH + 1);
-            ctx.quadraticCurveTo(-2 - scarfLen * 0.5, -torsoH + 3 + scarfWave1, -2 - scarfLen, -torsoH + 6 + scarfWave2);
-            ctx.lineTo(-2 - scarfLen + 2, -torsoH + 10 + scarfWave2);
-            ctx.quadraticCurveTo(-2 - scarfLen * 0.4, -torsoH + 6 + scarfWave1, -1, -torsoH + 4);
-            ctx.closePath();
+            ctx.arc(2, cy, 0.9, 0, Math.PI * 2);
             ctx.fill();
         }
 
-        // 2.3. Thân áo: Áo Măng-tô Xám Than của Mật Thám (khi cải trang) HOẶC Áo ký giả nâu truyền thống
-        if (isDisguised) {
-            // Áo khoác măng-tô dài (Trench coat) màu xám than #1e293b giống hệt mật thám
-            const coatGrad = ctx.createLinearGradient(-7, -torsoH, 7, 5);
-            coatGrad.addColorStop(0, "#1e293b");
-            coatGrad.addColorStop(1, "#0f172a");
-            ctx.fillStyle = coatGrad;
-            ctx.beginPath();
-            ctx.roundRect(-7, -torsoH, 14, torsoH + 5, 2.5);
-            ctx.fill();
-            ctx.strokeStyle = "#334155";
-            ctx.lineWidth = 1;
-            ctx.stroke();
+        // Vòng khăn quàng đỏ quanh cổ + nút thắt sao vàng
+        ctx.fillStyle = "#ef4444";
+        ctx.beginPath();
+        ctx.roundRect(-5.5, -torsoH - 1.5, 11, 4, 2);
+        ctx.fill();
+        ctx.fillStyle = "#fde047";
+        ctx.beginPath();
+        ctx.arc(2.5, -torsoH + 0.5, 1.3, 0, Math.PI * 2);
+        ctx.fill();
 
-            // Ve áo măng-tô chữ V (#334155) giống mật thám (lines 1198-1203)
-            ctx.fillStyle = "#334155";
-            ctx.beginPath();
-            ctx.moveTo(-1, -torsoH);
-            ctx.lineTo(4.5, -torsoH + 9);
-            ctx.lineTo(4.5, -torsoH);
-            ctx.closePath();
-            ctx.fill();
-
-            // Đai lưng áo măng-tô & khóa bạc
-            ctx.fillStyle = "#090d16";
-            ctx.fillRect(-7, -4, 14, 2.8);
-            ctx.strokeStyle = "#94a3b8";
-            ctx.lineWidth = 0.9;
-            ctx.strokeRect(0.5, -4.2, 3.2, 3.2);
-
-            // Hai hàng cúc áo kim loại bạc (#94a3b8) giống mật thám (lines 1206-1210)
-            ctx.fillStyle = "#94a3b8";
-            ctx.beginPath();
-            ctx.arc(0.5, -torsoH + 6, 1.0, 0, Math.PI * 2);
-            ctx.arc(0.5, -torsoH + 10, 1.0, 0, Math.PI * 2);
-            ctx.arc(3.5, -torsoH + 6, 1.0, 0, Math.PI * 2);
-            ctx.arc(3.5, -torsoH + 10, 1.0, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Cổ áo măng-tô dựng cao che gáy (#334155)
-            ctx.fillStyle = "#334155";
-            ctx.beginPath();
-            ctx.roundRect(-6, -torsoH - 2, 12, 4, 1.5);
-            ctx.fill();
-        } else {
-            const shirtGrad = ctx.createLinearGradient(-6, -torsoH, 6, 2);
-            shirtGrad.addColorStop(0, "#b45309");
-            shirtGrad.addColorStop(1, "#78350f");
-            ctx.fillStyle = shirtGrad;
-            ctx.beginPath();
-            ctx.roundRect(-6.5, -torsoH, 13, torsoH + 2, 3);
-            ctx.fill();
-            ctx.strokeStyle = "#451a03";
-            ctx.lineWidth = 1;
-            ctx.stroke();
-
-            // Hàng cúc áo vàng đồng giữa ngực
-            ctx.fillStyle = "#fde047";
-            for (let cy = -torsoH + 4; cy <= -2; cy += 4.5) {
-                ctx.beginPath();
-                ctx.arc(2, cy, 0.9, 0, Math.PI * 2);
-                ctx.fill();
-            }
-
-            // Vòng khăn quàng đỏ quanh cổ + nút thắt sao vàng
-            ctx.fillStyle = "#ef4444";
-            ctx.beginPath();
-            ctx.roundRect(-5.5, -torsoH - 1.5, 11, 4, 2);
-            ctx.fill();
-            ctx.fillStyle = "#fde047";
-            ctx.beginPath();
-            ctx.arc(2.5, -torsoH + 0.5, 1.3, 0, Math.PI * 2);
-            ctx.fill();
-        }
-
-        // 2.4. Đầu & Khuôn mặt (rõ nét mắt, lông mày và biểu cảm, hoặc hóa trang mũ phớt Fedora giống địch)
+        // 2.4. Đầu & Khuôn mặt (rõ nét mắt, lông mày và biểu cảm, không bị tóc che)
         const headBob = isRunning ? Math.sin(runCycle * 2) * 0.8 : Math.sin(idleCycle) * 0.5;
         ctx.save();
         ctx.translate(0.5, -torsoH - 8.5 + headBob);
@@ -1896,17 +1807,15 @@ class GameRenderer {
         ctx.beginPath();
         ctx.ellipse(0, 0, 7.2, 8.0, 0, 0, Math.PI * 2);
         ctx.fill();
-        ctx.strokeStyle = isDisguised ? "#475569" : "#c2410c";
+        ctx.strokeStyle = "#c2410c";
         ctx.lineWidth = 0.8;
         ctx.stroke();
 
-        // Má hồng nhẹ tạo sức sống (ẩn khi đang đóng giả mật thám lạnh lùng)
-        if (!isDisguised) {
-            ctx.fillStyle = "rgba(249, 115, 22, 0.22)";
-            ctx.beginPath();
-            ctx.ellipse(1.6, 2.2, 1.8, 1.1, 0, 0, Math.PI * 2);
-            ctx.fill();
-        }
+        // Má hồng nhẹ tạo sức sống
+        ctx.fillStyle = "rgba(249, 115, 22, 0.22)";
+        ctx.beginPath();
+        ctx.ellipse(1.6, 2.2, 1.8, 1.1, 0, 0, Math.PI * 2);
+        ctx.fill();
 
         // Mái tóc đen gọn gàng trên đỉnh đầu và gáy (cao ở y <= -3.8 nên không bao giờ che mắt)
         const hairLift = isAir ? -1.0 : (isRunning ? Math.sin(runCycle) * 0.6 : 0);
@@ -1958,56 +1867,21 @@ class GameRenderer {
         ctx.quadraticCurveTo(3.3, -3.7, 5.2, -2.7);
         ctx.stroke();
 
-        // Nếu đang cải trang (Disguise): đội Mũ Phớt Fedora Đen + Ruy băng xám giống hệt mật thám, đeo kính râm & ria mép giả
-        if (isDisguised) {
-            // Kính râm mật vụ che mắt kèm vệt phản quang
-            ctx.fillStyle = "rgba(15, 23, 42, 0.9)";
-            ctx.beginPath();
-            ctx.roundRect(0.6, -2.2, 5.4, 3.3, 1);
-            ctx.fill();
-            ctx.strokeStyle = "#94a3b8";
-            ctx.lineWidth = 1.0;
-            ctx.stroke();
-            // Gọng kính kéo về phía tai
-            ctx.beginPath();
-            ctx.moveTo(-4.5, -0.8);
-            ctx.lineTo(0.6, -0.8);
-            ctx.stroke();
-            // Vệt sáng trắng chéo trên mắt kính
-            ctx.strokeStyle = "rgba(255, 255, 255, 0.7)";
-            ctx.lineWidth = 0.9;
-            ctx.beginPath();
-            ctx.moveTo(1.8, -1.6);
-            ctx.lineTo(3.2, 0.4);
-            ctx.stroke();
+        // Nụ cười kiên định
+        ctx.strokeStyle = "#9a3412";
+        ctx.lineWidth = 1.1;
+        ctx.beginPath();
+        ctx.arc(2.8, 2.6, 1.8, 0.15, Math.PI * 0.78);
+        ctx.stroke();
 
-            // Ria mép giả của mật thám Pháp
-            ctx.fillStyle = "#1e293b";
-            ctx.beginPath();
-            ctx.ellipse(3.3, 2.2, 2.6, 1.0, -0.08, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Mũ phớt Fedora cổ điển (#0f172a) + Dải ruy băng xám (#475569) giống hệt mật thám (lines 1218-1225)
-            ctx.fillStyle = "#0f172a";
-            ctx.fillRect(-10.5, -5.2, 21, 3.2); // Vành mũ phớt rộng
-            ctx.beginPath();
-            ctx.roundRect(-6.8, -12.5, 13.6, 7.8, [2.5, 2.5, 0, 0]); // Chóp mũ phớt
-            ctx.fill();
-            // Dải ruy băng xám đặc trưng trên mũ mật thám
-            ctx.fillStyle = "#475569";
-            ctx.fillRect(-6.8, -6.8, 13.6, 2.0);
-            // Huy hiệu nhỏ ánh tím để người chơi vẫn nhận ra nhân vật của mình
-            ctx.fillStyle = "#c084fc";
-            ctx.beginPath();
-            ctx.arc(3.5, -5.8, 1.2, 0, Math.PI * 2);
-            ctx.fill();
-        } else {
-            // Nụ cười kiên định khi không cải trang
-            ctx.strokeStyle = "#9a3412";
-            ctx.lineWidth = 1.1;
-            ctx.beginPath();
-            ctx.arc(2.8, 2.6, 1.8, 0.15, Math.PI * 0.78);
-            ctx.stroke();
+        // Nếu đang cải trang (Disguise): vẽ thêm mũ phớt & kính cải trang trên đầu nhân vật
+        if (player.disguiseTimer > 0) {
+            ctx.fillStyle = "#3b0764";
+            ctx.fillRect(-8.5, -6.2, 17, 2.2);
+            ctx.fillRect(-5.5, -11.2, 11, 5.5);
+            ctx.strokeStyle = "#e9d5ff";
+            ctx.lineWidth = 1.2;
+            ctx.strokeRect(1.2, -2.2, 4.2, 3.2);
         }
 
         ctx.restore(); // Kết thúc vẽ Đầu
