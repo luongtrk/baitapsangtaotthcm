@@ -3,7 +3,7 @@
 const LEVELS = [
     // =========================================================================
     // MÀN 1: BẾN CẢNG SÀI GÒN & PARIS (1911 - 1919)
-    // [MỨC ĐỘ: TRUNG BÌNH] - 6 lính, tầm nhìn rộng hơn
+    // [MỨC ĐỘ: DỄ / NHẬP MÔN]
     // Đặc trưng: Nền đất liền mạch, nhiều thùng hàng ẩn nấp, lính tuần tra chậm rãi
     // =========================================================================
     {
@@ -51,24 +51,24 @@ const LEVELS = [
             { x: 2980, y: 350, w: 170, h: 20, type: "stone" }
         ],
 
-        // Chỗ ẩn nấp (6 vị trí)
+        // Rất nhiều chỗ ẩn nấp an toàn (8 vị trí)
         hidingSpots: [
             { x: 200,  y: 470, w: 50, h: 50, type: "crate", label: "Kiện hàng bến cảng" },
+            { x: 580,  y: 470, w: 50, h: 50, type: "crate", label: "Thùng gỗ" },
             { x: 1100, y: 470, w: 55, h: 50, type: "arch",  label: "Ngõ tối Paris" },
             { x: 1400, y: 470, w: 50, h: 50, type: "crate", label: "Kiện sách báo" },
             { x: 1645, y: 470, w: 55, h: 50, type: "arch",  label: "Vòm cửa cổ" },
+            { x: 2120, y: 470, w: 50, h: 50, type: "crate", label: "Thùng gỗ" },
             { x: 2380, y: 470, w: 55, h: 50, type: "arch",  label: "Hành lang Versailles" },
             { x: 2880, y: 470, w: 50, h: 50, type: "crate", label: "Thùng hàng cảng" }
         ],
 
-        // Kẻ địch: 6 mật thám tuần tra bến cảng, đại lộ & ban công Paris
+        // Kẻ địch: 4 mật thám tuần tra bến cảng & đại lộ Paris
         guards: [
-            { x: 480,  y: 472, minX: 360,  maxX: 640,  speed: 0.95, dir: 1,  range: 118 },
-            { x: 1350, y: 472, minX: 1180, maxX: 1560, speed: 1.0,  dir: -1, range: 122 },
-            { x: 1500, y: 302, minX: 1445, maxX: 1575, speed: 0.9,  dir: 1,  range: 115 }, // Gác ban công Paris
-            { x: 2050, y: 472, minX: 1900, maxX: 2280, speed: 1.0,  dir: -1, range: 122 },
-            { x: 2300, y: 302, minX: 2245, maxX: 2375, speed: 0.9,  dir: -1, range: 115 }, // Gác ban công đại lộ
-            { x: 2820, y: 472, minX: 2690, maxX: 3040, speed: 1.02, dir: 1,  range: 125 }
+            { x: 480,  y: 472, minX: 380,  maxX: 620,  speed: 0.78, dir: 1,  range: 98 },
+            { x: 1350, y: 472, minX: 1200, maxX: 1540, speed: 0.82, dir: -1, range: 105 },
+            { x: 2050, y: 472, minX: 1920, maxX: 2260, speed: 0.84, dir: -1, range: 105 },
+            { x: 2820, y: 472, minX: 2700, maxX: 3020, speed: 0.85, dir: 1,  range: 105 }
         ],
 
         // Bẫy cạm: 3 lạch nước hiểm trở
@@ -105,10 +105,11 @@ const LEVELS = [
             { x: 380,  y: 485, type: "shield" },   // Áo Trấn Thủ ở bến cảng
             { x: 1250, y: 485, type: "heal" },     // Lương khô ở ngõ Paris
             { x: 1600, y: 315, type: "speed" },    // Dép Cao Su trên ban công Paris
+            { x: 2280, y: 315, type: "heal" },     // Lương khô giữa chặng
             { x: 2750, y: 485, type: "disguise" }  // Hòm cải trang trước Versailles
         ],
 
-        // Đồng chí liên lạc bí mật (cần 4 Sao Vàng để đổi mật hiệu tiếp tế & mở lối tắt)
+        // Đồng chí liên lạc bí mật (cần 3 Sao Vàng để đổi mật hiệu tiếp tế & mở lối tắt)
         npcs: [
             {
                 x: 750, y: 472,
@@ -116,7 +117,7 @@ const LEVELS = [
                 quote: "Anh Ba! Tàu sắp nhổ neo, tôi đã hạ sẵn chiếc cầu bí mật giúp anh vượt qua lạch nước an toàn!",
                 giftType: "shield",
                 shortcutId: "shortcut_harbor",
-                starCost: 4
+                starCost: 3
             }
         ],
 
@@ -128,7 +129,7 @@ const LEVELS = [
 
     // =========================================================================
     // MÀN 2: MÙA ĐÔNG MOSKVA & ĐƯỜNG KÁCH MỆNH (1920 - 1927)
-    // [MỨC ĐỘ: KHÓ] - 8 lính, có lính gác tầng cao
+    // [MỨC ĐỘ: TRUNG BÌNH]
     // Đặc trưng: Băng tuyết trơn trượt (Icy Slip Physics) & Vực băng rộng đòi hỏi Nhảy đúp
     // =========================================================================
     {
@@ -189,16 +190,13 @@ const LEVELS = [
             { x: 3120, y: 470, w: 50, h: 50, type: "crate", label: "Kiện sách Quảng Châu" }
         ],
 
-        // 8 lính tuần tra tuyết mật vụ dày đặc
+        // 5 lính tuần tra tuyết mật vụ dày đặc
         guards: [
-            { x: 420,  y: 472, minX: 300,  maxX: 600,  speed: 1.02, dir: 1,  range: 125, angle: 0.34 },
-            { x: 1280, y: 472, minX: 1130, maxX: 1460, speed: 1.05, dir: -1, range: 128, angle: 0.34 },
-            { x: 1450, y: 282, minX: 1375, maxX: 1515, speed: 0.95, dir: 1,  range: 120, angle: 0.34 }, // Canh gác tầng cao
-            { x: 1650, y: 472, minX: 1560, maxX: 1800, speed: 1.05, dir: -1, range: 125, angle: 0.34 },
-            { x: 2320, y: 472, minX: 2140, maxX: 2580, speed: 1.08, dir: 1,  range: 130, angle: 0.34 },
-            { x: 2420, y: 282, minX: 2365, maxX: 2505, speed: 0.95, dir: -1, range: 120, angle: 0.34 }, // Gác Kremlin tầng cao
-            { x: 3180, y: 472, minX: 3020, maxX: 3400, speed: 1.08, dir: -1, range: 130, angle: 0.34 },
-            { x: 3320, y: 272, minX: 3265, maxX: 3405, speed: 0.95, dir: 1,  range: 120, angle: 0.34 }  // Gác lớp học Quảng Châu
+            { x: 420,  y: 472, minX: 320,  maxX: 580,  speed: 0.82, dir: 1,  range: 102 },
+            { x: 1280, y: 472, minX: 1150, maxX: 1450, speed: 0.85, dir: -1, range: 105 },
+            { x: 1450, y: 282, minX: 1390, maxX: 1520, speed: 0.84, dir: 1,  range: 100 }, // Canh gác tầng cao
+            { x: 2320, y: 472, minX: 2150, maxX: 2560, speed: 0.85, dir: 1,  range: 105 },
+            { x: 3180, y: 472, minX: 3040, maxX: 3380, speed: 0.86, dir: -1, range: 105 }
         ],
 
         // 3 Vực băng giá sâu
@@ -232,10 +230,11 @@ const LEVELS = [
             { x: 380,  y: 485, type: "speed" },    // Dép Cao Su chạy băng tuyết
             { x: 1320, y: 485, type: "shield" },   // Áo Trấn Thủ chống lạnh & đỡ đòn
             { x: 1750, y: 215, type: "heal" },     // Lương khô tầng cao
+            { x: 2450, y: 295, type: "speed" },    // Dép Cao Su vượt vực 3
             { x: 3330, y: 285, type: "disguise" }  // Hòm cải trang tại Quảng Châu
         ],
 
-        // Đồng chí liên lạc bí mật (cần 4 Sao Vàng để đổi mật hiệu tiếp tế & mở lối tắt)
+        // Đồng chí liên lạc bí mật (cần 3 Sao Vàng để đổi mật hiệu tiếp tế & mở lối tắt)
         npcs: [
             {
                 x: 720, y: 472,
@@ -243,7 +242,7 @@ const LEVELS = [
                 quote: "Đồng chí Nguyễn! Luận cương của Lênin là ngọn đuốc soi đường. Cây cầu bí mật vượt vực tuyết đã mở!",
                 giftType: "speed",
                 shortcutId: "shortcut_moscow",
-                starCost: 4
+                starCost: 3
             }
         ],
 
@@ -255,7 +254,7 @@ const LEVELS = [
 
     // =========================================================================
     // MÀN 3: RỪNG NÚI PÁC BÓ & TIẾNG GỌI TỔ QUỐC (1930 - 1941)
-    // [MỨC ĐỘ: RẤT KHÓ] - 8 lính nhanh, ngắm bắn nhanh hơn
+    // [MỨC ĐỘ: KHÓ]
     // Đặc trưng: Địa hình Leo Vách Núi Thẳng Đứng (Vertical Platforming), Vực thác sâu
     // =========================================================================
     {
@@ -325,16 +324,14 @@ const LEVELS = [
             { x: 3840, y: 470, w: 55, h: 50, type: "bush",      label: "Lùm cây cửa hang" }
         ],
 
-        // 8 lính tuần tra biên giới phong tỏa nghiêm ngặt
+        // 6 lính tuần tra biên giới phong tỏa nghiêm ngặt
         guards: [
-            { x: 400,  y: 472, minX: 240,  maxX: 600,  speed: 1.1,  dir: 1,  range: 132, angle: 0.36, aimDelay: 12 },
-            { x: 880,  y: 142, minX: 830,  maxX: 985,  speed: 1.0,  dir: -1, range: 125, angle: 0.36, aimDelay: 12 }, // Gác trên đỉnh cao 1
-            { x: 1750, y: 472, minX: 1560, maxX: 1990, speed: 1.12, dir: 1,  range: 135, angle: 0.36, aimDelay: 12 },
-            { x: 1880, y: 282, minX: 1845, maxX: 2000, speed: 1.0,  dir: 1,  range: 128, angle: 0.36, aimDelay: 12 }, // Canh giữ vách núi 2
-            { x: 2300, y: 122, minX: 2250, maxX: 2425, speed: 1.0,  dir: -1, range: 128, angle: 0.36, aimDelay: 12 }, // Gác trên mỏm đá 2
-            { x: 3180, y: 472, minX: 3000, maxX: 3440, speed: 1.12, dir: -1, range: 135, angle: 0.36, aimDelay: 12 }, // Tuần tra thung lũng cuối
-            { x: 3320, y: 272, minX: 3255, maxX: 3395, speed: 1.0,  dir: 1,  range: 125, angle: 0.36, aimDelay: 12 }, // Gác vách thung lũng
-            { x: 3560, y: 172, minX: 3465, maxX: 3625, speed: 1.0,  dir: -1, range: 128, angle: 0.36, aimDelay: 12 }  // Gác đỉnh núi 3
+            { x: 400,  y: 472, minX: 300,  maxX: 550,  speed: 0.88, dir: 1,  range: 108 },
+            { x: 880,  y: 142, minX: 840,  maxX: 980,  speed: 0.85, dir: -1, range: 102 }, // Gác trên đỉnh cao 1
+            { x: 1750, y: 472, minX: 1600, maxX: 1950, speed: 0.9,  dir: 1,  range: 110 },
+            { x: 1880, y: 282, minX: 1840, maxX: 1980, speed: 0.86, dir: 1,  range: 105 }, // Canh giữ vách núi 2
+            { x: 2300, y: 122, minX: 2260, maxX: 2420, speed: 0.85, dir: -1, range: 105 }, // Gác trên mỏm đá 2
+            { x: 3180, y: 472, minX: 3020, maxX: 3400, speed: 0.88, dir: -1, range: 108 }  // Tuần tra thung lũng cuối
         ],
 
         // Thác ghềnh cuộn sóng sâu
@@ -369,10 +366,11 @@ const LEVELS = [
             { x: 350,  y: 485, type: "shield" },   // Áo Trấn Thủ du kích
             { x: 950,  y: 155, type: "heal" },     // Lương khô đỉnh núi 1
             { x: 1600, y: 485, type: "speed" },    // Dép Cao Su vượt suối Lê-nin
-            { x: 2360, y: 135, type: "disguise" }  // Hòm cải trang đỉnh núi 2
+            { x: 2360, y: 135, type: "disguise" }, // Hòm cải trang đỉnh núi 2
+            { x: 3080, y: 485, type: "heal" }      // Lương khô thung lũng cuối
         ],
 
-        // Đồng chí liên lạc bí mật (cần 4 Sao Vàng để đổi mật hiệu tiếp tế & mở lối tắt)
+        // Đồng chí liên lạc bí mật (cần 3 Sao Vàng để đổi mật hiệu tiếp tế & mở lối tắt)
         npcs: [
             {
                 x: 550, y: 472,
@@ -380,7 +378,7 @@ const LEVELS = [
                 quote: "Bác đã về với núi rừng quê hương! Đồng bào đã dựng cầu tre bí mật đưa Bác qua dòng thác ghềnh!",
                 giftType: "shield",
                 shortcutId: "shortcut_pacbo",
-                starCost: 4
+                starCost: 3
             }
         ],
 
@@ -392,7 +390,7 @@ const LEVELS = [
 
     // =========================================================================
     // MÀN 4: MÙA THU ĐỘC LẬP - BA ĐÌNH LỊCH SỬ (1945)
-    // [MỨC ĐỘ: CỰC KHÓ / CAO TRÀO] - 10 lính, bắn dồn dập
+    // [MỨC ĐỘ: RẤT KHÓ / CAO TRÀO]
     // Đặc trưng: Chạy mái ngói phố cổ, rào thép gai dày đặc, tiến về Quảng trường Ba Đình
     // =========================================================================
     {
@@ -453,21 +451,19 @@ const LEVELS = [
             { x: 2340, y: 470, w: 55, h: 50, type: "bush",  label: "Cây cảnh Bắc Bộ Phủ" },
             { x: 2730, y: 280, w: 55, h: 50, type: "arch",  label: "Vòm cửa sổ cổ" },
             { x: 3300, y: 470, w: 55, h: 50, type: "bush",  label: "Vườn hoa Ba Đình" },
+            { x: 3510, y: 470, w: 50, h: 50, type: "bush",  label: "Hàng cây quảng trường" },
             { x: 3920, y: 200, w: 55, h: 50, type: "bush",  label: "Cột hoa lễ đài" }
         ],
 
-        // 10 lính tuần tra tàn quân bảo vệ nghiêm ngặt
+        // 7 lính tuần tra tàn quân bảo vệ nghiêm ngặt
         guards: [
-            { x: 500,  y: 292, minX: 425,  maxX: 565,  speed: 1.15, dir: 1,  range: 135, angle: 0.38, aimDelay: 10, fireRate: 34 },
-            { x: 920,  y: 302, minX: 885,  maxX: 1015, speed: 1.18, dir: -1, range: 138, angle: 0.38, aimDelay: 10, fireRate: 34 },
-            { x: 1500, y: 262, minX: 1455, maxX: 1605, speed: 1.18, dir: 1,  range: 138, angle: 0.38, aimDelay: 10, fireRate: 34 },
-            { x: 1780, y: 182, minX: 1705, maxX: 1855, speed: 1.1,  dir: -1, range: 135, angle: 0.38, aimDelay: 10, fireRate: 34 }, // Gác mái cao phố cổ
-            { x: 1980, y: 282, minX: 1945, maxX: 2075, speed: 1.2,  dir: -1, range: 138, angle: 0.38, aimDelay: 10, fireRate: 34 },
-            { x: 2480, y: 472, minX: 2300, maxX: 2620, speed: 1.2,  dir: 1,  range: 140, angle: 0.38, aimDelay: 10, fireRate: 34 },
-            { x: 2980, y: 202, minX: 2905, maxX: 3055, speed: 1.1,  dir: 1,  range: 135, angle: 0.38, aimDelay: 10, fireRate: 34 }, // Gác mái ngói đợt 3
-            { x: 3400, y: 472, minX: 3270, maxX: 3570, speed: 1.2,  dir: -1, range: 140, angle: 0.38, aimDelay: 10, fireRate: 34 },
-            { x: 3680, y: 282, minX: 3625, maxX: 3765, speed: 1.15, dir: 1,  range: 138, angle: 0.38, aimDelay: 10, fireRate: 34 },
-            { x: 3950, y: 202, minX: 3855, maxX: 4015, speed: 1.1,  dir: -1, range: 135, angle: 0.38, aimDelay: 10, fireRate: 34 }  // Cận vệ trước lễ đài
+            { x: 500,  y: 292, minX: 430,  maxX: 570,  speed: 0.92, dir: 1,  range: 105 },
+            { x: 920,  y: 302, minX: 890,  maxX: 1020, speed: 0.94, dir: -1, range: 110 },
+            { x: 1500, y: 262, minX: 1460, maxX: 1610, speed: 0.94, dir: 1,  range: 110 },
+            { x: 1980, y: 282, minX: 1950, maxX: 2080, speed: 0.95, dir: -1, range: 110 },
+            { x: 2480, y: 472, minX: 2320, maxX: 2600, speed: 0.94, dir: 1,  range: 110 },
+            { x: 3400, y: 472, minX: 3280, maxX: 3540, speed: 0.94, dir: -1, range: 110 },
+            { x: 3680, y: 282, minX: 3630, maxX: 3770, speed: 0.92, dir: 1,  range: 110 }
         ],
 
         // Rào thép gai dày đặc của tàn quân dưới đất (Bắt buộc phải chạy trên mái)
@@ -503,10 +499,11 @@ const LEVELS = [
             { x: 350,  y: 395, type: "disguise" }, // Cải trang đi trên mái phố cổ
             { x: 1350, y: 365, type: "heal" },     // Lương khô
             { x: 1800, y: 195, type: "shield" },   // Áo Trấn Thủ tự vệ đỏ
+            { x: 2740, y: 295, type: "heal" },     // Lương khô giữa chặng
             { x: 3340, y: 485, type: "speed" }     // Dép Cao Su chạy vào lễ đài
         ],
 
-        // Đồng chí liên lạc bí mật (cần 5 Sao Vàng để đổi mật hiệu tiếp tế & mở lối tắt)
+        // Đồng chí liên lạc bí mật (cần 3 Sao Vàng để đổi mật hiệu tiếp tế & mở lối tắt)
         npcs: [
             {
                 x: 360, y: 472,
@@ -514,7 +511,7 @@ const LEVELS = [
                 quote: "Thưa Bác! Toàn thể đồng bào đang reo hò đón Bác. Chúng cháu đã mở lối cầu ván vượt qua rào thép gai!",
                 giftType: "disguise",
                 shortcutId: "shortcut_badinh",
-                starCost: 5
+                starCost: 3
             }
         ],
 

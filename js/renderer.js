@@ -2192,7 +2192,7 @@ class GameRenderer {
                 ctx.font = "700 10px 'Courier Prime', monospace";
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
-                ctx.fillText(`🔒 ★${sc.cost || 3}`, midX, midY + 0.5);
+                ctx.fillText("🔒 ★3", midX, midY + 0.5);
             }
             ctx.restore();
         }
