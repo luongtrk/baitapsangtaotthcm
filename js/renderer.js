@@ -1,4 +1,4 @@
-// Renderer: Vẽ đồ họa Canvas 2D Đỉnh Cao, Texture Bề Mặt Chi Tiết, Ánh Sáng & Hiệu Ứng Nghệ Thuật
+// Renderer: Vẽ Canvas 2D, hiệu ứng và nhân vật
 
 class GameRenderer {
     constructor(canvas) {
@@ -76,9 +76,7 @@ class GameRenderer {
         this.initTextures();
     }
 
-    // =========================================================================
-    // HỆ THỐNG TẠO TEXTURE PATTERNS ĐỒ HỌA GAME 2D SẮC NÉT
-    // =========================================================================
+    // Khởi tạo texture patterns
     initTextures() {
         // A. Texture Gỗ Bến Cảng (Beveled Wood Planks & Rivets)
         const canWood = document.createElement("canvas");
@@ -215,9 +213,7 @@ class GameRenderer {
         this.patterns.marble = this.ctx.createPattern(canMarble, "repeat");
     }
 
-    // =========================================================================
-    // HELPER: VẼ NÚT PHÍM CƠ 3D TRÊN CANVAS ([E], [Q]) & ICON ĐỒ HỌA
-    // =========================================================================
+    // Vẽ nút phím trên canvas
     drawKeycap(x, y, keyText, accentColor = "#d4a349", cooldownRatio = 0) {
         const ctx = this.ctx;
         ctx.save();
@@ -324,9 +320,7 @@ class GameRenderer {
         ctx.restore();
     }
 
-    // =========================================================================
-    // VÒNG LẶP VẼ CHÍNH
-    // =========================================================================
+    // Vòng lặp vẽ chính
     render(gameState) {
         this.time += 0.025;
         const ctx = this.ctx;
@@ -360,7 +354,7 @@ class GameRenderer {
             starsCount = 0
         } = gameState;
 
-        // Chấn động màn hình (Screen Shake) chân thực như các game danh tiếng
+        // Chấn động màn hình (Screen Shake)
         const shakeX = screenShake > 0.3 ? (Math.random() - 0.5) * screenShake : 0;
         const shakeY = screenShake > 0.3 ? (Math.random() - 0.5) * screenShake : 0;
 
@@ -443,9 +437,7 @@ class GameRenderer {
         ctx.restore();
     }
 
-    // =========================================================================
     // 1. BẦU TRỜ, SAO ĐÊM, MÂY TRÔI & PARALLAX BACKGROUND
-    // =========================================================================
     drawBackground(level, cameraX, width, height) {
         const ctx = this.ctx;
 
@@ -555,9 +547,7 @@ class GameRenderer {
         ctx.restore();
     }
 
-    // =========================================================================
     // 2. NỀN TẢNG & TEXTURE BỀ MẶT NGHỆ THUẬT
-    // =========================================================================
     drawPlatforms(platforms, defaultColor, cameraX, viewWidth = 1000) {
         const ctx = this.ctx;
         for (const p of platforms) {
@@ -692,9 +682,7 @@ class GameRenderer {
         }
     }
 
-    // =========================================================================
     // 3. NƠI ẨN NẤP CHI TIẾT (THÙNG HÀNG GIA CỐ, BỤI CÂY RẬM, VÒM NGÕ TỐI)
-    // =========================================================================
     drawHidingSpots(spots, cameraX, viewWidth = 1000) {
         const ctx = this.ctx;
         for (const spot of spots) {
@@ -789,9 +777,7 @@ class GameRenderer {
         }
     }
 
-    // =========================================================================
     // 4. CHƯỚNG NGẠI VẬT & CẠM BẪY NGHỆ THUẬT (SÓNG NƯỚC, DÂY THÉP GAI)
-    // =========================================================================
     drawHazards(hazards, cameraX, viewWidth = 1000) {
         const ctx = this.ctx;
         for (const haz of hazards) {
@@ -837,9 +823,7 @@ class GameRenderer {
         }
     }
 
-    // =========================================================================
     // 5. CỘT CỜ CHECKPOINT VẢI 3D UỐN LƯỢN HÌNH SIN
-    // =========================================================================
     drawCheckpoints(checkpoints, cameraX, viewWidth = 1000) {
         const ctx = this.ctx;
         for (const cp of checkpoints) {
@@ -882,9 +866,7 @@ class GameRenderer {
         }
     }
 
-    // =========================================================================
     // 6. CÔNG TRÌNH VỀ ĐÍCH HOÀNG GIA (TÀU THỦY, TÀU HỎA, PÁC BÓ, LỄ ĐÀI BA ĐÌNH)
-    // =========================================================================
     drawExit(level, cameraX, viewWidth = 1000) {
         const ctx = this.ctx;
         const screenX = level.exitPos.x - cameraX;
@@ -1032,9 +1014,7 @@ class GameRenderer {
         ctx.restore();
     }
 
-    // =========================================================================
     // 7. NGÔI SAO CÁCH MẠNG 3D TỎA HÀO QUANG
-    // =========================================================================
     drawStars(stars, cameraX, viewWidth = 1000) {
         const ctx = this.ctx;
         for (const star of stars) {
@@ -1066,9 +1046,7 @@ class GameRenderer {
         }
     }
 
-    // =========================================================================
     // 8. CUỘN VĂN KIỆN DI SẢN THẾP VÀNG, NIÊM PHONG SÁP ĐỎ
-    // =========================================================================
     drawDocuments(documents, cameraX, viewWidth = 1000) {
         const ctx = this.ctx;
         for (const doc of documents) {
@@ -1127,9 +1105,7 @@ class GameRenderer {
         }
     }
 
-    // =========================================================================
     // 9. MẬT THÁM ÁO MĂNG-TÔ, MŨ PHỚT, ĐÈN BÃO & CHÙM SÁNG VOLUMETRIC
-    // =========================================================================
     drawGuards(guards, cameraX, viewWidth = 1000) {
         const ctx = this.ctx;
         for (const guard of guards) {
@@ -1353,9 +1329,7 @@ class GameRenderer {
         }
     }
 
-    // =========================================================================
     // 9.5. ĐƯỜNG ĐẠN BẮN CỦA MẬT THÁM (BULLET TRACERS)
-    // =========================================================================
     drawBullets(bullets, cameraX, viewWidth = 1000) {
         if (!bullets || bullets.length === 0) return;
         const ctx = this.ctx;
@@ -1390,9 +1364,7 @@ class GameRenderer {
         }
     }
 
-    // =========================================================================
     // 10. NGƯỜI CHƠI (SPRITE VECTOR SẮC NÉT & HIỆU ỨNG NHẬP VAI CHUYÊN NGHIỆP)
-    // =========================================================================
     drawPlayer(player, cameraX, nearGuardForTakedown = false, nearNpc = null) {
         const ctx = this.ctx;
         const screenX = player.x - cameraX;
@@ -1534,9 +1506,7 @@ class GameRenderer {
         ctx.restore();
     }
 
-    // =========================================================================
     // HỆ THỐNG KHỚP XƯƠNG ĐỘNG (PROCEDURAL ARTICULATED PLAYER ANIMATION 60FPS)
-    // =========================================================================
     drawAnimatedPlayerCharacter(player, screenX) {
         const ctx = this.ctx;
         const speedAbs = Math.abs(player.vx);
@@ -1978,9 +1948,7 @@ class GameRenderer {
         ctx.restore();
     }
 
-    // =========================================================================
     // 10.5. VẼ SỎI NGHI BINH ĐÁNH LẠC HƯỚNG
-    // =========================================================================
     drawPebbles(pebbles, cameraX, viewWidth = 1000) {
         if (!pebbles || pebbles.length === 0) return;
         const ctx = this.ctx;
@@ -2010,9 +1978,7 @@ class GameRenderer {
         }
     }
 
-    // =========================================================================
     // 10.8. VẼ VẬT PHẨM TIẾP TẾ CÁCH MẠNG (HUY HIỆU GAME LỤC GIÁC + ICON VECTOR, KHÔNG DÙNG CHỮ RƯỜM RÀ)
-    // =========================================================================
     drawSupplies(supplies, cameraX, viewWidth = 1000) {
         if (!supplies || supplies.length === 0) return;
         const ctx = this.ctx;
@@ -2077,9 +2043,7 @@ class GameRenderer {
         }
     }
 
-    // =========================================================================
     // 10.9. VẼ ĐỒNG CHÍ LIÊN LẠC VIÊN BÍ MẬT (BONG BÓNG ĐỔI SAO ★ BẰNG ICON)
-    // =========================================================================
     drawNpcs(npcs, cameraX, viewWidth = 1000, starsCount = 0) {
         if (!npcs || npcs.length === 0) return;
         const ctx = this.ctx;
@@ -2210,9 +2174,7 @@ class GameRenderer {
         }
     }
 
-    // =========================================================================
     // 10.10. VẼ LỐI TẮT BÍ MẬT (SECRET SHORTCUTS / BRIDGES - ICON KHÓA GỌN GÀNG)
-    // =========================================================================
     drawShortcuts(shortcuts, cameraX, viewWidth = 1000) {
         if (!shortcuts || shortcuts.length === 0) return;
         const ctx = this.ctx;
@@ -2279,9 +2241,7 @@ class GameRenderer {
         }
     }
 
-    // =========================================================================
     // 12. HIỆU ỨNG KHÍ HẬU MÔI TRƯỜNG ĐẶC BIỆT
-    // =========================================================================
     drawWeatherEffects(chapterId, width, height) {
         const ctx = this.ctx;
         if (chapterId === 2) {

@@ -1,7 +1,7 @@
-// Dữ liệu học thuật & Ngân hàng tri thức môn Tư tưởng Hồ Chí Minh
+// Dữ liệu câu hỏi và văn kiện lịch sử môn Tư tưởng Hồ Chí Minh
 
 const TTHCM_KNOWLEDGE = {
-    // 4 Chương Lịch Sử
+    // 4 chương lịch sử
     chapters: [
         {
             id: 1,
@@ -37,7 +37,7 @@ const TTHCM_KNOWLEDGE = {
         }
     ],
 
-    // Danh sách 12 Văn kiện & Di sản lịch sử quý giá
+    // 12 văn kiện lịch sử
     documents: {
         "ben_nha_rong": {
             id: "ben_nha_rong",

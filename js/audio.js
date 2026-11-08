@@ -1,9 +1,7 @@
-// Game Audio Manager - Quản lý Nhạc Nền (BGM) & Hiệu Ứng Âm Thanh (SFX)
-// Hỗ trợ điều chỉnh âm lượng riêng biệt, bật/tắt nhạc nền riêng, lưu trạng thái vào localStorage
+// Quản lý nhạc nền (BGM) và hiệu ứng âm thanh (SFX)
 
 class SoundManager {
     constructor() {
-        // Tải thiết lập đã lưu hoặc dùng mặc định
         const savedBgmVol = localStorage.getItem("tthcm_bgm_volume");
         const savedSfxVol = localStorage.getItem("tthcm_sfx_volume");
         const savedBgmMuted = localStorage.getItem("tthcm_bgm_muted");
@@ -16,7 +14,6 @@ class SoundManager {
         this.isMuted = false;
         this.bgmPlaying = false;
 
-        // Danh sách 3 bản nhạc nền game thuần nhạc cụ 100% (không có lời / không có giọng nói)
         this.bgmFiles = [
             "assets/audio/bgm/bgm_main.mp3",
             "assets/audio/bgm/bgm_stealth.mp3",
@@ -24,13 +21,11 @@ class SoundManager {
         ];
         this.currentTrackIndex = 0;
 
-        // Trình phát nhạc nền HTML5 Audio
         this.bgmAudio = new Audio(this.bgmFiles[this.currentTrackIndex]);
         this.bgmAudio.loop = true;
         this.bgmAudio.volume = this.isBgmMuted ? 0 : this.bgmVolume;
         this.bgmAudio.preload = "auto";
 
-        // Kho hiệu ứng âm thanh game 2D kinh điển, đơn giản, rõ ràng
         this.sfxPaths = {
             jump: "assets/audio/sfx/jump.wav",
             double_jump: "assets/audio/sfx/double_jump.wav",
@@ -50,7 +45,6 @@ class SoundManager {
             gameover: "assets/audio/sfx/gameover.wav"
         };
 
-        // Nạp trước toàn bộ sample vào bộ nhớ đệm để phát tức thì (zero-latency)
         this.sfxCache = {};
         for (const [name, src] of Object.entries(this.sfxPaths)) {
             const a = new Audio(src);
@@ -58,7 +52,7 @@ class SoundManager {
             this.sfxCache[name] = a;
         }
 
-        // Tự động mở khóa BGM ở tương tác đầu tiên nếu trình duyệt chặn autoplay
+        // Mở khóa phát nhạc khi người dùng tương tác lần đầu
         const unlockAudio = () => {
             if (this.bgmPlaying && !this.isBgmMuted && !this.isMuted && this.bgmAudio.paused) {
                 this.bgmAudio.play().catch(() => {});
@@ -68,15 +62,8 @@ class SoundManager {
         window.addEventListener("keydown", unlockAudio, { passive: true });
     }
 
-    init() {
-        // Giữ tương thích với các lệnh gọi audio.init() trong engine
-    }
+    init() {}
 
-    // =========================================================================
-    // QUẢN LÝ ÂM LƯỢNG & TẮT / BẬT NHẠC NỀN
-    // =========================================================================
-
-    // Đổi âm lượng Nhạc nền (0.0 -> 1.0)
     setBgmVolume(val) {
         this.bgmVolume = Math.max(0, Math.min(1, parseFloat(val) || 0));
         localStorage.setItem("tthcm_bgm_volume", this.bgmVolume.toString());
@@ -85,13 +72,11 @@ class SoundManager {
         }
     }
 
-    // Đổi âm lượng Hiệu ứng SFX (0.0 -> 1.0)
     setSfxVolume(val) {
         this.sfxVolume = Math.max(0, Math.min(1, parseFloat(val) || 0));
         localStorage.setItem("tthcm_sfx_volume", this.sfxVolume.toString());
     }
 
-    // Bật / Tắt riêng Nhạc Nền (BGM)
     toggleBgm() {
         this.isBgmMuted = !this.isBgmMuted;
         localStorage.setItem("tthcm_bgm_muted", this.isBgmMuted ? "true" : "false");
@@ -106,14 +91,12 @@ class SoundManager {
         return this.isBgmMuted;
     }
 
-    // Bật / Tắt riêng Hiệu ứng SFX
     toggleSfx() {
         this.isSfxMuted = !this.isSfxMuted;
         localStorage.setItem("tthcm_sfx_muted", this.isSfxMuted ? "true" : "false");
         return this.isSfxMuted;
     }
 
-    // Tắt / Bật toàn bộ âm thanh
     toggleMute() {
         this.isMuted = !this.isMuted;
         if (this.isMuted) {
@@ -127,14 +110,12 @@ class SoundManager {
         return this.isMuted;
     }
 
-    // Phát một sample SFX với âm lượng chuẩn hóa theo thanh trượt sfxVolume
     playSample(name, baseVol = 0.45, playbackRate = 1.0) {
         if (this.isMuted || this.isSfxMuted || this.sfxVolume <= 0) return;
         const base = this.sfxCache[name];
         if (!base) return;
         try {
             const sound = base.cloneNode();
-            // Tỷ lệ âm lượng thực tế = âm lượng gốc * (thanh trượt / 0.45)
             const realVol = Math.max(0, Math.min(1, baseVol * (this.sfxVolume / 0.45)));
             sound.volume = realVol;
             if (playbackRate !== 1.0) {
@@ -145,7 +126,6 @@ class SoundManager {
         } catch (e) {}
     }
 
-    // Tương thích ngược nếu có chỗ gọi playTone
     playTone(freq = 440) {
         if (this.isMuted || this.isSfxMuted) return;
         if (freq < 240) {
@@ -204,96 +184,75 @@ class SoundManager {
         } catch (e) {}
     }
 
-    // =========================================================================
-    // CÁC HIỆU ỨNG ÂM THANH GAME 2D BASIC
-    // =========================================================================
-
-    // Nhảy đơn
+    // Các hàm phát hiệu ứng âm thanh
     playJump() {
         this.playSample("jump", 0.45, 1.0);
     }
 
-    // Nhảy đúp
     playDoubleJump() {
         this.playSample("double_jump", 0.45, 1.0);
     }
 
-    // Nhặt Sao Vàng (★) - chuông 2 nốt 'ding-ding' trong trẻo
     playCollect() {
         this.playSample("collect", 0.46, 1.0);
     }
 
-    // Nhặt Văn kiện lịch sử / Checkpoint - hợp âm chuông 3 nốt
     playKey() {
         this.playSample("book", 0.45, 1.0);
     }
 
-    // Nhặt Tiếp tế (Áo Trấn Thủ, Dép Cao Su, Cải Trang, Lương Khô) - thăng hoa 4 nốt
     playPowerup() {
         this.playSample("powerup", 0.45, 1.0);
     }
 
-    // Khống chế mật thám [Q] - tiếng 'bụp' đục gọn gàng
     playTakedown() {
         this.playSample("takedown", 0.48, 1.0);
     }
 
-    // Đổi Sao Vàng mở khóa Liên lạc viên & Cầu bí mật
     playUnlock() {
         this.playSample("unlock", 0.45, 1.0);
     }
 
-    // Báo âm khi chưa đủ Sao Vàng (★ < 3) / Trả lời sai
     playLocked() {
         this.playSample("fail", 0.42, 1.0);
     }
 
-    // Tiếng sỏi nghi binh nảy trên mặt đất [F]
     playPebbleBounce() {
         this.playSample("pebble", 0.44, 1.0);
     }
 
-    // Mật thám phát hiện người chơi (!)
     playAlert() {
         this.playSample("alert", 0.45, 1.0);
     }
 
-    // Mật thám bắn súng - tiếng 'pew' laser/pop ngắn gọn arcade
     playGunshot() {
         this.playSample("shot", 0.44, 1.0);
     }
 
-    // Trúng đạn / Va chạm mất máu
     playHit() {
         this.playSample("hit", 0.46, 1.0);
     }
 
-    // Hồi sinh tại Checkpoint
     playRespawn() {
         this.playSample("powerup", 0.42, 1.0);
     }
 
-    // Trả lời đúng trắc nghiệm
     playQuizSuccess() {
         this.playSample("quiz_correct", 0.46, 1.0);
     }
 
-    // Trả lời sai trắc nghiệm
     playQuizFail() {
         this.playSample("fail", 0.44, 1.0);
     }
 
-    // Hoàn thành màn chơi
     playLevelComplete() {
         this.playSample("win", 0.48, 1.0);
     }
 
-    // Hết máu / Game Over
     playGameOver() {
         this.playSample("gameover", 0.46, 1.0);
     }
 
-    // Ẩn nấp vào bụi cây / thùng hàng
     playHide() {
         this.playSample("hide", 0.40, 1.0);
     }

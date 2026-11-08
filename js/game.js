@@ -1,4 +1,4 @@
-// Game Manager: Điều phối trạng thái, Giao diện Menu, Bảng Xếp Hạng & Bảo Tàng Di Sản
+// Game Manager: Điều phối game, UI, Bảng xếp hạng và Bảo tàng
 
 class GameManager {
     constructor() {
@@ -36,10 +36,8 @@ class GameManager {
     }
 
     initUI() {
-        // Cập nhật kỷ lục hiển thị ở Menu chính
         this.updateHighScorePreview();
 
-        // Nút Bắt đầu chơi (Chương 1)
         const btnStart = document.getElementById("btn-start-game");
         if (btnStart) {
             btnStart.onclick = () => {
@@ -52,7 +50,6 @@ class GameManager {
             };
         }
 
-        // Nút Chọn màn chơi
         const btnSelect = document.getElementById("btn-select-chapter");
         if (btnSelect) {
             btnSelect.onclick = () => {
@@ -61,7 +58,6 @@ class GameManager {
             };
         }
 
-        // Nút Mở bảo tàng di sản
         const btnMuseum = document.getElementById("btn-open-museum");
         if (btnMuseum) {
             btnMuseum.onclick = () => {
@@ -70,7 +66,6 @@ class GameManager {
             };
         }
 
-        // Nhập và ghi nhớ họ tên sinh viên / người chơi
         const inputPlayerName = document.getElementById("input-player-name");
         if (inputPlayerName) {
             inputPlayerName.value = this.playerName;
@@ -82,11 +77,9 @@ class GameManager {
         }
         this.updateHUDPlayerName();
 
-        // Nút Hướng dẫn trên Header
         const btnGuideTop = document.getElementById("btn-guide-top");
         if (btnGuideTop) btnGuideTop.onclick = () => this.openGuideModal();
 
-        // Nút Bảng Vàng trên Header: Cuộn mượt xuống thẳng Bảng Vàng ở Trang Chủ
         const scrollToLeaderboard = () => {
             this.closeAllModals();
             this.showScreen("screen-menu");
@@ -104,17 +97,14 @@ class GameManager {
         const btnOpenLeaderboard = document.getElementById("btn-open-leaderboard");
         if (btnOpenLeaderboard) btnOpenLeaderboard.onclick = scrollToLeaderboard;
 
-        // Nút Đặt lại Bảng Vàng (cả trên Modal lẫn trên Card Bảng Vàng Trang Chủ)
         const btnClearLeaderboard = document.getElementById("btn-clear-leaderboard");
         if (btnClearLeaderboard) btnClearLeaderboard.onclick = () => this.clearLeaderboard();
 
         const btnClearHome = document.getElementById("btn-clear-leaderboard-home");
         if (btnClearHome) btnClearHome.onclick = () => this.clearLeaderboard();
 
-        // Hiển thị ngay Bảng Vàng khi tải trang
         this.renderLeaderboardTable();
 
-        // Nút quay lại Menu từ các màn hình khác và trong các Popup/Modal
         document.querySelectorAll(".btn-back-menu").forEach(btn => {
             btn.onclick = () => {
                 this.closeAllModals();
@@ -123,13 +113,10 @@ class GameManager {
             };
         });
 
-        // =========================================================================
-        // ĐIỀU KHIỂN ÂM LƯỢNG & NHẠC NỀN (BGM & SFX INDEPENDENT CONTROLS)
-        // =========================================================================
+        // Điều khiển âm thanh
         const syncSoundUI = () => {
             if (typeof audio === "undefined") return;
 
-            // 1. Đồng bộ nút Nhạc nền (BGM) ở Header và Game HUD (biểu tượng nốt nhạc có gạch chéo rõ ràng)
             const isBgmMuted = audio.isBgmMuted || audio.isMuted;
             const bgmIconHtml = isBgmMuted
                 ? '<span class="icon-bgm-slash"><i class="fa-solid fa-music"></i></span>'
@@ -147,7 +134,6 @@ class GameManager {
                 btnGameBgm.title = isBgmMuted ? "Bật Nhạc Nền" : "Tắt Nhạc Nền";
             }
 
-            // 2. Đồng bộ nút Toàn bộ âm thanh (Master Mute)
             const masterIconHtml = audio.isMuted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
             const btnMute1 = document.getElementById("btn-toggle-sound");
             const btnMute2 = document.getElementById("btn-game-sound");
@@ -162,7 +148,6 @@ class GameManager {
                 btnMute2.title = audio.isMuted ? "Bật Toàn Bộ Âm Thanh" : "Tắt Toàn Bộ Âm Thanh";
             }
 
-            // 3. Đồng bộ Slider & Trạng thái trong Modal Cài Đặt Âm Lượng
             const sliderBgm = document.getElementById("slider-bgm-volume");
             const labelBgm = document.getElementById("label-bgm-volume");
             const btnModalBgm = document.getElementById("btn-modal-toggle-bgm");
@@ -196,7 +181,6 @@ class GameManager {
             }
         };
 
-        // Bật / Tắt riêng Nhạc Nền (BGM)
         const handleToggleBgm = () => {
             audio.toggleBgm();
             syncSoundUI();
@@ -210,7 +194,6 @@ class GameManager {
         const btnModalToggleBgm = document.getElementById("btn-modal-toggle-bgm");
         if (btnModalToggleBgm) btnModalToggleBgm.onclick = handleToggleBgm;
 
-        // Bật / Tắt riêng Hiệu Ứng (SFX)
         const handleToggleSfx = () => {
             audio.toggleSfx();
             syncSoundUI();
@@ -221,7 +204,6 @@ class GameManager {
         const btnModalToggleSfx = document.getElementById("btn-modal-toggle-sfx");
         if (btnModalToggleSfx) btnModalToggleSfx.onclick = handleToggleSfx;
 
-        // Bật / Tắt Toàn Bộ Âm Thanh (Master Mute)
         const handleToggleMaster = () => {
             audio.toggleMute();
             syncSoundUI();
@@ -232,7 +214,6 @@ class GameManager {
         const btnGameSound = document.getElementById("btn-game-sound");
         if (btnGameSound) btnGameSound.onclick = handleToggleMaster;
 
-        // Đổi bản nhạc nền sample
         const handleNextTrack = () => {
             audio.nextTrack();
         };
@@ -245,7 +226,6 @@ class GameManager {
         const btnModalNextTrack = document.getElementById("btn-modal-next-track");
         if (btnModalNextTrack) btnModalNextTrack.onclick = handleNextTrack;
 
-        // Mở Modal Cài Đặt Âm Lượng
         const openSoundModal = () => {
             syncSoundUI();
             const modal = document.getElementById("modal-sound-settings");
@@ -257,7 +237,6 @@ class GameManager {
         const btnGameOpenSound = document.getElementById("btn-game-sound-settings");
         if (btnGameOpenSound) btnGameOpenSound.onclick = openSoundModal;
 
-        // Thanh trượt âm lượng BGM
         const sliderBgm = document.getElementById("slider-bgm-volume");
         if (sliderBgm) {
             sliderBgm.oninput = (e) => {
@@ -267,7 +246,6 @@ class GameManager {
             };
         }
 
-        // Thanh trượt âm lượng SFX
         const sliderSfx = document.getElementById("slider-sfx-volume");
         if (sliderSfx) {
             let sfxDebounce = null;
@@ -282,10 +260,8 @@ class GameManager {
             };
         }
 
-        // Khởi tạo trạng thái icon ban đầu
         syncSoundUI();
 
-        // Nút Fullscreen Toàn màn hình
         const toggleFullscreen = () => {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen().catch(() => {});
@@ -302,7 +278,6 @@ class GameManager {
         const btnFs2 = document.getElementById("btn-game-fullscreen");
         if (btnFs2) btnFs2.onclick = toggleFullscreen;
 
-        // Tự động nhận diện thiết bị cảm ứng để tối ưu điều khiển
         const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.matchMedia("(pointer: coarse)").matches;
         if (isTouch) {
             document.body.classList.add("touch-device");
@@ -316,7 +291,6 @@ class GameManager {
             };
         }
 
-        // Resize canvas toàn màn hình chuẩn xác & lắng nghe sự kiện xoay màn hình
         this.setupCanvasDPI();
         window.addEventListener("resize", () => {
             this.setupCanvasDPI();
@@ -345,7 +319,6 @@ class GameManager {
     }
 
     setupCanvasDPI() {
-        // Tự động kéo giãn canvas vừa khít màn hình hiển thị (Fullscreen)
         this.canvas.width = window.innerWidth || 1280;
         this.canvas.height = window.innerHeight || 720;
     }
@@ -357,7 +330,6 @@ class GameManager {
     }
 
     showScreen(screenId) {
-        // Đóng toàn bộ popup/modal đang mở để không bao giờ bị kẹt lại trên màn hình
         this.closeAllModals();
         document.querySelectorAll(".screen-panel").forEach(panel => {
             panel.classList.remove("active");
@@ -378,7 +350,6 @@ class GameManager {
     }
 
     startChapter(chapterIndex) {
-        // Đảm bảo tên người chơi được cập nhật
         if (!this.playerName) {
             const inputPlayerName = document.getElementById("input-player-name");
             if (inputPlayerName && inputPlayerName.value.trim()) {
@@ -411,7 +382,6 @@ class GameManager {
             const card = document.createElement("div");
             card.className = "chapter-card";
 
-            // Kiểm tra bao nhiêu tài liệu trong chương này đã mở khóa
             const chapterDocs = TTHCM_KNOWLEDGE.getDocsForChapter(chap.id);
             const unlockedCount = chapterDocs.filter(d => this.unlockedDocIds.has(d.id)).length;
 
@@ -442,12 +412,11 @@ class GameManager {
         });
     }
 
-    // Modal hiển thị văn kiện học thuật & câu hỏi trắc nghiệm
+    // Modal hiển thị văn kiện và câu hỏi trắc nghiệm
     showDocumentModal(docId) {
         const doc = TTHCM_KNOWLEDGE.getDocument(docId);
         if (!doc) return;
 
-        // Lưu trạng thái đã mở khóa
         this.unlockedDocIds.add(docId);
         this.saveData();
 
@@ -466,7 +435,6 @@ class GameManager {
         contextEl.innerText = doc.historicalContext;
         ideaEl.innerText = doc.coreIdea;
 
-        // Xây dựng phần Quiz trắc nghiệm
         const isGameActive = document.getElementById("screen-game")?.classList.contains("active");
         quizArea.innerHTML = `
             <div class="quiz-box">
@@ -497,7 +465,6 @@ class GameManager {
                     feedbackEl.innerHTML = `<strong>✓ Đúng (+200 điểm, +25 HP)</strong><p>${doc.quiz.explanation}</p>`;
                     if (typeof audio !== "undefined" && audio.playQuizSuccess) audio.playQuizSuccess();
 
-                    // CHỈ CỘNG ĐIỂM & HỒI PHỤC MÁU KHI TRẢ LỜI ĐÚNG
                     if (isGameActive && this.engine) {
                         this.engine.score += 200;
                         this.totalQuizPoints += 200;
@@ -521,7 +488,6 @@ class GameManager {
                     feedbackEl.innerHTML = `<strong>✗ Sai (0 điểm)</strong><p>${doc.quiz.explanation}</p>`;
                     if (typeof audio !== "undefined" && audio.playQuizFail) audio.playQuizFail();
 
-                    // TRẢ LỜI SAI: 0 ĐIỂM
                     if (isGameActive && this.engine && this.engine.player) {
                         this.engine.particles.addFloatingText(
                             this.engine.player.x + this.engine.player.width / 2,
@@ -542,7 +508,6 @@ class GameManager {
 
         resumeBtn.onclick = () => {
             if (isGameActive && !answered) {
-                // Yêu cầu người chơi trả lời câu hỏi trắc nghiệm trước khi tiếp tục
                 feedbackEl.className = "quiz-feedback wrong";
                 feedbackEl.innerHTML = `<strong>⚠️ Chưa chọn đáp án:</strong> Vui lòng chọn một đáp án trước khi tiếp tục.`;
                 feedbackEl.style.display = "block";
@@ -555,7 +520,7 @@ class GameManager {
         };
     }
 
-    // Modal Chiến thắng màn chơi (Level Victory)
+    // Modal Qua màn
     showVictoryModal(levelIndex) {
         const chapter = TTHCM_KNOWLEDGE.chapters[levelIndex];
         const modal = document.getElementById("modal-victory");
@@ -568,7 +533,6 @@ class GameManager {
         descEl.innerText = "Bạn đã hoàn thành màn chơi.";
         scoreEl.innerText = `Điểm: ${this.engine.score} | Thời gian: ${this.engine.getFormattedTime()} | Sao: ${this.engine.starsCollectedCount}`;
 
-        // Kiểm tra xem đây có phải màn cuối cùng (Chương 4)
         if (levelIndex >= TTHCM_KNOWLEDGE.chapters.length - 1) {
             nextBtn.innerText = "Xem tổng kết ➔";
             nextBtn.onclick = () => {
@@ -583,7 +547,6 @@ class GameManager {
             };
         }
 
-        // Nút Về Menu trong modal chiến thắng
         const victoryBackBtn = modal.querySelector(".btn-back-menu");
         if (victoryBackBtn) {
             victoryBackBtn.onclick = () => {
@@ -597,7 +560,7 @@ class GameManager {
         modal.classList.add("active");
     }
 
-    // Màn hình Đại thắng lợi & Thống kê kỷ lục
+    // Hoàn thành toàn bộ game
     showGrandVictory() {
         this.engine.stop();
         const modal = document.getElementById("modal-grand-victory");
@@ -614,7 +577,6 @@ class GameManager {
         if (docsCountEl) docsCountEl.innerText = `${this.unlockedDocIds.size}/12`;
         if (starsEl) starsEl.innerText = `${this.engine.starsCollectedCount} ★`;
 
-        // Tự động lưu thẳng kết quả vào Bảng xếp hạng
         const nameToSave = (this.playerName || "Khách").trim() || "Khách";
         this.addLeaderboardEntry(nameToSave, finalScore, finalTime);
         this.renderLeaderboardTable();
@@ -625,7 +587,6 @@ class GameManager {
             saveNotice.style.color = "#4ade80";
         }
 
-        // Hiệu ứng pháo hoa ăn mừng
         for (let i = 0; i < 6; i++) {
             setTimeout(() => {
                 this.engine.particles.addFireworks(
@@ -661,7 +622,6 @@ class GameManager {
         modal.classList.add("active");
     }
 
-    // Giao diện Bảo tàng Di sản
     renderMuseum() {
         const container = document.getElementById("museum-grid");
         if (!container) return;
@@ -694,9 +654,7 @@ class GameManager {
         });
     }
 
-    // =========================================================================
-    // HỆ THỐNG BẢNG VÀNG THÀNH TÍCH (LEADERBOARD)
-    // =========================================================================
+    // Bảng xếp hạng
     getDefaultLeaderboard() {
         return [];
     }
@@ -707,7 +665,6 @@ class GameManager {
             if (raw) {
                 let list = JSON.parse(raw);
                 if (Array.isArray(list)) {
-                    // Xóa bỏ triệt để toàn bộ các bản ghi giả định cũ
                     list = list.filter(item =>
                         item.date !== "Kỷ lục" &&
                         item.name !== "Chiến Sĩ Quyết Tử" &&
@@ -748,7 +705,6 @@ class GameManager {
             date: new Date().toLocaleDateString("vi-VN")
         });
 
-        // Sắp xếp: Điểm cao nhất trước, nếu bằng điểm thì thời gian ít hơn xếp trên
         list.sort((a, b) => {
             if (b.score !== a.score) return b.score - a.score;
             return a.time.localeCompare(b.time);

@@ -1,4 +1,4 @@
-// Game Engine: Xử lý Vòng lặp trò chơi, Phím bấm, Cảm ứng Mobile, Camera & Va chạm
+// Game Engine: Vòng lặp trò chơi, xử lý điều khiển, camera và va chạm
 
 class GameEngine {
     constructor(canvas, onDocumentFound, onLevelVictory, onGameOver) {
@@ -24,24 +24,24 @@ class GameEngine {
         this.particles = new ParticleSystem();
 
         this.cameraX = 0;
-        this.screenShake = 0; // Chấn động màn hình khi va chạm / trúng bẫy
+        this.screenShake = 0;
         this.score = 0;
         this.chapterStartScore = 0;
         this.starsCollectedCount = 0;
-        this.detectedCount = 0; // Số lần bị mật thám phát hiện
+        this.detectedCount = 0;
         this.maxHp = 100;
         this.hp = 100;
         this.bullets = [];
-        this.pebbles = []; // Sỏi nghi binh đang bay / nảy
-        this.supplies = []; // Vật phẩm tiếp tế (Áo Trấn Thủ, Dép Cao Su, Hòm Cải Trang)
-        this.npcs = []; // Đồng chí liên lạc bí mật
-        this.shortcuts = []; // Cầu/lối tắt bí mật
-        this.nearNpc = null; // NPC đang đứng gần
-        this.nearGuardForTakedown = null; // Mật thám có thể khống chế sau lưng
+        this.pebbles = [];
+        this.supplies = [];
+        this.npcs = [];
+        this.shortcuts = [];
+        this.nearNpc = null;
+        this.nearGuardForTakedown = null;
 
-        this.playTime = 0; // Tổng thời gian chơi tính bằng giây
+        this.playTime = 0;
         this.chapterStartTime = 0;
-        this.nearDocument = null; // Văn kiện đang đứng gần để bấm [E] mở
+        this.nearDocument = null;
 
         this.isRunning = false;
         this.isPaused = false;
@@ -51,8 +51,6 @@ class GameEngine {
     }
 
     initInputListeners() {
-        // Bàn phím máy tính
-        // Bỏ qua phím khi người chơi đang gõ chữ (ô nhập tên) để không chặn dấu cách / kích hoạt nhầm kỹ năng
         const isTypingTarget = (e) => {
             const t = e.target;
             return t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable);
@@ -61,7 +59,7 @@ class GameEngine {
         window.addEventListener("keydown", (e) => {
             if (isTypingTarget(e)) return;
             if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(e.key)) {
-                e.preventDefault(); // Ngăn cuộn trang web
+                e.preventDefault();
             }
             if (e.key === "ArrowLeft" || e.key.toLowerCase() === "a") this.controls.left = true;
             if (e.key === "ArrowRight" || e.key.toLowerCase() === "d") this.controls.right = true;
@@ -76,10 +74,9 @@ class GameEngine {
                 this.controls.up = true;
             }
 
-            // Các phím kỹ năng chỉ kích hoạt một lần mỗi lần bấm (bỏ qua auto-repeat khi giữ phím)
             if (e.repeat) return;
 
-            // Phím E: Tương tác mở đọc văn kiện HOẶC trò chuyện với đồng chí liên lạc
+            // Phím E: Tương tác văn kiện hoặc NPC
             if (e.key.toLowerCase() === "e") {
                 if (this.nearDocument) {
                     this.readNearDocument();
@@ -88,12 +85,12 @@ class GameEngine {
                 }
             }
 
-            // Phím F: Tung Nghi Binh (Ném sỏi đánh lạc hướng mật thám)
+            // Phím F: Ném sỏi đánh lạc hướng
             if (e.key.toLowerCase() === "f") {
                 this.throwPebble();
             }
 
-            // Phím Q: Khống Chế Từ Phía Sau (Stealth Takedown)
+            // Phím Q: Khống chế lính sau lưng
             if (e.key.toLowerCase() === "q") {
                 this.performTakedown();
             }
@@ -106,7 +103,7 @@ class GameEngine {
             if (e.key === "ArrowUp" || e.key.toLowerCase() === "w" || e.key === " ") this.controls.up = false;
         });
 
-        // Nút cảm ứng ảo trên màn hình điện thoại / máy tính bảng
+        // Điều khiển cảm ứng trên mobile
         const bindTouchBtn = (elementId, actionDown, actionUp) => {
             const btn = document.getElementById(elementId);
             if (!btn) return;
@@ -142,7 +139,6 @@ class GameEngine {
             }
         }, () => {});
 
-        // Nút đọc văn kiện / trò chuyện với NPC
         bindTouchBtn("btn-touch-interact", () => {
             if (this.nearDocument) {
                 this.readNearDocument();
@@ -151,13 +147,9 @@ class GameEngine {
             }
         }, () => {});
 
-        // Nút tung sỏi nghi binh trên mobile
         bindTouchBtn("btn-touch-distract", () => this.throwPebble(), () => {});
-
-        // Nút khống chế mật thám sau lưng trên mobile
         bindTouchBtn("btn-touch-takedown", () => this.performTakedown(), () => {});
 
-        // Đảm bảo không bị kẹt phím khi người chơi nhấc toàn bộ ngón tay hoặc chuyển ứng dụng
         window.addEventListener("touchend", (e) => {
             if (e.touches && e.touches.length === 0) {
                 this.controls.left = false;
@@ -181,7 +173,6 @@ class GameEngine {
         return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
     }
 
-    // Kỹ năng Nghi Binh (Phím F hoặc nút cảm ứng): Ném sỏi đánh lạc hướng
     throwPebble() {
         if (!this.player || !this.isRunning || this.isPaused || this.player.isDying) return;
         const pebble = this.player.throwPebble();
@@ -190,22 +181,21 @@ class GameEngine {
         }
     }
 
-    // Kỹ năng Tự Vệ Khống Chế Từ Phía Sau (Phím Q hoặc nút cảm ứng)
+    // Khống chế mật thám từ sau lưng
     performTakedown() {
         if (!this.player || !this.isRunning || this.isPaused || this.player.isDying) return;
         if (this.player.takedownCooldown > 0) return;
 
         for (const guard of this.guards) {
             if (this.player.canTakedown(guard)) {
-                this.player.takedownCooldown = this.player.maxTakedownCooldown; // Hồi chiêu 8s
+                this.player.takedownCooldown = this.player.maxTakedownCooldown;
                 this.player.actionAnimTimer = 20;
                 this.player.actionAnimType = "takedown";
                 this.player.scaleX = 1.25;
                 this.player.scaleY = 0.84;
-                guard.stun(720); // Choáng 12 giây
+                guard.stun(720);
                 guard.timesTakenDown++;
 
-                // Chỉ thưởng điểm mưu lược ở lần khống chế đầu tiên (chống farm điểm khi lính tỉnh lại)
                 const isFirstTime = guard.timesTakenDown === 1;
                 if (isFirstTime) {
                     this.score += 150;
@@ -226,7 +216,7 @@ class GameEngine {
         }
     }
 
-    // Áp dụng hiệu ứng vật phẩm tiếp tế (dùng chung cho nhặt vật phẩm và quà của đồng chí liên lạc)
+    // Áp dụng hiệu ứng vật phẩm
     applySupplyEffect(type, x, y) {
         const p = this.player;
         if (!p) return "";
@@ -237,18 +227,18 @@ class GameEngine {
             return "🛡️";
         }
         if (type === "speed") {
-            p.speedBoostTimer = 480; // 8 giây
+            p.speedBoostTimer = 480;
             this.particles.addFloatingText(x, y, "⚡ 8s", "#facc15", 15, 95);
             this.particles.addBurst(x, y + 30, "#facc15", 18);
             return "⚡";
         }
         if (type === "disguise") {
-            p.disguiseTimer = 720; // 12 giây
+            p.disguiseTimer = 720;
             this.particles.addFloatingText(x, y, "🎭 12s", "#c084fc", 15, 95);
             this.particles.addBurst(x, y + 30, "#c084fc", 18);
             return "🎭";
         }
-        // Mặc định: Lương khô hồi máu
+        // Hồi máu
         this.hp = Math.min(this.maxHp, this.hp + 25);
         this.updateHUD();
         this.particles.addFloatingText(x, y, "❤️ +25", "#4ade80", 15, 95);
@@ -256,13 +246,12 @@ class GameEngine {
         return "❤️";
     }
 
-    // Đổi Tín Vật Sao Vàng (★) để liên hệ Đồng chí & mở lối tắt bí mật
+    // Tương tác NPC
     interactWithNpc() {
         if (!this.nearNpc || this.isPaused || !this.isRunning || !this.player || this.player.isDying) return;
         const npc = this.nearNpc;
         if (!npc.talked) {
             const cost = npc.starCost || 3;
-            // Kiểm tra đủ số Sao Vàng để đổi liên lạc chưa
             if (this.starsCollectedCount < cost) {
                 if (typeof audio !== "undefined" && audio.playLocked) {
                     audio.playLocked();
@@ -278,14 +267,12 @@ class GameEngine {
                 return;
             }
 
-            // Đổi Sao Vàng -> Mở khóa liên lạc
             this.starsCollectedCount -= cost;
             npc.talked = true;
             this.updateHUD();
 
             this.applySupplyEffect(npc.giftType, npc.x + 14, npc.y - 30);
 
-            // Mở lối tắt bí mật nếu có
             if (npc.shortcutId) {
                 for (const sc of this.shortcuts) {
                     if (sc.id === npc.shortcutId) {
@@ -314,16 +301,13 @@ class GameEngine {
         this.particles.addBurst(doc.x + 14, doc.y + 16, "#fbbf24", 24);
         this.particles.addFloatingText(doc.x + 14, doc.y - 20, "📜", "#fbbf24", 16, 90);
 
-        // Tạm dừng game để mở Modal câu hỏi & tư liệu học thuật
         this.pause();
         if (this.onDocumentFound) {
             this.onDocumentFound(doc.docId);
         }
     }
 
-    // Cập nhật trạng thái hiển thị của các nút hành động trên màn hình cảm ứng
-    // Chỉ chạm vào DOM khi trạng thái thực sự thay đổi (gọi mỗi frame nên tránh ghi innerHTML liên tục,
-    // vì thay phần tử con đang được chạm sẽ làm mất sự kiện touchend trên điện thoại)
+    // Cập nhật trạng thái các nút ảo trên mobile
     updateActionButtons() {
         if (!this._btnState) this._btnState = {};
         const st = this._btnState;
@@ -357,7 +341,6 @@ class GameEngine {
             if (btnTakedown) btnTakedown.classList.toggle("cooling", takedownCooling);
         }
 
-        // Làm mờ nút ném sỏi khi đang hồi chiêu
         const cooling = !!(this.player && this.player.pebbleCooldown > 0);
         if (st.cooling !== cooling) {
             st.cooling = cooling;
@@ -373,27 +356,14 @@ class GameEngine {
     loadLevel(levelIndex) {
         this.levelIndex = levelIndex;
         const levelData = LEVELS[levelIndex];
-        this.currentLevel = JSON.parse(JSON.stringify(levelData)); // Bản sao dữ liệu
+        this.currentLevel = JSON.parse(JSON.stringify(levelData));
 
-        // Khởi tạo người chơi
         this.player = new Player(this.currentLevel.startPos.x, this.currentLevel.startPos.y);
-
-        // Khởi tạo lính tuần tra
         this.guards = this.currentLevel.guards.map(g => new Guard(g));
-
-        // Khởi tạo tài liệu văn kiện
         this.documents = this.currentLevel.documents.map(d => new DocumentItem(d));
-
-        // Khởi tạo sao thưởng
         this.stars = this.currentLevel.stars.map(s => new StarItem(s.x, s.y));
-
-        // Khởi tạo vật phẩm tiếp tế cách mạng mới (Áo Trấn Thủ, Dép Cao Su, Hòm Cải Trang)
         this.supplies = (this.currentLevel.supplies || []).map(s => new SupplyItem(s));
-
-        // Khởi tạo đồng chí liên lạc viên bí mật
         this.npcs = (this.currentLevel.npcs || []).map(n => new ComradeNPC(n));
-
-        // Khởi tạo lối tắt / cầu bí mật
         this.shortcuts = (this.currentLevel.shortcuts || []).map(sc => ({ ...sc, isOpen: false }));
 
         this.bullets = [];
@@ -419,11 +389,11 @@ class GameEngine {
         this.updateHUD();
     }
 
-    // Xử lý mất máu khi trúng đạn, cạm bẫy hoặc rơi vực
+    // Xử lý sát thương người chơi
     handlePlayerDamage(type, amount = 25, label = "") {
         if (this.hp <= 0) return;
 
-        // Nếu người chơi đang có Áo Trấn Thủ (Khiên bảo vệ), đỡ trọn đòn sát thương này (ngoại trừ rơi vực sâu)
+        // Có khiên thì đỡ 1 đòn
         if (this.player && this.player.hasShield && type !== "pit") {
             this.player.hasShield = false;
             this.player.invulnerableTimer = Math.max(this.player.invulnerableTimer, 45);
@@ -449,7 +419,6 @@ class GameEngine {
 
         this.particles.addFloatingText(px, py, text, "#ef4444", 15, 105);
 
-        // Nếu hết sạch máu -> Kích hoạt chuỗi Game Over và cho phép chơi lại màn từ đầu
         if (this.hp <= 0) {
             this.particles.addFloatingText(px, py - 28, "💀 0 HP", "#ef4444", 16, 140);
             if (this.player) {
@@ -498,7 +467,6 @@ class GameEngine {
             this.update();
         }
 
-        // Vẽ đồ họa
         this.renderer.render({
             currentLevel: this.currentLevel,
             player: this.player,
@@ -524,11 +492,10 @@ class GameEngine {
     update() {
         if (!this.player || !this.currentLevel) return;
 
-        // Tính tổng thời gian chơi theo thời gian thực (Real-time clock) và cập nhật HUD mỗi giây
+        // Đồng hồ thời gian thực
         const now = performance.now();
         if (this.lastTime) {
             const dt = (now - this.lastTime) / 1000;
-            // Giới hạn dt hợp lý để tránh nhảy số khi chuyển tab trình duyệt
             if (dt > 0 && dt < 0.5) {
                 this.playTime += dt;
             }
@@ -542,13 +509,11 @@ class GameEngine {
             if (timerEl) timerEl.innerText = this.getFormattedTime();
         }
 
-        // Giảm dần chấn động màn hình (Screen Shake decay)
         if (this.screenShake > 0) {
             this.screenShake *= 0.88;
             if (this.screenShake < 0.2) this.screenShake = 0;
         }
 
-        // Khi máu về 0 (Game Over pending): khóa phím điều khiển, chỉ cho chạy hiệu ứng ngã gục & hạt nổi
         if (this.hp <= 0) {
             this.player.update(
                 { left: false, right: false, up: false, down: false },
@@ -562,7 +527,7 @@ class GameEngine {
             return;
         }
 
-        // 1. Cập nhật Player
+        // Cập nhật Player
         const result = this.player.update(
             this.controls,
             this.currentLevel.platforms,
@@ -583,7 +548,7 @@ class GameEngine {
                 audio.playHit();
                 audio.playAlert();
                 this.particles.addHitShockwave(this.player.x + this.player.width / 2, this.player.y + this.player.height / 2);
-                this.player.invulnerableTimer = 65; // ~1s bất tử nhấp nháy né dính bẫy liên tục
+                this.player.invulnerableTimer = 65;
                 this.handlePlayerDamage("hazard", 20, result.label);
             } else if (result.fellInPit) {
                 this.detectedCount++;
@@ -603,7 +568,7 @@ class GameEngine {
             }
         }
 
-        // 2. Cập nhật Camera theo chân Người chơi mượt mà (Tương thích màn hình Fullscreen)
+        // Cập nhật Camera
         const scale = this.canvas.height > 0 ? this.canvas.height / 600 : 1;
         const virtualWidth = this.canvas.width / scale;
         const targetCameraX = this.player.x - virtualWidth * 0.35;
@@ -612,7 +577,7 @@ class GameEngine {
         const maxCameraX = Math.max(0, this.currentLevel.levelWidth - virtualWidth);
         if (this.cameraX > maxCameraX) this.cameraX = maxCameraX;
 
-        // 3. Cập nhật Sỏi nghi binh (Ném sỏi đánh lạc hướng)
+        // Cập nhật Sỏi
         for (let i = this.pebbles.length - 1; i >= 0; i--) {
             const p = this.pebbles[i];
             const isDead = p.update(this.currentLevel.platforms, this.guards, this.particles);
@@ -621,7 +586,7 @@ class GameEngine {
             }
         }
 
-        // 4. Cập nhật Đạn của mật thám
+        // Cập nhật Đạn
         for (let i = this.bullets.length - 1; i >= 0; i--) {
             const b = this.bullets[i];
             const bRes = b.update(this.currentLevel.platforms);
@@ -631,18 +596,17 @@ class GameEngine {
                 continue;
             }
 
-            // Đạn trúng người chơi
             if (b.checkHitPlayer(this.player)) {
                 audio.playHit();
                 this.screenShake = 12;
                 this.particles.addHitShockwave(this.player.x + this.player.width / 2, this.player.y + this.player.height / 2);
-                this.player.invulnerableTimer = 60; // 1 giây nhấp nháy bất tử bảo vệ
+                this.player.invulnerableTimer = 60;
                 this.handlePlayerDamage("bullet", b.damage || 25);
                 this.bullets.splice(i, 1);
             }
         }
 
-        // 5. Cập nhật Mật thám & Bắn súng
+        // Cập nhật Mật thám
         for (const guard of this.guards) {
             const shot = guard.update(this.player, this.currentLevel.platforms);
             if (shot && shot.fired) {
@@ -651,7 +615,6 @@ class GameEngine {
                 this.particles.addMuzzleFlash(shot.x, shot.y, shot.dir);
             }
 
-            // Va chạm cơ thể trực tiếp với mật thám (nếu không ẩn nấp, không bất tử và mật thám còn tỉnh táo)
             if (!this.player.isDying && this.player.invulnerableTimer === 0 && !this.player.isHidden && guard.stunTimer <= 0) {
                 if (this.player.checkCollision(this.player, guard)) {
                     audio.playHit();
@@ -664,8 +627,7 @@ class GameEngine {
             }
         }
 
-        // 6. Cập nhật Điểm lưu (Checkpoints)
-        // Cho phép kích hoạt khi đi qua hoặc nhảy phía trên cột cờ, nhưng không kích hoạt nhầm cột cờ trên mái cao khi đang đi dưới đất
+        // Cập nhật Checkpoint
         for (const cp of this.currentLevel.checkpoints) {
             if (!cp.reached && !this.player.isDying && Math.abs(this.player.x - cp.x) < 42 && this.player.y <= cp.y + 70 && this.player.y >= cp.y - 140) {
                 cp.reached = true;
@@ -676,7 +638,7 @@ class GameEngine {
             }
         }
 
-        // 7. Cập nhật Sao cách mạng (Stars - Tín vật đổi liên lạc & điểm thưởng)
+        // Cập nhật Sao
         for (const star of this.stars) {
             star.update();
             if (star.checkCollect(this.player)) {
@@ -685,12 +647,12 @@ class GameEngine {
                 this.starsCollectedCount++;
                 this.particles.addBurst(star.x, star.y, "#fbbf24", 14);
                 this.particles.addFloatingText(star.x, star.y - 20, "★ +1", "#fbbf24", 14, 90);
-                this.hp = Math.min(this.maxHp, this.hp + 5); // Nhặt sao hồi phục nhẹ 5 HP
+                this.hp = Math.min(this.maxHp, this.hp + 5);
                 this.updateHUD();
             }
         }
 
-        // 8. Cập nhật Vật phẩm tiếp tế cách mạng (Áo Trấn Thủ, Dép Cao Su, Hòm Cải Trang, Lương Khô)
+        // Cập nhật Vật phẩm
         for (const item of this.supplies) {
             item.update();
             if (!item.collected && item.checkCollect(this.player)) {
@@ -703,7 +665,7 @@ class GameEngine {
             }
         }
 
-        // 9. Cập nhật Đồng chí liên lạc viên bí mật
+        // Cập nhật NPC
         let foundNearNpc = null;
         for (const npc of this.npcs) {
             npc.update(this.player);
@@ -713,7 +675,7 @@ class GameEngine {
         }
         this.nearNpc = foundNearNpc;
 
-        // 10. Cập nhật Lối tắt bí mật (khi mở thì thêm platform vào bản đồ)
+        // Cập nhật Lối tắt
         for (const sc of this.shortcuts) {
             if (sc.isOpen && !sc.platformAdded) {
                 this.currentLevel.platforms.push({
@@ -727,7 +689,7 @@ class GameEngine {
             }
         }
 
-        // 11. Cập nhật Tài liệu văn kiện (Documents) - người chơi tự chọn bấm [E] mở hoặc lướt qua
+        // Cập nhật Văn kiện
         let foundNearDoc = null;
         for (const doc of this.documents) {
             doc.update();
@@ -737,7 +699,7 @@ class GameEngine {
         }
         this.nearDocument = foundNearDoc;
 
-        // 12. Kiểm tra xem có thể thực hiện đòn khống chế (Takedown) mật thám sau lưng không
+        // Kiểm tra khả năng khống chế lính
         let canTakedownAny = false;
         for (const guard of this.guards) {
             if (this.player.canTakedown(guard)) {
@@ -748,16 +710,14 @@ class GameEngine {
         this.nearGuardForTakedown = canTakedownAny;
         this.updateActionButtons();
 
-        // 13. Cập nhật Hạt hiệu ứng & Chữ nổi
         this.particles.update();
 
-        // 14. Kiểm tra Đích đến của màn chơi (Level Exit)
+        // Kiểm tra đích đến
         const exitX = this.currentLevel.exitPos.x;
         const exitY = this.currentLevel.exitPos.y;
         const pCenterX = this.player.x + this.player.width / 2;
         const pCenterY = this.player.y + this.player.height / 2;
 
-        // Vùng kích hoạt đích đến bao phủ toàn bộ công trình (tàu / xe lửa / hang đá / lễ đài)
         const inExitZone = (
             pCenterX >= exitX - 30 &&
             pCenterX <= exitX + 160 &&
@@ -765,7 +725,6 @@ class GameEngine {
         );
 
         if (inExitZone) {
-            // Hoàn thành màn chơi
             this.pause();
             this.chapterStartScore = this.score;
             audio.playLevelComplete();
