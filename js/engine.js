@@ -197,12 +197,12 @@ class GameEngine {
 
         for (const guard of this.guards) {
             if (this.player.canTakedown(guard)) {
-                this.player.takedownCooldown = this.player.maxTakedownCooldown; // Hồi chiêu 10s
+                this.player.takedownCooldown = this.player.maxTakedownCooldown; // Hồi chiêu 7s
                 this.player.actionAnimTimer = 20;
                 this.player.actionAnimType = "takedown";
                 this.player.scaleX = 1.25;
                 this.player.scaleY = 0.84;
-                guard.stun(480); // Choáng 8 giây
+                guard.stun(600); // Choáng 10 giây
                 guard.timesTakenDown++;
 
                 // Chỉ thưởng điểm mưu lược ở lần khống chế đầu tiên (chống farm điểm khi lính tỉnh lại)
@@ -237,21 +237,21 @@ class GameEngine {
             return "🛡️";
         }
         if (type === "speed") {
-            p.speedBoostTimer = 480; // 8 giây
-            this.particles.addFloatingText(x, y, "⚡ 8s", "#facc15", 15, 95);
+            p.speedBoostTimer = 540; // 9 giây
+            this.particles.addFloatingText(x, y, "⚡ 9s", "#facc15", 15, 95);
             this.particles.addBurst(x, y + 30, "#facc15", 18);
             return "⚡";
         }
         if (type === "disguise") {
-            p.disguiseTimer = 720; // 12 giây
-            this.particles.addFloatingText(x, y, "🎭 12s", "#c084fc", 15, 95);
+            p.disguiseTimer = 840; // 14 giây
+            this.particles.addFloatingText(x, y, "🎭 14s", "#c084fc", 15, 95);
             this.particles.addBurst(x, y + 30, "#c084fc", 18);
             return "🎭";
         }
         // Mặc định: Lương khô hồi máu
-        this.hp = Math.min(this.maxHp, this.hp + 25);
+        this.hp = Math.min(this.maxHp, this.hp + 35);
         this.updateHUD();
-        this.particles.addFloatingText(x, y, "❤️ +25", "#4ade80", 15, 95);
+        this.particles.addFloatingText(x, y, "❤️ +35", "#4ade80", 15, 95);
         this.particles.addBurst(x, y + 30, "#4ade80", 18);
         return "❤️";
     }
@@ -586,14 +586,14 @@ class GameEngine {
                 audio.playHit();
                 audio.playAlert();
                 this.particles.addHitShockwave(this.player.x + this.player.width / 2, this.player.y + this.player.height / 2);
-                this.player.invulnerableTimer = 65; // ~1s bất tử nhấp nháy né dính bẫy liên tục
-                this.handlePlayerDamage("hazard", 25, result.label);
+                this.player.invulnerableTimer = 75; // ~1.25s bất tử nhấp nháy né dính bẫy liên tục
+                this.handlePlayerDamage("hazard", 20, result.label);
             } else if (result.fellInPit) {
                 this.detectedCount++;
                 this.screenShake = 8;
                 audio.playHit();
                 audio.playAlert();
-                this.handlePlayerDamage("pit", 35);
+                this.handlePlayerDamage("pit", 25);
             }
             if (result.jumpDust) {
                 this.particles.addDust(result.jumpDust.x, result.jumpDust.y, 4);
@@ -654,15 +654,15 @@ class GameEngine {
                 this.particles.addMuzzleFlash(shot.x, shot.y, shot.dir);
             }
 
-            // Va chạm cơ thể trực tiếp với mật thám (nếu không ẩn nấp, không bất tử và mật thám còn tỉnh táo)
-            if (!this.player.isDying && this.player.invulnerableTimer === 0 && !this.player.isHidden && guard.stunTimer <= 0) {
+            // Va chạm cơ thể trực tiếp với mật thám (nếu không ẩn nấp, không cải trang, không bất tử và mật thám còn tỉnh táo)
+            if (!this.player.isDying && this.player.invulnerableTimer === 0 && !this.player.isHidden && this.player.disguiseTimer <= 0 && guard.stunTimer <= 0) {
                 if (this.player.checkCollision(this.player, guard)) {
                     audio.playHit();
                     audio.playAlert();
                     this.screenShake = 12;
                     this.particles.addHitShockwave(this.player.x + this.player.width / 2, this.player.y + this.player.height / 2);
-                    this.player.invulnerableTimer = 60;
-                    this.handlePlayerDamage("guard_touch", 25);
+                    this.player.invulnerableTimer = 65;
+                    this.handlePlayerDamage("guard_touch", 18);
                 }
             }
         }
@@ -688,7 +688,7 @@ class GameEngine {
                 this.starsCollectedCount++;
                 this.particles.addBurst(star.x, star.y, "#fbbf24", 14);
                 this.particles.addFloatingText(star.x, star.y - 20, "★ +1", "#fbbf24", 14, 90);
-                this.hp = Math.min(this.maxHp, this.hp + 5); // Nhặt sao hồi phục nhẹ 5 HP
+                this.hp = Math.min(this.maxHp, this.hp + 8); // Nhặt sao hồi phục 8 HP
                 this.updateHUD();
             }
         }

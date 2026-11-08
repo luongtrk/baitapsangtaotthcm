@@ -13,9 +13,9 @@ class Player {
 
         this.vx = 0;
         this.vy = 0;
-        this.speed = 1.85; // Tốc độ di chuyển chuẩn mực, vừa vặn, không quá nhanh để dễ kiểm soát bước chân
-        this.jumpForce = -10.4;
-        this.gravity = 0.46;
+        this.speed = 1.88; // Tốc độ di chuyển chuẩn mực, vừa vặn, dễ kiểm soát bước chân
+        this.jumpForce = -10.65;
+        this.gravity = 0.45;
         this.maxFallSpeed = 11;
 
         this.onGround = false;
@@ -42,14 +42,14 @@ class Player {
         this.isSlidingOnIce = false; // Đang trôi quán tính trên mặt băng tuyết
 
         // Chuẩn game thiết kế chuyên nghiệp: Coyote Time & Jump Buffering
-        this.coyoteTimer = 0;       // Thời gian ân hạn nhảy khi vừa rời mép vực (6 frames)
-        this.jumpBufferTimer = 0;   // Lưu phím bấm nhảy trước khi chạm đất (6 frames)
+        this.coyoteTimer = 0;       // Thời gian ân hạn nhảy khi vừa rời mép vực (8 frames)
+        this.jumpBufferTimer = 0;   // Lưu phím bấm nhảy trước khi chạm đất (8 frames)
 
         // Tính năng gameplay mới: Nghi Binh, Khống Chế, Hóa Trang, Khiên Áo Trấn Thủ, Dép Cao Su
         this.pebbleCooldown = 0;    // Hồi chiêu ném sỏi nghi binh (frames)
-        this.maxPebbleCooldown = 240; // 4 giây hồi chiêu
+        this.maxPebbleCooldown = 180; // 3 giây hồi chiêu
         this.takedownCooldown = 0;  // Hồi chiêu khống chế [Q] (frames)
-        this.maxTakedownCooldown = 600; // 10 giây hồi chiêu
+        this.maxTakedownCooldown = 420; // 7 giây hồi chiêu
         this.hasShield = false;     // Áo trấn thủ: đỡ trọn 1 đòn đạn/bẫy
         this.speedBoostTimer = 0;   // Dép cao su vạn dặm: tăng tốc chạy & nhảy
         this.disguiseTimer = 0;     // Hòm đồ cải trang: lính không nhận diện
@@ -96,7 +96,7 @@ class Player {
     jump() {
         if (this.isDying) return false;
         // Ghi nhận jump buffer (người chơi bấm nhảy trước khi chạm sàn)
-        this.jumpBufferTimer = 6;
+        this.jumpBufferTimer = 8;
         return this.executeJump();
     }
 
@@ -194,7 +194,7 @@ class Player {
 
         // Cập nhật Coyote Time khi rơi khỏi mép vực
         if (this.onGround) {
-            this.coyoteTimer = 6;
+            this.coyoteTimer = 8;
         } else if (this.coyoteTimer > 0) {
             this.coyoteTimer--;
         }
@@ -398,16 +398,16 @@ class Player {
         const dist = Math.abs(pCenterX - gCenterX);
         const dy = Math.abs((this.y + this.height / 2) - (guard.y + guard.height / 2));
 
-        if (dist > 48 || dy > 32) return false;
+        if (dist > 52 || dy > 34) return false;
 
-        // Phải ở phía sau lưng mật thám (mật thám nhìn phải -> người chơi ở trái, mật thám nhìn trái -> người chơi ở phải)
+        // Phải ở phía sau lưng mật thám (hoặc đang mặc đồ cải trang áp sát mật thám)
         const isBehind = (guard.dir === 1 && pCenterX < gCenterX) || (guard.dir === -1 && pCenterX > gCenterX);
-        return isBehind && !guard.isAiming;
+        return (isBehind || this.disguiseTimer > 0) && !guard.isAiming;
     }
 }
 
 class Bullet {
-    constructor(x, y, dir, speed = 7.8) {
+    constructor(x, y, dir, speed = 6.5) {
         this.x = x;
         this.y = y;
         this.dir = dir;
@@ -417,7 +417,7 @@ class Bullet {
         this.w = 12;
         this.h = 4;
         this.life = 120; // Tồn tại 2 giây
-        this.damage = 25; // Gây trừ 25 HP
+        this.damage = 18; // Gây trừ 18 HP (đã giảm độ khó)
     }
 
     update(platforms) {
@@ -464,10 +464,10 @@ class Guard {
         this.speed = config.speed ? Math.min(config.speed, 1.4) : 0.9;
         this.dir = config.dir || 1;
         // Tầm quét đèn tăng dần theo độ khó từng màn (90 - 160 px)
-        this.visionRange = config.range ? Math.min(160, Math.max(90, config.range)) : 110;
-        this.visionAngle = config.angle || 0.32; // Nón sáng (~18 độ), màn sau rộng hơn
-        this.aimDelay = config.aimDelay || 14;   // Số frame ngắm trước khi bóp cò
-        this.fireRate = config.fireRate || 40;   // Giãn cách giữa các loạt đạn
+        this.visionRange = config.range ? Math.min(150, Math.max(85, config.range)) : 105;
+        this.visionAngle = config.angle || 0.30; // Nón sáng vừa phải
+        this.aimDelay = config.aimDelay || 22;   // Số frame ngắm trước khi bóp cò (~0.37s để người chơi kịp phản xạ)
+        this.fireRate = config.fireRate || 52;   // Giãn cách giữa các loạt đạn
         this.animTimer = 0;
         this.animFrame = 0;
         this.crouchSuspicionTimer = 0;
@@ -625,8 +625,8 @@ class Guard {
         const dy = playerCenterY - eyeY;
         const dist = Math.hypot(dx, dy);
 
-        // Nếu người chơi đang trong trang phục cải trang: lính chỉ phát hiện khi va chạm quá gần (< 36px)
-        if (player.disguiseTimer > 0 && dist > 36) {
+        // Nếu người chơi đang trong trang phục cải trang: mật thám tưởng là đồng bọn nên không phát hiện
+        if (player.disguiseTimer > 0) {
             this.crouchSuspicionTimer = Math.max(0, this.crouchSuspicionTimer - 2);
             if (!this.isAiming) this.isAlerted = false;
             return false;
@@ -646,7 +646,7 @@ class Guard {
 
         // Góc nhìn tương đối hoặc cự ly rất gần cùng độ cao
         const angleToPlayer = Math.abs(Math.atan2(dy, Math.abs(dx)));
-        const inCloseRange = dist < 45 && Math.abs(dy) < 32;
+        const inCloseRange = dist < 40 && Math.abs(dy) < 30;
 
         if (angleToPlayer < this.visionAngle || inCloseRange) {
             if (!player.isCrouching) {
@@ -655,14 +655,14 @@ class Guard {
                 return true;
             } else {
                 // Đang cúi người né đèn: nếu ngồi trước mắt quá lâu mới bị nghi ngờ
-                const rate = dist < 55 ? 2 : 1;
+                const rate = dist < 50 ? 2 : 1;
                 this.crouchSuspicionTimer += rate;
 
-                if (this.crouchSuspicionTimer > 30) {
+                if (this.crouchSuspicionTimer > 42) {
                     this.isAlerted = true;
                 }
 
-                if (this.crouchSuspicionTimer >= 70) {
+                if (this.crouchSuspicionTimer >= 95) {
                     this.crouchSuspicionTimer = 0;
                     this.isAlerted = true;
                     return true;
