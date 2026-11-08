@@ -278,12 +278,13 @@ class Player {
         this.vy += this.gravity;
         if (this.vy > this.maxFallSpeed) this.vy = this.maxFallSpeed;
 
-        // Di chuyển trục X và va chạm nền tảng
+        // Di chuyển trục X và va chạm nền tảng (chỉ chặn ngang với nền đất đặc y >= 500, các bục trên cao cho phép nhảy xuyên qua mượt mà)
         this.x += this.vx;
         if (this.x < 0) this.x = 0;
         if (this.x + this.width > levelWidth) this.x = levelWidth - this.width;
 
         for (const plat of platforms) {
+            if (plat.y < 500) continue; // Bục trên cao là One-Way Platform, không chặn ngang làm kẹt người chơi
             if (this.checkCollision(this, plat)) {
                 if (this.vx > 0) {
                     this.x = plat.x - this.width;
@@ -302,8 +303,8 @@ class Player {
 
         for (const plat of platforms) {
             if (this.checkCollision(this, plat)) {
-                // Rơi từ trên xuống sàn
-                if (this.vy > 0 && (this.y + this.height - this.vy) <= plat.y + 12) {
+                // Rơi từ trên xuống mặt bục / mặt đất
+                if (this.vy >= 0 && (this.y + this.height - this.vy) <= plat.y + 14) {
                     this.y = plat.y - this.height;
                     this.vy = 0;
                     this.onGround = true;
@@ -317,7 +318,7 @@ class Player {
                             events.landDust = { x: this.x + this.width / 2, y: this.y + this.height };
                         }
                     }
-                } else if (this.vy < 0) { // Va đầu vào trần dưới
+                } else if (this.vy < 0 && plat.y >= 500) { // Chỉ va đầu với khối nền đặc dưới đất, bục trên cao cho phép nhảy xuyên từ dưới lên
                     this.y = plat.y + plat.h;
                     this.vy = 0;
                 }
