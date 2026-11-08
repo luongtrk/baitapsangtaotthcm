@@ -197,12 +197,12 @@ class GameEngine {
 
         for (const guard of this.guards) {
             if (this.player.canTakedown(guard)) {
-                this.player.takedownCooldown = this.player.maxTakedownCooldown; // Hồi chiêu 8s
+                this.player.takedownCooldown = this.player.maxTakedownCooldown; // Hồi chiêu 10s
                 this.player.actionAnimTimer = 20;
                 this.player.actionAnimType = "takedown";
                 this.player.scaleX = 1.25;
                 this.player.scaleY = 0.84;
-                guard.stun(720); // Choáng 12 giây
+                guard.stun(480); // Choáng 8 giây
                 guard.timesTakenDown++;
 
                 // Chỉ thưởng điểm mưu lược ở lần khống chế đầu tiên (chống farm điểm khi lính tỉnh lại)
@@ -394,7 +394,10 @@ class GameEngine {
         this.npcs = (this.currentLevel.npcs || []).map(n => new ComradeNPC(n));
 
         // Khởi tạo lối tắt / cầu bí mật
-        this.shortcuts = (this.currentLevel.shortcuts || []).map(sc => ({ ...sc, isOpen: false }));
+        this.shortcuts = (this.currentLevel.shortcuts || []).map(sc => {
+            const owner = this.npcs.find(n => n.shortcutId === sc.id);
+            return { ...sc, isOpen: false, cost: owner ? (owner.starCost || 3) : 3 };
+        });
 
         this.bullets = [];
         this.pebbles = [];
@@ -584,13 +587,13 @@ class GameEngine {
                 audio.playAlert();
                 this.particles.addHitShockwave(this.player.x + this.player.width / 2, this.player.y + this.player.height / 2);
                 this.player.invulnerableTimer = 65; // ~1s bất tử nhấp nháy né dính bẫy liên tục
-                this.handlePlayerDamage("hazard", 20, result.label);
+                this.handlePlayerDamage("hazard", 25, result.label);
             } else if (result.fellInPit) {
                 this.detectedCount++;
                 this.screenShake = 8;
                 audio.playHit();
                 audio.playAlert();
-                this.handlePlayerDamage("pit", 30);
+                this.handlePlayerDamage("pit", 35);
             }
             if (result.jumpDust) {
                 this.particles.addDust(result.jumpDust.x, result.jumpDust.y, 4);

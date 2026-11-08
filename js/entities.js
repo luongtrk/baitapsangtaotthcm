@@ -47,9 +47,9 @@ class Player {
 
         // Tính năng gameplay mới: Nghi Binh, Khống Chế, Hóa Trang, Khiên Áo Trấn Thủ, Dép Cao Su
         this.pebbleCooldown = 0;    // Hồi chiêu ném sỏi nghi binh (frames)
-        this.maxPebbleCooldown = 180; // 3 giây hồi chiêu
+        this.maxPebbleCooldown = 240; // 4 giây hồi chiêu
         this.takedownCooldown = 0;  // Hồi chiêu khống chế [Q] (frames)
-        this.maxTakedownCooldown = 480; // 8 giây hồi chiêu
+        this.maxTakedownCooldown = 600; // 10 giây hồi chiêu
         this.hasShield = false;     // Áo trấn thủ: đỡ trọn 1 đòn đạn/bẫy
         this.speedBoostTimer = 0;   // Dép cao su vạn dặm: tăng tốc chạy & nhảy
         this.disguiseTimer = 0;     // Hòm đồ cải trang: lính không nhận diện
@@ -461,11 +461,13 @@ class Guard {
         this.h = 48;
         this.minX = config.minX;
         this.maxX = config.maxX;
-        this.speed = config.speed ? Math.min(config.speed, 0.85) : 0.75;
+        this.speed = config.speed ? Math.min(config.speed, 1.4) : 0.9;
         this.dir = config.dir || 1;
-        // Giảm mạnh tầm quét đèn theo yêu cầu (95 - 110 px)
-        this.visionRange = config.range ? Math.min(115, Math.max(85, config.range)) : 95;
-        this.visionAngle = 0.28; // Nón sáng hẹp gọn gàng (~16 độ)
+        // Tầm quét đèn tăng dần theo độ khó từng màn (90 - 160 px)
+        this.visionRange = config.range ? Math.min(160, Math.max(90, config.range)) : 110;
+        this.visionAngle = config.angle || 0.32; // Nón sáng (~18 độ), màn sau rộng hơn
+        this.aimDelay = config.aimDelay || 14;   // Số frame ngắm trước khi bóp cò
+        this.fireRate = config.fireRate || 40;   // Giãn cách giữa các loạt đạn
         this.animTimer = 0;
         this.animFrame = 0;
         this.crouchSuspicionTimer = 0;
@@ -541,8 +543,8 @@ class Guard {
 
             // Ngắm bắn nhanh nhạy sau 14 frames (~0.23s)
             this.aimTimer++;
-            if (this.aimTimer >= 14 && this.shootCooldown <= 0) {
-                this.shootCooldown = 40; // Giãn cách bắn nhanh hơn (~0.66s giữa các loạt đạn)
+            if (this.aimTimer >= this.aimDelay && this.shootCooldown <= 0) {
+                this.shootCooldown = this.fireRate; // Giãn cách giữa các loạt đạn theo độ khó màn
                 this.muzzleFlashTimer = 6;
                 this.aimTimer = 0;
 
@@ -559,8 +561,8 @@ class Guard {
             // Người chơi đã nấp an toàn hoặc chạy thoát khỏi tầm nhìn
             if (this.isAiming) {
                 this.lostPlayerTimer++;
-                // Sau ~35 frames không thấy, hạ súng và quay lại tuần tra
-                if (this.lostPlayerTimer > 35) {
+                // Sau ~1 giây không thấy, hạ súng và quay lại tuần tra (cảnh giác lâu hơn)
+                if (this.lostPlayerTimer > 60) {
                     this.isAiming = false;
                     this.isAlerted = false;
                     this.aimTimer = 0;
@@ -656,11 +658,11 @@ class Guard {
                 const rate = dist < 55 ? 2 : 1;
                 this.crouchSuspicionTimer += rate;
 
-                if (this.crouchSuspicionTimer > 40) {
+                if (this.crouchSuspicionTimer > 30) {
                     this.isAlerted = true;
                 }
 
-                if (this.crouchSuspicionTimer >= 95) {
+                if (this.crouchSuspicionTimer >= 70) {
                     this.crouchSuspicionTimer = 0;
                     this.isAlerted = true;
                     return true;
