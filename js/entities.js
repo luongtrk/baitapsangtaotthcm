@@ -13,7 +13,7 @@ class Player {
 
         this.vx = 0;
         this.vy = 0;
-        this.speed = 1.85;
+        this.speed = 1.6;
         this.jumpForce = -10.4;
         this.gravity = 0.46;
         this.maxFallSpeed = 11;
