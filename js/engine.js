@@ -374,7 +374,6 @@ class GameEngine {
         this.maxHp = 100;
         this.hp = 100;
         this.starsCollectedCount = 0;
-        this.score = this.chapterStartScore;
         this.nearDocument = null;
         this.nearNpc = null;
         this.nearGuardForTakedown = null;
@@ -383,9 +382,12 @@ class GameEngine {
         if (levelIndex === 0) {
             this.playTime = 0;
             this.chapterStartTime = 0;
+            this.score = 0;
+            this.chapterStartScore = 0;
         } else {
             this.chapterStartTime = this.playTime;
         }
+        this.score = this.chapterStartScore;
         this.updateHUD();
     }
 

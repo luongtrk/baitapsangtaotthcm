@@ -596,9 +596,21 @@ class GameManager {
             }, i * 350);
         }
 
+        const resetGameProgress = () => {
+            if (this.engine) {
+                this.engine.score = 0;
+                this.engine.chapterStartScore = 0;
+                this.engine.playTime = 0;
+                this.engine.chapterStartTime = 0;
+                this.engine.starsCollectedCount = 0;
+                this.engine.updateHUD();
+            }
+        };
+
         const restartBtn = document.getElementById("btn-restart-game");
         if (restartBtn) {
             restartBtn.onclick = () => {
+                resetGameProgress();
                 modal.classList.remove("active");
                 this.closeAllModals();
                 this.showScreen("screen-menu");
@@ -608,6 +620,7 @@ class GameManager {
         const btnViewLb = document.getElementById("btn-grand-view-leaderboard");
         if (btnViewLb) {
             btnViewLb.onclick = () => {
+                resetGameProgress();
                 this.closeAllModals();
                 this.showScreen("screen-menu");
                 setTimeout(() => {
